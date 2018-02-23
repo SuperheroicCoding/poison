@@ -1,8 +1,8 @@
-@angular/material@5.2.0
+@angular/material@5.0.4
 MIT
 The MIT License
 
-Copyright (c) 2018 Google LLC.
+Copyright (c) 2017 Google LLC.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -46,37 +46,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-acorn@5.1.1
-MIT
-Copyright (C) 2012-2017 by various contributors (see AUTHORS)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
-@angular/animations@5.2.4
+@angular/animations@5.2.0
 MIT
 MIT
 
-@angular/cdk@5.2.0
+@angular/cdk@5.0.4
 MIT
 The MIT License
 
-Copyright (c) 2018 Google LLC.
+Copyright (c) 2017 Google LLC.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -96,23 +74,23 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-@angular/common@5.2.4
+@angular/common@5.2.0
 MIT
 MIT
 
-@angular/core@5.2.4
+@angular/core@5.2.0
 MIT
 MIT
 
-@angular/forms@5.2.4
+@angular/forms@5.2.0
 MIT
 MIT
 
-@angular/platform-browser@5.2.4
+@angular/platform-browser@5.2.0
 MIT
 MIT
 
-@angular/router@5.2.4
+@angular/router@5.2.0
 MIT
 MIT
 
@@ -140,7 +118,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-webpack@3.10.0
+webpack@3.11.0
 MIT
 Copyright JS Foundation and other contributors
 
@@ -185,7 +163,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-zone.js@0.8.20
+zone.js@0.8.19
 MIT
 The MIT License
 
