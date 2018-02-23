@@ -1,10 +1,11 @@
 <mat-card appRaiseCard class="gpu-card">
   <mat-card-header>
     <div mat-card-avatar class="gpu-header-image"></div>
-    <mat-card-title>Some GPU Accelerated Calculations</mat-card-title>
-    <mat-card-subtitle>using gpu.js</mat-card-subtitle>
+    <mat-card-title>An example utilizing gpu.js</mat-card-title>
+    <mat-card-subtitle>No friggeling shader code needed for this</mat-card-subtitle>
   </mat-card-header>
   <canvas class="mat-card-image full-height" #gpuResult></canvas>
+  <div>Calculation time with {{additionForm.get('useGPU').value ? 'GPU': 'CPU'}} : {{(calculationTime$ | async)}}ms</div>
   <mat-card-content>
     <form class="gpu-form" [formGroup]="additionForm" novalidate>
       <div class="full-width">
@@ -24,7 +25,7 @@
                     thumb-label="true"
                     min="0"
                     max="255"
-                    color="accent"
+                    color="warn"
                     formControlName="g">
         </mat-slider>
         <mat-chip color="warn">{{additionForm.get('g').value}}</mat-chip>
@@ -35,33 +36,36 @@
                     thumb-label="true"
                     min="0"
                     max="255"
+                    color="warn"
                     formControlName="b">
         </mat-slider>
         <mat-chip color="warn">{{additionForm.get('b').value}}</mat-chip>
       </div>
       <div class="full-width">
         <span>Repeativness</span>
-        <mat-slider class="blue-color-slider"
-                    thumb-label="true"
-                    invert="true"
-                    min="1"
-                    max="200"
-                    formControlName="sinDivider">
+        <mat-slider
+          thumb-label="true"
+          invert="true"
+          min="1"
+          max="200"
+          formControlName="sinDivider">
         </mat-slider>
         <mat-chip color="accent">{{additionForm.get('sinDivider').value}}</mat-chip>
       </div>
       <div class="full-width">
         <span>Speed</span>
-        <mat-slider class="blue-color-slider"
-                    thumb-label="true"
-                    min="1"
-                    max="100"
-                    formControlName="speed">
+        <mat-slider
+          thumb-label="true"
+          min="1"
+          max="100"
+          formControlName="speed">
         </mat-slider>
         <mat-chip color="accent">{{additionForm.get('speed').value}}%</mat-chip>
       </div>
+      <mat-slide-toggle formControlName="useGPU">
+        {{additionForm.get('useGPU').value ? 'GPU is used' : 'GPU is not used' }}
+      </mat-slide-toggle>
     </form>
-    <div>Calculation time with GPU: {{calculationTime$ | async}}ms</div>
   </mat-card-content>
 </mat-card>
 

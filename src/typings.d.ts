@@ -17,5 +17,5 @@ interface KernelFunction {
 }
 
 interface GPU {
-  createKernel(kernelFunction: Function): KernelFunction;
+  createKernel(kernelFunction: Function, parameters?: {mode: 'gpu' | 'cpu'}): KernelFunction;
 }

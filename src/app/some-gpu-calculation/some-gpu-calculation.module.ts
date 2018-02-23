@@ -4,6 +4,8 @@ import {someGpuCalculationRoutes} from './some-gpu-calculation-routing.module';
 import {SomeGpuCalculationComponent} from './some-gpu-calculation.component';
 import {ReactiveFormsModule} from '@angular/forms';
 
+import {GpuJsService} from "./gpujs.service";
+
 @NgModule({
   imports: [
     someGpuCalculationRoutes,
@@ -11,6 +13,7 @@ import {ReactiveFormsModule} from '@angular/forms';
     ReactiveFormsModule
   ],
   declarations: [SomeGpuCalculationComponent],
-  providers: []
+  providers: [GpuJsService]
 })
-export class SomeGpuCalculationModule { }
+export class SomeGpuCalculationModule {
+}
