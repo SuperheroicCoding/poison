@@ -28,18 +28,17 @@ export class P5ViewComponent implements OnChanges {
   @Input() calcService: ReactionDiffCalculator;
   @Input() run = false;
   @Input() showFps = false;
-  @Input() scale = 1;
-  private scetch: any;
   @Output() mousePressed: EventEmitter<{ x: number, y: number }> = new EventEmitter();
+  private scetch: any;
   private frameRate = 1;
 
   constructor(private colorMapper: ColorMapperService) {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.simWidth || changes.simHeight || changes.scale) {
+    if (changes.simWidth || changes.simHeight || changes.speed) {
       if (this.scetch) {
-        this.scetch.resizeCanvas(Math.floor(this.simWidth * this.scale), Math.floor(this.simHeight * this.scale));
+        this.scetch.resizeCanvas(Math.floor(this.simWidth), Math.floor(this.simHeight));
       } else {
         this.scetch = new p5((p) => this.initP5(p), this.drawArea.nativeElement);
       }
@@ -48,7 +47,7 @@ export class P5ViewComponent implements OnChanges {
 
   private initP5(p: p5) {
     p.setup = () => {
-      p.createCanvas(Math.floor(this.simWidth * this.scale), Math.floor(this.simHeight * this.scale));
+      p.createCanvas(Math.floor(this.simWidth), Math.floor(this.simHeight));
     };
 
     p.draw = () => {

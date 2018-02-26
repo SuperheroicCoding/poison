@@ -15,14 +15,16 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   private feedRate: number;
   private killRate: number;
   private calcNextKernel: KernelFunction;
+  private speed: number;
 
   constructor(private width: number, private height: number,
               calcParams$: Observable<ReactionDiffCalcParams>,
               calcCellWeights$: Observable<CellWeights>,
-              addChemicalRadius$: Observable<number>, private  gpuJs: GPU) {
+              addChemicalRadius$: Observable<number>, speed$: Observable<number>, private  gpuJs: GPU) {
     calcParams$.subscribe((calcParams) => this.setCalcParams(calcParams));
     calcCellWeights$.subscribe((weights) => this.setWeights(weights));
     addChemicalRadius$.subscribe((radius) => this.addChemicalRadius = radius);
+    speed$.subscribe((speed) => this.speed = speed);
 
     this.initGrid();
     this.createCalcNextGpuKernel();
@@ -61,8 +63,10 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
 
   calcNext(): void {
     performance.mark('calcNext-start');
-    this.grid = this.calcNextKernel(input(this.grid, [this.width * this.height * 2]),
-      this.weights, this.diffRateA, this.diffRateB, this.feedRate, this.killRate, this.width);
+    for (let i = 0; i < this.speed; i++) {
+      this.grid = this.calcNextKernel(input(this.grid, [this.width * this.height * 2]),
+        this.weights, this.diffRateA, this.diffRateB, this.feedRate, this.killRate, this.width);
+    }
     performance.mark('calcNext-end');
     performance.measure('calcNext', 'calcNext-start', 'calcNext-end');
   }
@@ -75,6 +79,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
       }
     }
   }
+
   private getCell = (column: number, row: number): Cell => {
     const index = (column + row * this.width) * 2;
     return {
@@ -87,7 +92,6 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
     arrayToSet[index] = cell.a;
     arrayToSet[index + 1] = cell.b;
   }
-
 
   private setWeights(weights: CellWeights) {
     this.weights = weightsToArray(weights);
@@ -121,9 +125,18 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
       return sum;
     };
 
+    const calcNextA = function (a, dA, laplaceA, abb, f) {
+      const nextA = a +
+        (dA * laplaceA) -
+        abb +
+        (f * (1 - a));
+      return Math.min(1.0, Math.max(0.0, nextA));
+    };
+
     this.calcNextKernel = this.gpuJs.createKernel(
       function (grid, weights: number[], dA, dB, f, k, width) {
-        const indexA = this.thread.x - this.thread.x % 2;
+        const oddEvenMod = this.thread.x % 2;
+        const indexA = this.thread.x - oddEvenMod;
         const indexB = indexA + 1;
         const a = grid[indexA];
         const b = grid[indexB];
@@ -132,23 +145,12 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
 
         const abb = a * b * b;
 
-        if (this.thread.x % 2 === 0) {
-          const nextA = a +
-            (dA * laplaceA) -
-            abb +
-            (f * (1 - a));
-          return Math.min(1.0, Math.max(0.0, nextA));
-        } else {
-          const nextB = b +
-            (dB * laplaceB) +
-            abb -
-            ((k + f) * b);
-          return Math.min(1.0, Math.max(0.0, nextB));
-        }
+        return (oddEvenMod - 1) * -calcNextA(a, dA, laplaceA, abb, f)
+          + (oddEvenMod * (b + (dB * laplaceB) + abb - ((k + f) * b)));
       }
     )
       .setOutput([this.width * this.height * 2])
       .setFloatTextures(true)
-      .setFunctions([calcWeightedSum, cellIndex])
+      .setFunctions([calcWeightedSum, cellIndex, calcNextA]);
   }
 }

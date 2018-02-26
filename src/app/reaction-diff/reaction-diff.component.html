@@ -21,7 +21,6 @@
       [calcService]="calcService"
       [run]="start"
       [showFps]="showFps"
-      [scale]="scale"
       (mousePressed)="addChemical($event)">
     </app-p5-view>
     <mat-card-actions>
@@ -57,16 +56,16 @@
              [(ngModel)]="height"
              (change)="updateDimension()">
     </mat-input-container>
-    <mat-input-container class="small" mat-tooltip="Sorry, but scaling does not work yet">
-      <input matInput id="scale"
-             disabled
-             placeholder="Scale"
+    <mat-input-container class="small" mat-tooltip="iterations per frame">
+      <input matInput id="speed"
+             placeholder="Speed"
              type="number"
-             step="0.1"
-             name="scale"
-             min="0"
-             max="3"
-             [(ngModel)]="scale">
+             step="1"
+             name="speed"
+             min="1"
+             max="30"
+             [(ngModel)]="speed"
+             (change)="updateSpeed()">
     </mat-input-container>
     <mat-input-container class="small">
       <input matInput id="addChemicalRadius"

@@ -18,7 +18,7 @@ export class ReactionDiffCalcServiceFactory {
         width, height,
         this.configService.calcParams$,
         this.configService.calcCellWeights$,
-        this.configService.addChemicalRadius$, this.gpuJsService);
+        this.configService.addChemicalRadius$, this.configService.speed$, this.gpuJsService);
     } else {
       this.lastCalcService = new ReactionDiffWorkerCalcService(
         width,

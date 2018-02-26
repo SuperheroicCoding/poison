@@ -28,7 +28,7 @@ export class ReactionDiffComponent implements OnInit {
   public examples: string[];
   public selectedExample: string;
   public addChemicalRadius: number;
-  public scale = 1;
+  public speed = 1;
   public useGpu = true;
   calculationTime$: Observable<number>;
 
@@ -49,6 +49,10 @@ export class ReactionDiffComponent implements OnInit {
     );
     this.configService.addChemicalRadius$.subscribe((radius) =>
       this.addChemicalRadius = radius
+    );
+
+    this.configService.speed$.subscribe((speed) =>
+      this.speed = speed
     );
 
     this.calculationTime$ = Observable.interval(1000).pipe(
@@ -110,5 +114,9 @@ export class ReactionDiffComponent implements OnInit {
   updateUseGpu() {
     this.start = false;
     this.calcService = this.calcFactory.createCalcService(this.width, this.height, this.useGpu);
+  }
+
+  updateSpeed() {
+    this.configService.updateSpeed(this.speed);
   }
 }

@@ -61,11 +61,13 @@ export class ReactionDiffConfigService {
   public exampleOptions = ReactionDiffConfigService.exampleWeights.map(option => option.name);
   public selectedExample$: Observable<string>;
   public addChemicalRadius$: Observable<number>;
+  public speed$: Observable<number>;
 
   private selectedExampleSubject$: Subject<ExampleParamOption> = new BehaviorSubject(ReactionDiffConfigService.exampleWeights[0]);
   private paramsSubject$: Subject<ReactionDiffCalcParams> = new BehaviorSubject(ReactionDiffConfigService.defaultParams);
   private weightsSubject$: Subject<CellWeights> = new BehaviorSubject(ReactionDiffConfigService.defaultWeights);
   private addChemicalRadiusSubject$: Subject<number> = new BehaviorSubject(ReactionDiffConfigService.addChemicalRadius);
+  private speedSubject$: Subject<number> = new BehaviorSubject(1);
 
   constructor() {
     this.calcParams$ = this.paramsSubject$.asObservable()
@@ -83,6 +85,8 @@ export class ReactionDiffConfigService {
           (example) ? this.updateCalcParams(example.value) : null),
         map((example) => example ? example.name : null)
       );
+
+    this.speed$ = this.speedSubject$.asObservable();
   }
 
   private trimWeights(weights: CellWeights): CellWeights {
@@ -102,6 +106,10 @@ export class ReactionDiffConfigService {
 
   updateCalcCellWeights(weightsParams: CellWeights) {
     this.weightsSubject$.next(weightsParams);
+  }
+
+  updateSpeed(speed) {
+    this.speedSubject$.next(speed);
   }
 
   resetAddChemicalRadius() {
