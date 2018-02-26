@@ -1,4 +1,4 @@
-export interface CalcCellWeights {
+export interface CellWeights {
   topLeft: number;
   topCenter: number;
   topRight: number;
@@ -9,3 +9,11 @@ export interface CalcCellWeights {
   bottomCenter: number;
   bottomRight: number;
 }
+
+export const weightsToArray = (weights) => {
+  return [
+    weights.topLeft, weights.topCenter, weights.topRight,
+    weights.left, weights.center, weights.right,
+    weights.bottomLeft, weights.bottomCenter, weights.bottomRight
+  ];
+};

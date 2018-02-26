@@ -10,7 +10,7 @@ export class CoreModule {
       ngModule: CoreModule,
       providers: [
         TitleService,
-        RandomService
+        RandomService,
       ],
     };
   }

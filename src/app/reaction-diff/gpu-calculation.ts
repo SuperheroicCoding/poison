@@ -1,7 +1,6 @@
 import {Cell} from './cell';
 import {WorkerPostParams} from '../rx/operator/map-worker';
 import {CalcNextParam} from './calc-next-param';
-import {AddChemicalsParams} from './add-chemicals-param';
 
 
 export const calcNextDiffStep = function (input: CalcNextParam): WorkerPostParams<{ buffer: ArrayBufferLike, offsetRow: number }> {
@@ -101,9 +100,17 @@ export const calcNextDiffStep = function (input: CalcNextParam): WorkerPostParam
     }
   }
   // we grid buffer to release resources. Otherwise the memory is eaten up really quick.
-  return {data: {buffer: next.buffer, offsetRow}, transferList: [next.buffer, gridBuffer]};
+  return {data: {buffer: next.buffer, offsetRow}, transferList: [next.buffer, gridBuffer ]};
 };
 
+export interface AddChemicalsParams {
+  x: number;
+  y: number;
+  r: number;
+  gridBuffer: ArrayBufferLike;
+  width: number;
+  height: number;
+}
 
 export const addChemicals = function (data: AddChemicalsParams): WorkerPostParams<ArrayBufferLike> {
   const grid = new Float32Array(data.gridBuffer);

@@ -12,8 +12,10 @@ interface KernelFunction {
   (...argArray: any[]): any;
   setGraphical(on: boolean): KernelFunction;
   setOutput(outputDef: number[]):  KernelFunction;
+  setFloatTextures(activate: boolean): KernelFunction;
   getCanvas(): HTMLCanvasElement;
   setOutputToTexture(outputToTexture: boolean);
+  setFunctions(functions: Function[]);
 }
 
 interface GPU {

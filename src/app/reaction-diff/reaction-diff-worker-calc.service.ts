@@ -1,51 +1,17 @@
-import {Injectable} from '@angular/core';
+import {CellWeights} from './cell-weights';
 import {Observable} from 'rxjs/Observable';
+import {addChemicals, calcNextDiffStep} from './worker-calculation';
 import {ReactionDiffCalcParams} from './reaction-diff-calc-params';
-import {Cell} from './cell';
-import {CalcCellWeights} from './cell-weights';
-import {ReactionDiffConfigService} from './reaction-diff-config.service';
+import {WorkerPostParams} from '../rx/operator/map-worker';
+import {CalcNextParam} from './calc-next-param';
 import {Subject} from 'rxjs/Subject';
+import {Cell} from './cell';
 import {Subscription} from 'rxjs/Subscription';
-import {addChemicals, AddChemicalsParams, calcNextDiffStep} from './worker-calculation';
-import {GPU} from 'gpu.js';
-import {mapWorker, WorkerPostParams} from '../rx/operator/map-worker';
-import '../rx/add/operator/map-worker';
-import 'rxjs/add/operator/filter';
+import {AddChemicalsParams} from './add-chemicals-param';
 import {filter} from 'rxjs/operators';
+import {ReactionDiffCalculator} from './reaction-diff-calculator';
 
-@Injectable()
-export class ReactionDiffCalcServiceFactory {
-  lastCalcService: ReactionDiffCalcService;
-
-  constructor(private configService: ReactionDiffConfigService) {
-  }
-
-  public createCalcService(width: number, height: number) {
-    this.lastCalcService = new ReactionDiffCalcService(
-      width,
-      height,
-      this.configService.calcParams$,
-      this.configService.calcCellWeights$,
-      this.configService.addChemicalRadius$,
-    );
-    return this.lastCalcService;
-  }
-}
-
-interface CalcNextWebWorkerParam {
-  width: number;
-  height: number;
-  gridBuffer: ArrayBufferLike;
-  dA: number;
-  dB: number;
-  f: number;
-  k: number;
-  w: CalcCellWeights;
-  offsetRow: number;
-  offsetLength: number;
-}
-
-export class ReactionDiffCalcService {
+export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
 
   public grid: Float32Array;
   public numberThreads = 8;
@@ -54,9 +20,9 @@ export class ReactionDiffCalcService {
   private diffRateB;
   private feedRate;
   private killRate;
-  private weights: CalcCellWeights;
+  private weights: CellWeights;
   private addChemicalRadius: number;
-  private workerSubjects$: Subject<WorkerPostParams<CalcNextWebWorkerParam>>[];
+  private workerSubjects$: Subject<WorkerPostParams<CalcNextParam>>[];
   private workers$: Observable<{ buffer: ArrayBufferLike; offsetRow: number }>[];
   private canCalculate = true;
   private workerSubscriptions: Subscription[];
@@ -65,7 +31,7 @@ export class ReactionDiffCalcService {
   constructor(private width: number,
               private height: number,
               calcParams$: Observable<ReactionDiffCalcParams>,
-              weightParams$: Observable<CalcCellWeights>,
+              weightParams$: Observable<CellWeights>,
               addChemicalRadius$: Observable<number>) {
     calcParams$.subscribe((calcParams) => this.setCalcParams(calcParams));
     weightParams$.subscribe((weights) => this.setWeights(weights));
@@ -73,7 +39,7 @@ export class ReactionDiffCalcService {
     this.init();
   }
 
-  private setWeights(weights: CalcCellWeights) {
+  private setWeights(weights: CellWeights) {
     this.weights = Object.assign({}, weights);
   }
 
@@ -102,7 +68,7 @@ export class ReactionDiffCalcService {
   private initCalcWorkers$() {
     this.workerSubjects$ = [];
     Observable.range(0, this.numberThreads)
-      .subscribe((index) => this.workerSubjects$[index] = new Subject<WorkerPostParams<CalcNextWebWorkerParam>>());
+      .subscribe((index) => this.workerSubjects$[index] = new Subject<WorkerPostParams<CalcNextParam>>());
 
     this.workers$ = this.workerSubjects$
       .map(subject =>
@@ -240,3 +206,4 @@ export class ReactionDiffCalcService {
     this.initCalcWorkers$();
   }
 }
+

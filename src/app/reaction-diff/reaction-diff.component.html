@@ -41,7 +41,7 @@
              type="number"
              step="1"
              name="width"
-             min="0"
+             min="1"
              max="1000"
              [(ngModel)]="width"
              (change)="updateDimension()">
@@ -52,7 +52,7 @@
              type="number"
              step="1"
              name="height"
-             min="0"
+             min="1"
              max="1000"
              [(ngModel)]="height"
              (change)="updateDimension()">
@@ -87,9 +87,12 @@
              name="addChemicalRadius"
              min="1"
              max="16"
+             [disabled]="useGpu"
              [(ngModel)]="numberWebWorkers"
              (change)="updateNumberOfWebWorkers()">
     </mat-input-container>
+    <mat-checkbox [(ngModel)]="useGpu" (change)="updateUseGpu()">Use GPU
+    </mat-checkbox>
 
     <div>Calculation needs: {{calculationTime$ | async}}ms</div>
   </mat-card>

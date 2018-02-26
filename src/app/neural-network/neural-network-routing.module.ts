@@ -5,15 +5,12 @@ import {MultiPerceptronComponent} from './multi-perceptron/multi-perceptron.comp
 import {PerceptronTabComponent} from './perceptron-tab/perceptron-tab.component';
 
 
-const routes: Routes = [
-    {
-      path: '', component: NeuralNetworkComponent, children: [
-        {path: 'perceptron', component: PerceptronTabComponent},
-        {path: 'multiPerceptron', component: MultiPerceptronComponent}
-      ]
-    },
+const routes: Routes = [{
+  path: '', component: NeuralNetworkComponent, children: [
+    {path: 'perceptron', component: PerceptronTabComponent},
+    {path: 'multiPerceptron', component: MultiPerceptronComponent}
   ]
-;
+}];
 
 export const navLinks = routes.filter(route => route.path.length > 0);
 

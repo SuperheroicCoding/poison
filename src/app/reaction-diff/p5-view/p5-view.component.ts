@@ -10,8 +10,9 @@ import {
   ViewChild
 } from '@angular/core';
 import * as p5 from 'p5';
-import {ReactionDiffCalcService} from '../reaction-diff-calculation.service';
+
 import {ColorMapperService} from './color-mapper.service';
+import {ReactionDiffCalculator} from '../reaction-diff-calculator';
 
 @Component({
   selector: 'app-p5-view',
@@ -24,7 +25,7 @@ export class P5ViewComponent implements OnChanges {
   @ViewChild('drawArea') drawArea: ElementRef;
   @Input() simWidth: number;
   @Input() simHeight: number;
-  @Input() calcService: ReactionDiffCalcService;
+  @Input() calcService: ReactionDiffCalculator;
   @Input() run = false;
   @Input() showFps = false;
   @Input() scale = 1;
@@ -48,7 +49,6 @@ export class P5ViewComponent implements OnChanges {
   private initP5(p: p5) {
     p.setup = () => {
       p.createCanvas(Math.floor(this.simWidth * this.scale), Math.floor(this.simHeight * this.scale));
-      p.frameRate(30);
     };
 
     p.draw = () => {
@@ -101,7 +101,7 @@ export class P5ViewComponent implements OnChanges {
     };
   }
 
-  private getGrid() {
+  private getGrid(): Float32Array {
     return this.calcService.grid;
   }
 }

@@ -1,12 +1,13 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {ReactionDiffCalcService, ReactionDiffCalcServiceFactory} from './reaction-diff-calculation.service';
+import {ReactionDiffCalcServiceFactory} from './reaction-diff-calculation-service.factory';
 
-import {CalcCellWeights} from './cell-weights';
+import {CellWeights} from './cell-weights';
 import {ReactionDiffConfigService} from './reaction-diff-config.service';
 import {ReactionDiffCalcParams} from './reaction-diff-calc-params';
 import {Observable} from 'rxjs/Observable';
 import {MatSelectChange} from '@angular/material';
-import {map, flatMap} from 'rxjs/operators';
+import {flatMap, map} from 'rxjs/operators';
+import {ReactionDiffCalculator} from './reaction-diff-calculator';
 
 @Component({
   selector: 'app-reaction-diff',
@@ -16,18 +17,19 @@ import {map, flatMap} from 'rxjs/operators';
 })
 export class ReactionDiffComponent implements OnInit {
 
-  public calcService: ReactionDiffCalcService;
+  public calcService: ReactionDiffCalculator;
   public start = false;
   public showFps = true;
   public width = 200;
   public height = 200;
   public numberWebWorkers: number;
-  public cellWeights$: Observable<CalcCellWeights>;
+  public cellWeights$: Observable<CellWeights>;
   public calcParams: ReactionDiffCalcParams;
   public examples: string[];
   public selectedExample: string;
   public addChemicalRadius: number;
   public scale = 1;
+  public useGpu = true;
   calculationTime$: Observable<number>;
 
   constructor(private calcFactory: ReactionDiffCalcServiceFactory, private configService: ReactionDiffConfigService) {
@@ -36,7 +38,7 @@ export class ReactionDiffComponent implements OnInit {
   public ngOnInit(): void {
     this.examples = this.configService.exampleOptions;
 
-    this.calcService = this.calcFactory.createCalcService(this.width, this.height);
+    this.calcService = this.calcFactory.createCalcService(this.width, this.height, this.useGpu);
     this.numberWebWorkers = this.calcService.numberThreads;
     this.cellWeights$ = this.configService.calcCellWeights$;
     this.configService.selectedExample$.subscribe((example) =>
@@ -55,8 +57,10 @@ export class ReactionDiffComponent implements OnInit {
         if (measures.length === 0) {
           return 0;
         }
-        return measures
-          .reduce((acc, next) => acc + next.duration / measures.length, 0);
+        const measuresmentsToTake = Math.min(measures.length, 50);
+        const calcTime = measures.slice(measures.length - measuresmentsToTake)
+          .reduce((acc, next) => acc + next.duration / measuresmentsToTake, 0);
+        return calcTime;
       }));
   }
 
@@ -86,7 +90,7 @@ export class ReactionDiffComponent implements OnInit {
     this.configService.updateCalcParams(calcParams);
   }
 
-  public updateWeights(weights: CalcCellWeights) {
+  public updateWeights(weights: CellWeights) {
     this.configService.updateCalcCellWeights(weights);
   }
 
@@ -101,5 +105,10 @@ export class ReactionDiffComponent implements OnInit {
 
   updateNumberOfWebWorkers() {
     this.calcService.updateNumberThreads(this.numberWebWorkers);
+  }
+
+  updateUseGpu() {
+    this.start = false;
+    this.calcService = this.calcFactory.createCalcService(this.width, this.height, this.useGpu);
   }
 }

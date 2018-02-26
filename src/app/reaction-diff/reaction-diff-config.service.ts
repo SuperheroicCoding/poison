@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Subject} from 'rxjs/Subject';
-import {CalcCellWeights} from './cell-weights';
+import {CellWeights} from './cell-weights';
 import {Observable} from 'rxjs/Observable';
 import {ReactionDiffCalcParams} from './reaction-diff-calc-params';
 import {map, tap} from 'rxjs/operators';
@@ -57,14 +57,14 @@ export class ReactionDiffConfigService {
 
 
   public calcParams$: Observable<ReactionDiffCalcParams>;
-  public calcCellWeights$: Observable<CalcCellWeights>;
+  public calcCellWeights$: Observable<CellWeights>;
   public exampleOptions = ReactionDiffConfigService.exampleWeights.map(option => option.name);
   public selectedExample$: Observable<string>;
   public addChemicalRadius$: Observable<number>;
 
   private selectedExampleSubject$: Subject<ExampleParamOption> = new BehaviorSubject(ReactionDiffConfigService.exampleWeights[0]);
   private paramsSubject$: Subject<ReactionDiffCalcParams> = new BehaviorSubject(ReactionDiffConfigService.defaultParams);
-  private weightsSubject$: Subject<CalcCellWeights> = new BehaviorSubject(ReactionDiffConfigService.defaultWeights);
+  private weightsSubject$: Subject<CellWeights> = new BehaviorSubject(ReactionDiffConfigService.defaultWeights);
   private addChemicalRadiusSubject$: Subject<number> = new BehaviorSubject(ReactionDiffConfigService.addChemicalRadius);
 
   constructor() {
@@ -73,7 +73,6 @@ export class ReactionDiffConfigService {
         map((calcParams) => Object.assign({}, calcParams))
       );
     this.calcCellWeights$ = this.weightsSubject$.asObservable().pipe(
-      map((calcWeights) => Object.assign({}, calcWeights)),
       map((weights) => this.trimWeights(weights))
     );
 
@@ -86,10 +85,10 @@ export class ReactionDiffConfigService {
       );
   }
 
-  private trimWeights(weights: CalcCellWeights): CalcCellWeights {
+  private trimWeights(weights: CellWeights): CellWeights {
     return Object.keys(weights).reduce(
       (result, key: string) =>
-        Object.assign(result, {[key]: Math.round(weights[key] * 10000) / 10000}), {}) as CalcCellWeights;
+        Object.assign(result, {[key]: Math.round(weights[key] * 10000) / 10000}), {}) as CellWeights;
   }
 
   updateAddChemicalRadius(radius: number) {
@@ -101,7 +100,7 @@ export class ReactionDiffConfigService {
     this.paramsSubject$.next(calcParams);
   }
 
-  updateCalcCellWeights(weightsParams: CalcCellWeights) {
+  updateCalcCellWeights(weightsParams: CellWeights) {
     this.weightsSubject$.next(weightsParams);
   }
 

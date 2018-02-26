@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
-import {CalcCellWeights} from '../cell-weights';
+import {CellWeights} from '../cell-weights';
 
 @Component({
   selector: 'app-weights-config',
@@ -8,8 +8,8 @@ import {CalcCellWeights} from '../cell-weights';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WeightsConfigComponent implements OnChanges {
-  @Input() weights: CalcCellWeights;
-  @Output() onWeightsChanged: EventEmitter<CalcCellWeights> = new EventEmitter<CalcCellWeights>();
+  @Input() weights: CellWeights;
+  @Output() onWeightsChanged: EventEmitter<CellWeights> = new EventEmitter<CellWeights>();
 
   private sumOfWeights;
 

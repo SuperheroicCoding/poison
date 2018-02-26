@@ -10,7 +10,7 @@ import {interval} from 'rxjs/observable/interval';
 import {of} from 'rxjs/observable/of';
 import {TimeInterval} from 'rxjs/Rx';
 import {Subscription} from 'rxjs/Subscription';
-import {GpuJsService} from "./gpujs.service";
+import {GpuJsService} from './gpujs.service';
 
 @Component({
   selector: 'app-some-gpu-calculation',
