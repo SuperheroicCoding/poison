@@ -3,7 +3,8 @@ import {CellWeights, weightsToArray} from './cell-weights';
 import {ReactionDiffCalculator} from './reaction-diff-calculator';
 import {Observable} from 'rxjs/Observable';
 import {Cell} from './cell';
-import {input} from 'gpu.js/dist';
+import {GpuJsService, inp} from './gpujs.service';
+import {ColorMapperService} from './color-mapper.service';
 
 export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   grid: Float32Array;
@@ -16,45 +17,50 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   private killRate: number;
   private calcNextKernel: KernelFunction;
   private speed: number;
+  private addChemicalsKernel: KernelFunction;
+  private imageKernel: KernelFunction;
+  private image: HTMLCanvasElement;
 
   constructor(private width: number, private height: number,
               calcParams$: Observable<ReactionDiffCalcParams>,
               calcCellWeights$: Observable<CellWeights>,
-              addChemicalRadius$: Observable<number>, speed$: Observable<number>, private  gpuJs: GPU) {
+              addChemicalRadius$: Observable<number>,
+              speed$: Observable<number>,
+              private  gpuJs: GpuJsService,
+              private colorMapper: ColorMapperService) {
     calcParams$.subscribe((calcParams) => this.setCalcParams(calcParams));
     calcCellWeights$.subscribe((weights) => this.setWeights(weights));
     addChemicalRadius$.subscribe((radius) => this.addChemicalRadius = radius);
     speed$.subscribe((speed) => this.speed = speed);
-
-    this.initGrid();
     this.createCalcNextGpuKernel();
+    this.createAddChemicalsKernel();
+    this.createImageKernel();
+    this.initGrid();
   }
 
   reset(): void {
+    this.createCalcNextGpuKernel();
+    this.createAddChemicalsKernel();
+    this.createImageKernel();
     this.initGrid();
   }
 
   addChemical(x: number, y: number): void {
     const r = this.addChemicalRadius;
-    for (let i = -r; i < r; i++) {
-      for (let j = -r; j < r; j++) {
-        const wrappedX = x + i < 0 ? this.width + i : (x + i) % this.width;
-        const wrappedY = y + j < 0 ? this.height + j : (y + j) % this.height;
-        const bToAdd = r / (i * i + j * j);
-        const cell = this.getCell(wrappedX, wrappedY);
-        this.setCell(wrappedX, wrappedY, {
-          a: cell.a,
-          b: Math.min(1.0, Math.max(0.0, cell.b + bToAdd))
-        });
-      }
-    }
+    this.grid = this.addChemicalsKernel(
+      x, y,
+      inp(this.grid, [this.width * this.height * 2]),
+      r,
+      this.width);
   }
 
   resize(width: number, height: number): void {
     this.width = width;
     this.height = height;
-    this.initGrid();
     this.createCalcNextGpuKernel();
+    this.createAddChemicalsKernel();
+    this.createImageKernel();
+    this.initGrid();
   }
 
   updateNumberThreads(numberWebWorkers: number): void {
@@ -64,8 +70,15 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   calcNext(): void {
     performance.mark('calcNext-start');
     for (let i = 0; i < this.speed; i++) {
-      this.grid = this.calcNextKernel(input(this.grid, [this.width * this.height * 2]),
-        this.weights, this.diffRateA, this.diffRateB, this.feedRate, this.killRate, this.width);
+      this.grid = this.calcNextKernel(
+        inp(this.grid, [this.width * this.height * 2]),
+        this.weights,
+        this.diffRateA,
+        this.diffRateB,
+        this.feedRate,
+        this.killRate,
+        this.width
+      );
     }
     performance.mark('calcNext-end');
     performance.measure('calcNext', 'calcNext-start', 'calcNext-end');
@@ -85,7 +98,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
     return {
       a: this.grid[index], b: this.grid[index + 1]
     };
-  }
+  };
 
   private setCell(column: number, row: number, cell: Cell, width: number = this.width, arrayToSet: Float32Array = this.grid) {
     const index = (column + row * width) * 2;
@@ -104,6 +117,13 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
     this.killRate = calcParams.killRate;
   }
 
+  getImage(p: any) {
+    this.imageKernel(inp(this.grid, [this.width * this.height * 2]));
+    const canvas = this.imageKernel.getCanvas();
+    const dataURL = canvas.toDataURL('image/png');
+    const img = p.loadImage(dataURL);
+    return img;
+  }
 
   private createCalcNextGpuKernel() {
 
@@ -152,5 +172,58 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
       .setOutput([this.width * this.height * 2])
       .setFloatTextures(true)
       .setFunctions([calcWeightedSum, cellIndex, calcNextA]);
+  }
+
+  private createAddChemicalsKernel() {
+
+    this.addChemicalsKernel = this.gpuJs.createKernel(
+      function (x, y, grid, radius, width) {
+
+        const oddEvenMod = this.thread.x % 2;
+        if (oddEvenMod === 0) {
+          return grid[this.thread.x];
+        }
+        const col = (this.thread.x / 2) % width;
+        const row = this.thread.x / (width * 2);
+        const i = Math.abs(x - col);
+        const j = Math.abs(y - row);
+        const radPos = Math.sqrt((i * i) + (j * j));
+        if (radPos > radius) {
+          return grid[this.thread.x];
+        }
+        return Math.min(1, this.thread.x + (radius / ((radPos * radPos) + radius)));
+      }
+    )
+      .setOutput([this.width * this.height * 2])
+      .setFloatTextures(true);
+  }
+
+  private createImageKernel() {
+
+    this.imageKernel = this.gpuJs.createKernel(
+      function (grid) {
+        const oddEvenMod = this.thread.x % 2;
+        const indexA = this.thread.x - oddEvenMod;
+        const indexB = indexA + 1;
+        const aVal = grid[indexA];
+        const bVal = grid[indexB];
+        let r = 0;
+        let g = 0;
+        let b = 0;
+        if (aVal === 0) {
+          b = bVal;
+        } else if (bVal === 0) {
+          r = 0.5 * aVal;
+          g = 0.5 * aVal;
+          b = 0.8;
+        } else {
+          r = 0.5 * aVal;
+          g = 0.5 * aVal;
+          b = 0.4 + (0.5 * bVal);
+        }
+        this.color(r, g, b);
+      }
+    ).setFloatTextures(true)
+      .setOutput([this.width, this.height, 3])
   }
 }

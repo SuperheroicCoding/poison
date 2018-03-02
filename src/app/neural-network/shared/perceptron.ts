@@ -1,7 +1,6 @@
 import {TrainData} from './train-data';
 import {LabelClass} from './point';
 import {timer} from 'rxjs/observable/timer';
-import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
 
 export class Perceptron {

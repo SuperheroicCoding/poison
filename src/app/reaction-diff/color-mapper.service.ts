@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Cell} from '../cell';
+import {Cell} from './cell';
 
 export interface ReactionDiffCellColor {
   r: number;

@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import * as p5 from 'p5';
 
-import {ColorMapperService} from './color-mapper.service';
+import {ColorMapperService} from '../color-mapper.service';
 import {ReactionDiffCalculator} from '../reaction-diff-calculator';
 
 @Component({
@@ -45,7 +45,7 @@ export class P5ViewComponent implements OnChanges {
     }
   }
 
-  private initP5(p: p5) {
+  private initP5(p: any) {
     p.setup = () => {
       p.createCanvas(Math.floor(this.simWidth), Math.floor(this.simHeight));
     };

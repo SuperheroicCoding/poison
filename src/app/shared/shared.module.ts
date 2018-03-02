@@ -23,9 +23,23 @@ import 'rxjs/add/operator/bufferCount';
 import 'rxjs/add/operator/repeat';
 import '../rx/add/operator/map-worker';
 import {
-  MatButtonModule, MatCardModule, MatCheckboxModule, MatGridListModule, MatIconModule, MatInputModule, MatListModule, MatSelectModule,
-  MatSidenavModule, MatSlideToggleModule, MatTabsModule, MatToolbarModule, MatTooltipModule, MatSliderModule, MatChipsModule
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatChipsModule,
+  MatGridListModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatSliderModule,
+  MatSlideToggleModule,
+  MatTabsModule,
+  MatToolbarModule,
+  MatTooltipModule
 } from '@angular/material';
+import {SafeHtmlPipe} from './safe-html.pipe';
 
 @NgModule({
   exports: [
@@ -46,9 +60,10 @@ import {
     MatTabsModule,
     MatSliderModule,
     MatChipsModule,
-    RaiseCardDirective
+    RaiseCardDirective,
+    SafeHtmlPipe
   ],
-  declarations: [RaiseCardDirective]
+  declarations: [RaiseCardDirective, SafeHtmlPipe]
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders {

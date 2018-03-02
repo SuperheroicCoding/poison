@@ -1,7 +1,8 @@
-import {Data, Route, RouterModule, Routes} from '@angular/router';
+import {Data, Route, RouterModule} from '@angular/router';
 import {ModuleWithProviders} from '@angular/core';
 import {InfoComponent} from './info/info.component';
 import {SomeGpuCalculationModule} from './some-gpu-calculation/some-gpu-calculation.module';
+import {ShaderExamplesModule} from './shader-examples/shader-examples.module';
 
 export interface AppRouteData extends Data {
   linkText?: string;
@@ -25,7 +26,9 @@ export const routes: AppRoute[] = [
     data: {linkText: 'Reaction Diffusion Algorithm'}
   },
   {
-    path: 'webGl', loadChildren: 'app/web-gl/web-gl.module#WebGlModule', data: {linkText: 'WebGl Examples'}
+    path: 'webGl',
+    loadChildren: 'app/web-gl/web-gl.module#WebGlModule',
+    data: {linkText: 'WebGl Examples'}
   },
   {
     path: 'neuralNetwork',
@@ -36,6 +39,11 @@ export const routes: AppRoute[] = [
     path: 'someGpuCalculations',
     loadChildren: 'app/some-gpu-calculation/some-gpu-calculation.module#SomeGpuCalculationModule',
     data: {linkText: 'Some Gpu Accelerated Calculations'}
+  },
+  {
+    path: 'shaderExamples',
+    loadChildren: 'app/shader-examples/shader-examples.module#ShaderExamplesModule',
+    data: {linkText: 'WebGL Shader Examples'}
   },
   {path: '**', redirectTo: 'home'}
 ];

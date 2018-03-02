@@ -198,7 +198,7 @@ export class WebGlComponent implements OnInit, AfterContentInit {
       }
     }
 
-    const checkerBoard = new Mesh(geometry, materials);
+    const checkerBoard = new Mesh(geometry, materials as any);
     return checkerBoard;
   }
 

@@ -10,6 +10,7 @@ import {Subscription} from 'rxjs/Subscription';
 import {AddChemicalsParams} from './add-chemicals-param';
 import {filter} from 'rxjs/operators';
 import {ReactionDiffCalculator} from './reaction-diff-calculator';
+import {ColorMapperService} from './color-mapper.service';
 
 export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
 
@@ -32,7 +33,7 @@ export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
               private height: number,
               calcParams$: Observable<ReactionDiffCalcParams>,
               weightParams$: Observable<CellWeights>,
-              addChemicalRadius$: Observable<number>) {
+              addChemicalRadius$: Observable<number>, private colorMapper: ColorMapperService) {
     calcParams$.subscribe((calcParams) => this.setCalcParams(calcParams));
     weightParams$.subscribe((weights) => this.setWeights(weights));
     addChemicalRadius$.subscribe((radius) => this.addChemicalRadius = radius);
@@ -204,6 +205,21 @@ export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
     this.numberThreads = numberWebWorkers;
     this.workerSubjects$.forEach(sub => sub.complete());
     this.initCalcWorkers$();
+  }
+
+  getImage(p: any) {
+    const img = p.createImage(this.width, this.height);
+    img.loadPixels();
+    for (let x = 0; x < this.grid.length - 1; x = x + 2) {
+      const pix = (x * 2);
+      const cellColor = this.colorMapper.calcColorFor({a: this.grid[x], b: this.grid[x + 1]}, p);
+      img.pixels[pix] = cellColor.r;
+      img.pixels[pix + 1] = cellColor.b;
+      img.pixels[pix + 2] = cellColor.g;
+      img.pixels[pix + 3] = 255;
+    }
+    img.updatePixels();
+    return img;
   }
 }
 

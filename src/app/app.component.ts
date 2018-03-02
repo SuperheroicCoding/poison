@@ -1,8 +1,5 @@
 import {Component} from '@angular/core';
-import {AppRoute, AppRouteData, routes} from './app-routing.module';
-import {ActivatedRoute, Data, NavigationEnd, NavigationStart, Router} from '@angular/router';
-import {Title} from '@angular/platform-browser';
-import {filter, map, switchMap, switchMapTo, tap} from 'rxjs/operators';
+import {AppRoute, routes} from './app-routing.module';
 import {TitleService} from './core/title.service';
 
 const routerLinks = routes.filter((route) => route.data ? route.data.linkText : false);

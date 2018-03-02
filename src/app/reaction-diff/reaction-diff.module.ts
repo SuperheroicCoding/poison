@@ -6,7 +6,7 @@ import {P5ViewComponent} from './p5-view/p5-view.component';
 import {SharedModule} from '../shared/shared.module';
 import {WeightsConfigComponent} from './weights-config/weights-config.component';
 import {ReactionDiffConfigService} from './reaction-diff-config.service';
-import {ColorMapperService} from './p5-view/color-mapper.service';
+import {ColorMapperService} from './color-mapper.service';
 import {GpuJsService} from './gpujs.service';
 
 @NgModule({

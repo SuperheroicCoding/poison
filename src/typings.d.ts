@@ -6,6 +6,7 @@ interface NodeModule {
 }
 
 declare module 'gpu.js';
+declare module 'p5';
 
 interface KernelFunction {
   (arg?: any): any;

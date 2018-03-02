@@ -1,0 +1,21 @@
+<mat-toolbar>
+  <mat-toolbar-row>
+    Some WebGl Shader Examples inspired by&nbsp;
+    <a target="_blank" href="https://thebookofshaders.com">The Book of Shader</a>
+  </mat-toolbar-row>
+</mat-toolbar>
+<div class="card-container">
+  <mat-card *ngFor="let shader of shaders">
+    <mat-card-title>{{shader.description}}</mat-card-title>
+    <app-render-shader width="300" height="200" [shaderCode]="shader.code">
+    </app-render-shader>
+    <mat-card-content>
+
+      <div
+        [innerHTML]="shader.code | safe">
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+

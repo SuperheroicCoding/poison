@@ -5,6 +5,4 @@ import {SomeGpuCalculationComponent} from './some-gpu-calculation.component';
 const routes: Routes = [
   {path: '', component: SomeGpuCalculationComponent},
 ];
-
-export const someGpuCalculationRoutes: ModuleWithProviders = RouterModule.forChild(routes);
-
+export const SomeGpuCalculationRoutingModule: ModuleWithProviders = RouterModule.forChild(routes);

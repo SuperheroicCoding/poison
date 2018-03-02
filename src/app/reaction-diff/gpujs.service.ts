@@ -1,5 +1,8 @@
 import {Injectable} from '@angular/core';
 import * as GpuJs from 'gpu.js/dist';
+import {input} from 'gpu.js/dist';
+
+export const inp: (array: ArrayLike<number>, dimensions: number[]) => any = input;
 
 @Injectable()
 export class GpuJsService implements GPU {
