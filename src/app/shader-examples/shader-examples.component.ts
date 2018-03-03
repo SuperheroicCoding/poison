@@ -8,11 +8,14 @@ import {ShaderDef, shaders} from './shaders';
 })
 export class ShaderExamplesComponent implements OnInit {
   shaders: ShaderDef[];
+  private showFps: boolean;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
     this.shaders = shaders;
+    this.showFps = false;
   }
 
 }

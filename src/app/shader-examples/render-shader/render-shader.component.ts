@@ -1,6 +1,6 @@
-import {AfterContentInit, Component, ElementRef, HostListener, Input, ViewChild} from '@angular/core';
+import {AfterContentInit, Component, ElementRef, HostListener, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 import * as THREE from 'three';
-import {Camera, Mesh, OrthographicCamera, PlaneBufferGeometry, Scene, ShaderMaterial, Uniform, Vector2, WebGLRenderer} from 'three';
+import {Camera, Mesh, OrthographicCamera, PlaneBufferGeometry, Scene, ShaderMaterial, Vector2, WebGLRenderer} from 'three';
 import {defaultVertexShader} from '../vertex-shader';
 import * as Stats from 'stats.js';
 
@@ -9,32 +9,24 @@ import * as Stats from 'stats.js';
   templateUrl: './render-shader.component.html',
   styleUrls: ['./render-shader.component.less']
 })
-export class RenderShaderComponent implements AfterContentInit {
-
+export class RenderShaderComponent implements AfterContentInit, OnChanges {
   @Input() height: number;
   @Input() width: number;
   @Input() shaderCode: string;
   @Input() vertexShader?: string;
-  private runAnimate: boolean = true;
-
-  @HostListener('mouseenter') onEnter() {
-    this.runAnimate = true;
-    requestAnimationFrame(time => this.animate(time));
-  }
-
-  @HostListener('mouseleave') onLeave() {
-    this.runAnimate = false;
-  }
+  @Input() runAnimation = true;
+  @Input() showFps = true;
 
   @ViewChild('webGlCanvas') shaderCanvas: ElementRef;
   @ViewChild('stats') statsElem: ElementRef;
 
   private renderer: WebGLRenderer;
+
   private camera: Camera;
   private geometry: PlaneBufferGeometry;
   private material: ShaderMaterial;
-
   private mesh: Mesh;
+
   private scene: Scene;
   private uniforms: any;
   private stats: Stats;
@@ -80,14 +72,24 @@ export class RenderShaderComponent implements AfterContentInit {
     this.renderer.setSize(this.width, this.height);
   }
 
-  animate(time: number) {
-    if (this.runAnimate) {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.runAnimation && changes.runAnimation.currentValue) {
       requestAnimationFrame(timestamp => this.animate(timestamp));
     }
+  }
+
+  render(time: number) {
     this.stats.begin();
     this.uniforms.time.value = time / 1000;
     this.renderer.render(this.scene, this.camera);
     this.stats.end();
+  }
+
+  animate(time: number) {
+    if (this.runAnimation) {
+      requestAnimationFrame(timestamp => this.animate(timestamp));
+    }
+    this.render(time);
   }
 
 }

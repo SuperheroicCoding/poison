@@ -4,17 +4,23 @@
     <a target="_blank" href="https://thebookofshaders.com">The Book of Shader</a>
   </mat-toolbar-row>
 </mat-toolbar>
+<mat-checkbox [(ngModel)]="showFps">Show Fps</mat-checkbox>
 <div class="card-container">
   <mat-card *ngFor="let shader of shaders">
     <mat-card-title>{{shader.description}}</mat-card-title>
-    <app-render-shader width="300" height="200" [shaderCode]="shader.code">
+    <app-render-shader
+      width="300"
+      height="200"
+      [shaderCode]="shader.code"
+      [showFps]="showFps"
+    >
     </app-render-shader>
     <mat-card-content>
-
       <div
         [innerHTML]="shader.code | safe">
       </div>
     </mat-card-content>
+
   </mat-card>
 </div>
 
