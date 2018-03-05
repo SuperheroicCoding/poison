@@ -1,2 +1,4 @@
 <div class="stats" #stats [style.display]="showFps? 'block':'none'"></div>
-<canvas [style.width]="width" [style.height]="height" [width]="width" [height]="height" #webGlCanvas></canvas>
+<div #canvasContainer class="canvasContainer">
+  <canvas [width]="width" [height]="height" #webGlCanvas></canvas>
+</div>

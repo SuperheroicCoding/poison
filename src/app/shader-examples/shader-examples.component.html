@@ -5,23 +5,21 @@
   </mat-toolbar-row>
 </mat-toolbar>
 <mat-checkbox [(ngModel)]="showFps">Show Fps</mat-checkbox>
-<div class="card-container">
-  <mat-card *ngFor="let shader of shaders">
-    <mat-card-title>{{shader.description}}</mat-card-title>
-    <app-render-shader
-      width="300"
-      height="200"
-      [shaderCode]="shader.code"
-      [showFps]="showFps"
-    >
-    </app-render-shader>
-    <mat-card-content>
-      <div
-        [innerHTML]="shader.code | safe">
-      </div>
-    </mat-card-content>
-
-  </mat-card>
+<div class="shaders-container">
+  <div class="shader-container"
+       *ngFor="let shader of shaders">
+    <mat-card appRaiseCard>
+      <mat-card-title>{{shader.description}}</mat-card-title>
+      <mat-card-content>
+        <app-render-shader
+          [shaderCode]="shader.code"
+          [showFps]="showFps">
+        </app-render-shader>
+        <div class="shader-code" [innerHTML]="shader.code | safe">
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
 
 
