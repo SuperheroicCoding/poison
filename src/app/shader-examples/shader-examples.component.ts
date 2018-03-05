@@ -12,7 +12,7 @@ interface ShaderModel extends ShaderDef {
 })
 export class ShaderExamplesComponent implements OnInit {
   shaders: ShaderModel[];
-  private showFps: boolean;
+  showFps: boolean;
 
   constructor() {
   }

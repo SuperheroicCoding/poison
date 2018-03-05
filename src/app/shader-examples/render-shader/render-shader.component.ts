@@ -29,8 +29,9 @@ export class RenderShaderComponent implements OnInit, OnChanges, DoCheck {
   private scene: Scene;
   private uniforms: any;
   private stats: Stats;
-  private width: number;
-  private height: number;
+
+  width: number;
+  height: number;
 
   constructor() {
   }
