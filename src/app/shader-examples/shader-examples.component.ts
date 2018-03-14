@@ -20,7 +20,7 @@ export class ShaderExamplesComponent implements OnInit {
   showFps: boolean;
   shadersPaged$: Observable<ShaderModel[]>;
   currentPageSubject: Subject<PageEvent> = new ReplaySubject(1);
-  defaultPageSize = 2;
+  defaultPageSize = 3;
   @ViewChild('shaderRenderer') shaderRenderer: ElementRef;
 
   constructor() {
