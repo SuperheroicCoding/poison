@@ -1,4 +1,4 @@
-import {Component, DoCheck, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {Camera, Mesh, OrthographicCamera, PlaneBufferGeometry, Scene, ShaderMaterial, Vector2, WebGLRenderer} from 'three';
 import {defaultVertexShader} from '../vertex-shader';
 import * as Stats from 'stats.js';
@@ -8,7 +8,8 @@ import * as Stats from 'stats.js';
   templateUrl: './render-shader.component.html',
   styleUrls: ['./render-shader.component.less']
 })
-export class RenderShaderComponent implements OnInit, OnChanges, DoCheck {
+export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
+
 
   @Input() shaderCode: string;
   @Input() vertexShader?: string;
@@ -30,10 +31,14 @@ export class RenderShaderComponent implements OnInit, OnChanges, DoCheck {
   private uniforms: any;
   private stats: Stats;
 
-  width: number;
-  height: number;
+  @Input() canvasWidth: number;
+  @Input() canvasHeight: number;
 
   constructor() {
+  }
+
+  ngOnDestroy(): void {
+    this.renderer.dispose();
   }
 
   ngOnInit() {
@@ -41,13 +46,9 @@ export class RenderShaderComponent implements OnInit, OnChanges, DoCheck {
       antialias: true,
       canvas: this.shaderCanvas.nativeElement,
     });
-
-    this.width = this.canvasWidth();
-    this.height = this.canvasHeight();
-
     this.uniforms = {
       time: {value: 1.0},
-      resolution: {value: new Vector2(this.width, this.height)},
+      resolution: {value: new Vector2(this.canvasWidth, this.canvasHeight)},
       mouse: {value: new Vector2(0.5, 0.5)}
     };
 
@@ -75,28 +76,30 @@ export class RenderShaderComponent implements OnInit, OnChanges, DoCheck {
   }
 
   onMouseMove(e: MouseEvent) {
-    console.log(this.width, e.offsetX);
-    this.uniforms.mouse.value.x = e.offsetX / this.width;
-    this.uniforms.mouse.value.y = (this.height - e.offsetY) / this.height;
+    this.uniforms.mouse.value.x = e.offsetX / this.canvasWidth;
+    this.uniforms.mouse.value.y = (this.canvasHeight - e.offsetY) / this.canvasHeight;
   }
 
   onResize() {
-    this.renderer.setSize(this.width, this.height);
-    this.renderer.setPixelRatio(this.width / this.height);
-    this.uniforms.resolution.value = new Vector2(this.width, this.height);
+    this.renderer.setSize(this.canvasWidth, this.canvasHeight);
+    this.renderer.setPixelRatio(this.canvasWidth / this.canvasHeight);
+    this.uniforms.resolution.value = new Vector2(this.canvasWidth, this.canvasHeight);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.runAnimation && !changes.runAnimation.isFirstChange() && changes.runAnimation.currentValue) {
       requestAnimationFrame(timestamp => this.animate(timestamp));
-      return;
     }
-  }
+    if (changes.vertexShader && !changes.vertexShader.isFirstChange()) {
+      this.ngOnDestroy();
+      this.ngOnInit();
+    }
 
-  ngDoCheck() {
-    if (this.width !== this.canvasWidth() || this.height !== this.canvasHeight()) {
-      this.width = this.canvasWidth();
-      this.height = this.canvasHeight();
+    if (changes.canvasWidth && !changes.canvasWidth.isFirstChange()) {
+      this.onResize();
+    }
+
+    if (changes.canvasHeight && !changes.canvasHeight.isFirstChange()) {
       this.onResize();
     }
   }
@@ -113,14 +116,6 @@ export class RenderShaderComponent implements OnInit, OnChanges, DoCheck {
       requestAnimationFrame(timestamp => this.animate(timestamp));
     }
     this.render(time);
-  }
-
-  private canvasWidth() {
-    return 300;
-  }
-
-  private canvasHeight() {
-    return 200;
   }
 
 }

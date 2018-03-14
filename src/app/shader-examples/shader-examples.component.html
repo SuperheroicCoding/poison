@@ -7,19 +7,28 @@
 <mat-checkbox [(ngModel)]="showFps">Show Fps</mat-checkbox>
 <div class="shaders-container">
   <div class="shader-container"
-       *ngFor="let shader of shaders">
+       *ngFor="let shader of (shadersPaged$ | async)">
     <mat-card appRaiseCard>
       <mat-card-title>{{shader.description}}</mat-card-title>
-      <mat-card-content>
+      <mat-card-content #shaderRenderer class="shader-renderer">
         <app-render-shader
           [shaderCode]="shader.code"
-          [showFps]="showFps">
+          [showFps]="showFps"
+          [canvasWidth]="rendererWidth()"
+          [canvasHeight]="rendererHeight()">
         </app-render-shader>
         <div class="shader-code" [innerHTML]="shader.code | safe">
         </div>
       </mat-card-content>
     </mat-card>
   </div>
+</div>
+<div class="paginator-container">
+  <mat-paginator
+    [length]="shaders.length"
+    [pageSize]="defaultPageSize"
+    (page)="changeCurrentShaderPage($event)">
+  </mat-paginator>
 </div>
 
 

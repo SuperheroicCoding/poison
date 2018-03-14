@@ -1,18 +1,26 @@
 .shaders-container {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-around;
 }
 
 .shader-container {
-  flex: 1 1 30%;
-  height: 450px;
-  overflow: hidden
+  flex: 1 1 available;
+  overflow: hidden;
+  margin: 20px;
+}
+
+.paginator-container {
+  margin: 20px;
 }
 
 .shader-code {
   display: none;
   height: 150px;
   overflow-y: auto;
+}
+
+.shader-renderer {
+  width: 100%;
+  height: calc(~'100vh - 400px');
 }
 

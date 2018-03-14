@@ -1,4 +1,4 @@
-import {AfterContentInit, Component, ElementRef, EventEmitter, OnInit, ViewChild} from '@angular/core';
+import {AfterContentInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
 import {
@@ -36,7 +36,7 @@ declare const THREE: any;
   templateUrl: './web-gl.component.html',
   styleUrls: ['./web-gl.component.css']
 })
-export class WebGlComponent implements OnInit, AfterContentInit {
+export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
 
 
   @ViewChild('webGlCanvas') webGlCanvas: ElementRef;
@@ -74,6 +74,10 @@ export class WebGlComponent implements OnInit, AfterContentInit {
         event.preventDefault();
         return false;
       }));
+  }
+
+  ngOnDestroy(): void {
+    this.renderer.dispose();
   }
 
   ngAfterContentInit(): void {

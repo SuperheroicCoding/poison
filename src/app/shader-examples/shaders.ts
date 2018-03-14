@@ -416,6 +416,8 @@ void main() {
     vec2 r = vec2(0.);
     r.x = fbm( st + 1.0*q + vec2(1.7,9.2)+ 0.15*time );
     r.y = fbm( st + 1.0*q + vec2(8.3,2.8)+ 0.126*time);
+    
+    r = r * mouse;
 
     float f = fbm(st+r);
 
