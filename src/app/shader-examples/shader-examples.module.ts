@@ -3,7 +3,7 @@ import {ShaderExamplesComponent} from './shader-examples.component';
 
 import {ShaderExamplesRoutingModule} from './shader-examples-routing.module';
 import {SharedModule} from '../shared/shared.module';
-import { RenderShaderComponent } from './render-shader/render-shader.component';
+import {RenderShaderComponent} from './render-shader/render-shader.component';
 import {MatPaginatorModule} from '@angular/material';
 
 @NgModule({

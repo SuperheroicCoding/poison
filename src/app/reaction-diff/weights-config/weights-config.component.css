@@ -8,6 +8,7 @@ md-input-container {
   flex-flow: row;
   align-items: center;
 }
+
 .sumCheck md-icon {
   flex: 0 1 20%;
 }

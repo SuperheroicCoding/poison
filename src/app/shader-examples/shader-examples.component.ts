@@ -2,7 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ShaderDef, shaders} from './shaders';
 import {PageEvent} from '@angular/material';
 import {Subject} from 'rxjs/Subject';
-import {debounceTime, map, publishReplay, shareReplay} from 'rxjs/operators';
+import {debounceTime, map} from 'rxjs/operators';
 import {Observable} from 'rxjs/Observable';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 

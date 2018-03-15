@@ -10,4 +10,5 @@ import {webGlRoutes} from './web-gl-routing.module';
   ],
   declarations: [WebGlComponent]
 })
-export class WebGlModule { }
+export class WebGlModule {
+}

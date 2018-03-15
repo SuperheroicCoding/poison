@@ -11,4 +11,5 @@ import {CanvasDrawService} from './canvas-draw.service';
   declarations: [CanvasViewComponent],
   exports: [CanvasViewComponent]
 })
-export class CanvasViewModule { }
+export class CanvasViewModule {
+}

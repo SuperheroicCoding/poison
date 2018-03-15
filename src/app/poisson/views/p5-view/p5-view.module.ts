@@ -10,4 +10,5 @@ import {P5ViewComponent} from './p5-view.component';
   exports: [P5ViewComponent]
 
 })
-export class P5ViewModule { }
+export class P5ViewModule {
+}

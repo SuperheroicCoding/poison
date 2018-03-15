@@ -3,7 +3,7 @@
   width: calc(100vw - 16px);
 }
 
-:host >>> canvas {
+:host > > > canvas {
   width: calc(100vw - 16px);
   height: calc(100vh - 16px - 64px);
 }

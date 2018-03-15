@@ -12,7 +12,7 @@ export class PoissonConfigService {
   public iterationsPerFrame$: BehaviorSubject<number> = new BehaviorSubject(10);
 
   public r$: BehaviorSubject<number> = new BehaviorSubject(15);
-  public w =  minRadius / Math.sqrt(2);
+  public w = minRadius / Math.sqrt(2);
 
   constructor() {
   }

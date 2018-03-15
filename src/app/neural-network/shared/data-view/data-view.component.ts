@@ -71,8 +71,8 @@ export class DataViewComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   }
 
   private initDataScetch() {
-   this.dataP5 = new P5((p) => {
-      this.dataScetch = new DataP5Scetch(p, this.canvasWidth, this.canvasHeight, this.brainService,(x, y, click) => {
+    this.dataP5 = new P5((p) => {
+      this.dataScetch = new DataP5Scetch(p, this.canvasWidth, this.canvasHeight, this.brainService, (x, y, click) => {
         this.dataViewClicked.emit({x, y, click});
       }, this.showLinearDivider);
       this.dataScetch.points = this.points;

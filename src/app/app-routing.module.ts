@@ -1,8 +1,6 @@
 import {Data, Route, RouterModule} from '@angular/router';
 import {ModuleWithProviders} from '@angular/core';
 import {InfoComponent} from './info/info.component';
-import {SomeGpuCalculationModule} from './some-gpu-calculation/some-gpu-calculation.module';
-import {ShaderExamplesModule} from './shader-examples/shader-examples.module';
 
 export interface AppRouteData extends Data {
   linkText?: string;

@@ -18,4 +18,5 @@ import {GpuJsService} from './gpujs.service';
   exports: [ReactionDiffComponent],
   providers: [ReactionDiffCalcServiceFactory, ReactionDiffConfigService, ColorMapperService, GpuJsService]
 })
-export class ReactionDiffModule { }
+export class ReactionDiffModule {
+}

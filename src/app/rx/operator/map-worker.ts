@@ -52,8 +52,8 @@ class MapWorkerSubscriber<T extends WorkerPostParams<T>, R> extends Subscriber<T
   }
 
   protected _complete(): void {
-      this.worker.terminate();
-      super._complete();
+    this.worker.terminate();
+    super._complete();
   }
 
   public unsubscribe(): void {

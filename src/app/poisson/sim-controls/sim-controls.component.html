@@ -12,11 +12,13 @@
              (ngModelChange)=radiusChanged($event)>
     </mat-input-container>
     <mat-input-container>
-      <input matInput placeholder="Samples per iteration" id="samples" type="number" name="samples" min="1" [(ngModel)]="k"
+      <input matInput placeholder="Samples per iteration" id="samples" type="number" name="samples" min="1"
+             [(ngModel)]="k"
              (ngModelChange)=kChanged($event)>
     </mat-input-container>
     <mat-input-container>
-      <input matInput placeholder="Iterations per frame" id="iterationsPerFrame" type="number" name="iterationsPerFrame" min="1"
+      <input matInput placeholder="Iterations per frame" id="iterationsPerFrame" type="number" name="iterationsPerFrame"
+             min="1"
              [(ngModel)]="iterationsPerFrame"
              (ngModelChange)=iterationsPerFrameChanged($event)>
     </mat-input-container>

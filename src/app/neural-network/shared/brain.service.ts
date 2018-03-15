@@ -96,7 +96,7 @@ export class BrainService {
       for (let i = this.perceptrons.length - 2; i >= 0; i--) {
         const layer = this.perceptrons[i];
         layer.forEach((perceptron, index) => {
-          const hiddenError =  outputPerceptron.lastGuess * (1 - outputPerceptron.lastGuess) * error * outputPerceptron.weights[index];
+          const hiddenError = outputPerceptron.lastGuess * (1 - outputPerceptron.lastGuess) * error * outputPerceptron.weights[index];
           perceptron.trainWithLastInput(hiddenError, this.learnRate);
         });
       }

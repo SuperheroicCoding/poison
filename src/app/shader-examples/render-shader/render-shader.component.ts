@@ -1,5 +1,14 @@
 import {Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
-import {Camera, Mesh, OrthographicCamera, PlaneBufferGeometry, Scene, ShaderMaterial, Vector2, WebGLRenderer} from 'three';
+import {
+  Camera,
+  Mesh,
+  OrthographicCamera,
+  PlaneBufferGeometry,
+  Scene,
+  ShaderMaterial,
+  Vector2,
+  WebGLRenderer
+} from 'three';
 import {defaultVertexShader} from '../vertex-shader';
 import * as Stats from 'stats.js';
 

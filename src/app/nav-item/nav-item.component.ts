@@ -5,10 +5,11 @@ import {Component, Input} from '@angular/core';
   templateUrl: './nav-item.component.html',
   styleUrls: ['./nav-item.component.css']
 })
-export class NavItemComponent  {
+export class NavItemComponent {
 
   @Input() linkText: string;
   @Input() path: string;
 
-  constructor() { }
+  constructor() {
+  }
 }

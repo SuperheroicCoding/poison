@@ -5,7 +5,8 @@
     <mat-card-subtitle>No friggeling shader code needed for this</mat-card-subtitle>
   </mat-card-header>
   <canvas class="mat-card-image full-height" #gpuResult></canvas>
-  <div>Calculation time with {{additionForm.get('useGPU').value ? 'GPU': 'CPU'}} : {{(calculationTime$ | async)}}ms</div>
+  <div>Calculation time with {{additionForm.get('useGPU').value ? 'GPU': 'CPU'}} : {{(calculationTime$ | async)}}ms
+  </div>
   <mat-card-content>
     <form class="gpu-form" [formGroup]="additionForm" novalidate>
       <div class="full-width">
