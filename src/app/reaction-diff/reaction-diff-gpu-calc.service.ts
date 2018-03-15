@@ -126,11 +126,12 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   }
 
   private createCalcNextGpuKernel() {
-
+    /** @preserve */
     const cellIndex = function (x, columnOffset, rowOffset, width) {
       return x + ((columnOffset * 2) + (rowOffset * width * 2));
     };
 
+    /** @preserve */
     const calcWeightedSum = function (grid, weights: number[], x, width) {
       let sum = 0.0;
       sum += grid[cellIndex(x, -1, -1, width)] * weights[0];
@@ -144,7 +145,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
       sum += grid[cellIndex(x, 1, 1, width)] * weights[8];
       return sum;
     };
-
+    /** @preserve */
     const calcNextA = function (a, dA, laplaceA, abb, f) {
       const nextA = a +
         (dA * laplaceA) -
@@ -154,6 +155,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
     };
 
     this.calcNextKernel = this.gpuJs.createKernel(
+      /** @preserve */
       function (grid, weights: number[], dA, dB, f, k, width) {
         const oddEvenMod = this.thread.x % 2;
         const indexA = this.thread.x - oddEvenMod;
@@ -177,6 +179,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   private createAddChemicalsKernel() {
 
     this.addChemicalsKernel = this.gpuJs.createKernel(
+      /** @preserve */
       function (x, y, grid, radius, width) {
 
         // even cells are for fluid A. Odd cells are fluid B.
@@ -194,7 +197,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
         // we invert the result to get fluidA or fluid B if radius
         const fluid = ((result * -1.0) + 1) * grid[this.thread.x];
 
-        result = result * (this.thread.x + this.smoothstep(radius,0.0,  radPos * radPos));
+        result = result * (this.thread.x + this.smoothstep(radius, 0.0, radPos * radPos));
         return this.clamp(result + fluid, 0.0, 1.0);
       }
     )
@@ -205,6 +208,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   private createImageKernel() {
 
     this.imageKernel = this.gpuJs.createKernel(
+      /** @preserve */
       function (grid) {
         const oddEvenMod = this.thread.x % 2;
         const indexA = this.thread.x - oddEvenMod;
