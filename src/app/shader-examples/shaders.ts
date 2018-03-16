@@ -26,7 +26,7 @@ export const shaders: ShaderDef[] = [{
     void main() {
 	    gl_FragColor = vec4(abs(sin(time)),0.0,0.0,1.0);
     }`,
-    description: 'Using an uniform value time to change color'
+    description: 'Using time to change color'
   },
   {
     code: `
@@ -96,7 +96,7 @@ void main() {
 
     pct.r = smoothstep(0.0, mouse.x, st.x);
     pct.g = sin(st.x*PI * ((mouse.x + mouse.y) * 0.5));
-    pct.b = pow(st.x, mouse.y);
+    pct.b = pow(abs(st.x), mouse.y);
 
     color = mix(colorA, colorB, pct);
 
@@ -107,7 +107,7 @@ void main() {
 
     gl_FragColor = vec4(color,1.0);
 }`,
-    description: 'Mixing colors and show a transition lines'
+    description: 'Mixing colors and show transition lines'
   },
   {
     code: `#ifdef GL_ES
@@ -274,7 +274,8 @@ uniform vec2 mouse;
 uniform float time;
 
 float circle(in vec2 _st, in float _radius, in vec2 center){
-    vec2 dist = _st - center + 0.1;
+    vec2 dist = _st - center;
+    dist = dist * vec2(resolution.x / resolution.y, 1.0); 
 	return 1.-smoothstep(_radius-(_radius*0.01),
                          _radius+(_radius*0.01),
                          dot(dist,dist)*4.0);
@@ -435,5 +436,10 @@ void main() {
 
     gl_FragColor = vec4((f*f*f+.6*f*f+.5*f)*color,1.);
 }`, description: 'Smoke noise'
-  }
+  },
+  {description: 'Reaction Diffusion', code:`
+  
+  
+  
+  `}
 ];

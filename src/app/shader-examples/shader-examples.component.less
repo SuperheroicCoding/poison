@@ -1,12 +1,35 @@
+.toolbar-checkbox {
+  margin-right: 10px;
+}
+
 .shaders-container {
-  display: flex;
-  justify-content: space-around;
+  margin: 10px;
+  width: calc(~'100vw - 40px');
+  height: calc(~'100vh - 250px');
 }
 
 .shader-container {
-  flex: 1 1 available;
-  overflow: hidden;
-  margin: 20px;
+  width: 100%;
+  height: 100%;
+}
+
+.canvas-card {
+  min-width: calc(~'50% - 48px');
+  width: 100%;
+  height: 100%;
+}
+
+.code-card {
+  min-width: calc(~'50% - 48px');
+  width: 100%;
+  max-height: calc(~'100vh - 250px');
+  margin-right: 10px;
+
+  .code-editor {
+    overflow: auto;
+    height: 100%;
+    max-height: calc(~'100vh - 300px');
+  }
 }
 
 .paginator-container {
@@ -21,6 +44,10 @@
 
 .shader-renderer {
   width: 100%;
-  height: calc(~'100vh - 400px');
+  height: 100%;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
 }
 

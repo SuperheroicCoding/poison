@@ -30,7 +30,7 @@ import {
   MatGridListModule,
   MatIconModule,
   MatInputModule,
-  MatListModule,
+  MatListModule, MatProgressSpinnerModule,
   MatSelectModule,
   MatSidenavModule,
   MatSliderModule,
@@ -40,8 +40,11 @@ import {
   MatTooltipModule
 } from '@angular/material';
 import {SafeHtmlPipe} from './safe-html.pipe';
+import {AceEditorModule} from 'ng2-ace-editor';
+import { CodeEditorComponent } from './code-editor/code-editor.component';
 
 @NgModule({
+  imports:  [AceEditorModule],
   exports: [
     CommonModule,
     FormsModule,
@@ -60,10 +63,13 @@ import {SafeHtmlPipe} from './safe-html.pipe';
     MatTabsModule,
     MatSliderModule,
     MatChipsModule,
+    MatProgressSpinnerModule,
     RaiseCardDirective,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    AceEditorModule,
+    CodeEditorComponent
   ],
-  declarations: [RaiseCardDirective, SafeHtmlPipe]
+  declarations: [RaiseCardDirective, SafeHtmlPipe, CodeEditorComponent]
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders {

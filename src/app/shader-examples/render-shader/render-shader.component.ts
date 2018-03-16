@@ -47,6 +47,8 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    console.log('Renderer Dispose.');
+    this.renderer.forceContextLoss();
     this.renderer.dispose();
   }
 
@@ -90,18 +92,18 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onResize() {
+    console.log('onResize', this.canvasWidth, this.canvasHeight, this.renderer);
     this.renderer.setSize(this.canvasWidth, this.canvasHeight);
-    this.renderer.setPixelRatio(this.canvasWidth / this.canvasHeight);
-    this.uniforms.resolution.value = new Vector2(this.canvasWidth, this.canvasHeight);
+    this.uniforms.resolution.value = new Vector2(this.renderer.getSize().width, this.renderer.getSize().height);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.runAnimation && !changes.runAnimation.isFirstChange() && changes.runAnimation.currentValue) {
       requestAnimationFrame(timestamp => this.animate(timestamp));
     }
-    if (changes.vertexShader && !changes.vertexShader.isFirstChange()) {
-      this.ngOnDestroy();
-      this.ngOnInit();
+    if (changes.shaderCode && !changes.shaderCode.isFirstChange()) {
+      this.material.setValues({fragmentShader: this.shaderCode});
+      this.material.needsUpdate = true;
     }
 
     if (changes.canvasWidth && !changes.canvasWidth.isFirstChange()) {
