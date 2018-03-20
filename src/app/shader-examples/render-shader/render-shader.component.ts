@@ -82,6 +82,7 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
     this.mesh = new Mesh(this.geometry, this.material);
 
     this.shaderCanvas.nativeElement.onmousemove = (e) => this.onMouseMove(e);
+    this.shaderCanvas.nativeElement.ontouchmove = (e) => this.onMouseMove(e);
     this.scene.add(this.mesh);
     this.animate(1.0);
   }

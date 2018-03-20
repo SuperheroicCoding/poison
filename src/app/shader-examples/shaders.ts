@@ -437,9 +437,44 @@ void main() {
     gl_FragColor = vec4((f*f*f+.6*f*f+.5*f)*color,1.);
 }`, description: 'Smoke noise'
   },
-  {description: 'Reaction Diffusion', code:`
-  
-  
-  
-  `}
+  {
+    description: 'Colorfull cirlce', code: `
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+#define TWO_PI 6.28318530718
+
+uniform vec2 resolution;
+uniform vec2 mouse;
+uniform float time;
+
+//  Function from Iñigo Quiles
+//  https://www.shadertoy.com/view/MsS3Wc
+vec3 hsb2rgb( in vec3 c ){
+    vec3 rgb = clamp(abs(mod(c.x*6.0+vec3(0.0,4.0,2.0),
+                             6.0)-3.0)-1.0,
+                     0.0,
+                     1.0 );
+    rgb = rgb*rgb*(3.0-2.0*rgb);
+    return c.z * mix( vec3(1.0), rgb, c.y);
+}
+
+void main(){
+    vec2 st = gl_FragCoord.xy/resolution.xy;
+    // repeat it
+    st = st * 2.;
+    float angle = sin(mouse.x * TWO_PI / 4.);
+    float radius = mouse.y;
+    vec3 color = hsb2rgb(vec3(angle, radius, 1.0));
+    float distToCenter = length(fract(st) - mouse) + sin(time * 4.) * 0.03;
+
+    float distanceCircle = smoothstep(distToCenter - 0.05, distToCenter, length(mouse - 0.5)) + 
+    smoothstep( distToCenter, distToCenter + 0.05, length(mouse - 0.5)); 
+    
+    color =  mix(color, vec3(distanceCircle), distToCenter);
+    gl_FragColor = vec4(color, 1.0);
+}
+  `
+  }
 ];
