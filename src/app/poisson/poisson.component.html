@@ -15,8 +15,8 @@
     <mat-card-subtitle>Watch the lightning. It always comes from your mouse pointer</mat-card-subtitle>
     <mat-card-content>
       <app-canvas-view
-        [width]="simWidth"
-        [height]="simHeight"
+        [width]="width"
+        [height]="height"
         [circles]="poissonCalc.foundCircles$ | async"
         [actives]="poissonCalc.activeVectors$ | async"
         [lines]="poissonCalc.lines$ | async"
