@@ -6,8 +6,8 @@ import {SharedModule as PoissonShared} from './shared/shared.module';
 import {SimControlsComponent} from './sim-controls/sim-controls.component';
 import {FormsModule} from '@angular/forms';
 import {PoissonCalcService} from './poisson-calc.service';
-import {P5ViewModule} from './views/p5-view/p5-view.module';
 import {poissonRoutes} from './poisson-routing.module';
+import {CanvasViewModule} from './views/canvas-view/canvas-view.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +17,7 @@ import {poissonRoutes} from './poisson-routing.module';
     poissonRoutes,
     SharedModule,
     FormsModule,
-    P5ViewModule,
+    CanvasViewModule,
     PoissonShared
   ],
   exports: [PoissonComponent],

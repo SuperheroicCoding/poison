@@ -1,8 +1,7 @@
-import {Component} from '@angular/core';
-import {AppRoute, routes} from './app-routing.module';
+import {Component, Inject} from '@angular/core';
+import {AppRoute} from './app-routing.module';
 import {TitleService} from './core/title.service';
-
-const routerLinks = routes.filter((route) => route.data ? route.data.linkText : false);
+import {ROUTER_LINKS} from './app-routes.token';
 
 
 @Component({
@@ -11,11 +10,9 @@ const routerLinks = routes.filter((route) => route.data ? route.data.linkText : 
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  routerLinks: AppRoute[];
 
   // we need title service to update page title.
-  constructor(private titleService: TitleService) {
-    this.routerLinks = routerLinks;
+  constructor(private titleService: TitleService, @Inject(ROUTER_LINKS) public routerLinks: AppRoute[]) {
   }
 }
 

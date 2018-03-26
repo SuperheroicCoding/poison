@@ -1,14 +1,19 @@
+<app-about></app-about>
 <mat-card>
   <mat-card-title>
     Technologies used:
   </mat-card-title>
-
-  <div class="technologyCards">
-    <app-technology
-      *ngFor="let tech of technologies"
-      [title]="tech.title"
-      [image]="tech.image"
-      [link]="tech.link">
-    </app-technology>
-  </div>
+  <mat-card-subtitle>
+    Big thanks to the open source community!
+     </mat-card-subtitle>
+  <mat-card-content>
+    <div class="technologyCards">
+      <app-technology
+        *ngFor="let tech of technologies"
+        [title]="tech.title"
+        [image]="tech.image"
+        [link]="tech.link">
+      </app-technology>
+    </div>
+  </mat-card-content>
 </mat-card>

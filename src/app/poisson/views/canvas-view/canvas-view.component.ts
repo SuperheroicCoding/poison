@@ -16,6 +16,7 @@ import {Scheduler} from 'rxjs/Rx';
 import {Observable} from 'rxjs/Observable';
 import {Vector} from '../../shared/vector';
 import {Line} from '../../shared/line';
+import {skipUntil} from 'rxjs/operators';
 
 
 @Component({
@@ -42,7 +43,7 @@ export class CanvasViewComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit() {
-    this.draw$ = new IntervalObservable(0, Scheduler.animationFrame).skipUntil(this.onReadyToPaint);
+    this.draw$ = new IntervalObservable(0, Scheduler.animationFrame).pipe(skipUntil(this.onReadyToPaint));
   }
 
   ngAfterContentInit(): void {

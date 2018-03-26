@@ -96,13 +96,13 @@ export class P5ViewComponent implements AfterContentInit {
       // p.sphere(50);
       p.pop();
 
-      this.drawAreaFrame(p);
+      // this.drawAreaFrame(p);
 
       if (this.circles && this.circles.length) {
         p.push();
         p.translate(-p.width / 2, -p.height / 2);
         this.circles.forEach(circle => {
-          p.texture(wood);
+          // p.texture(wood);
           this.drawCircle(circle, this.time, p);
         });
         p.pop();

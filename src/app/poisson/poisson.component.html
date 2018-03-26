@@ -8,30 +8,36 @@
     </div>
   </mat-toolbar-row>
 </mat-toolbar>
-
-<!-- <app-canvas-view
-   [simWidth]="simWidth"
-   [simHeight]="simHeight"
-   [circles]="poissonCalc.foundCircles$ | async"
-   [actives]="poissonCalc.activeVectors$ | async"
-   [lines]="poissonCalc.lines$ | async"
-   (onAddObject)="addPoint($event)"
-   (onReadyToPaint)="calculate()"
- >
- </app-canvas-view>-->
 <div class="simContent">
   <mat-card>
     <mat-card-title>Simulation</mat-card-title>
     <mat-card-subtitle>Click to add balls as seed</mat-card-subtitle>
     <mat-card-subtitle>Watch the lightning. It always comes from your mouse pointer</mat-card-subtitle>
-    <app-p5-view
-      [width]="width"
-      [height]="height"
-      [circles]="poissonCalc.foundCircles$ | async"
-      [actives]="poissonCalc.activeVectors$ | async"
-      (onAddObject)="addPoint($event)"
-      (onReadyToPaint)="calculate()">
-    </app-p5-view>
+    <mat-card-content>
+      <app-canvas-view
+        [width]="simWidth"
+        [height]="simHeight"
+        [circles]="poissonCalc.foundCircles$ | async"
+        [actives]="poissonCalc.activeVectors$ | async"
+        [lines]="poissonCalc.lines$ | async"
+        (onAddObject)="addPoint($event)"
+        (onReadyToPaint)="calculate()"
+      >
+      </app-canvas-view>
+    </mat-card-content>
+    <!--<div class="simContent">
+      <mat-card>
+        <mat-card-title>Simulation</mat-card-title>
+        <mat-card-subtitle>Click to add balls as seed</mat-card-subtitle>
+        <mat-card-subtitle>Watch the lightning. It always comes from your mouse pointer</mat-card-subtitle>
+        <app-p5-view
+          [width]="width"
+          [height]="height"
+          [circles]="poissonCalc.foundCircles$ | async"
+          [actives]="poissonCalc.activeVectors$ | async"
+          (onAddObject)="addPoint($event)"
+          (onReadyToPaint)="calculate()">
+        </app-p5-view>-->
   </mat-card>
   <app-sim-controls (playChanged)="setPlay($event)" (onReset)="reset()"></app-sim-controls>
 </div>

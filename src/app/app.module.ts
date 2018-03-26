@@ -8,7 +8,10 @@ import {InfoComponent} from './info/info.component';
 import {TechnologyComponent} from './info/technology/technology.component';
 import {NavItemComponent} from './nav-item/nav-item.component';
 import {CoreModule} from './core/core.module';
-import {appRoutes} from './app-routing.module';
+import {appRoutes, routes} from './app-routing.module';
+import {AboutComponent} from './info/about/about.component';
+import {ROUTER_LINKS} from './app-routes.token';
+
 
 @NgModule({
   declarations: [
@@ -16,6 +19,7 @@ import {appRoutes} from './app-routing.module';
     InfoComponent,
     TechnologyComponent,
     NavItemComponent,
+    AboutComponent,
   ],
   imports: [
     CoreModule.forRoot(),
@@ -24,6 +28,9 @@ import {appRoutes} from './app-routing.module';
     BrowserAnimationsModule,
     SharedModule.forRoot()
   ],
+  providers: [{
+    provide: ROUTER_LINKS, useValue: routes.filter((route) => route.data ? route.data.linkText : false)
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule {

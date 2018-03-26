@@ -1,0 +1,22 @@
+<mat-card appRaiseCard>
+  <mat-card-title>
+    What's this all about?
+  </mat-card-title>
+  <mat-card-subtitle>
+    Playing around with awesome stuff!
+  </mat-card-subtitle>
+  <mat-card-content>
+    <p>
+      To raise my level in topics like webGL, KI, algorithms and Angular/Web development
+      I am implementing different examples.
+    </p>
+    Contents:
+    <mat-nav-list>
+      <app-nav-item *ngFor="let route of routerLinks"
+                    [path]="route.path"
+                    [linkText]="route.data.linkText"
+                    (click)="openPage(route)">
+      </app-nav-item>
+    </mat-nav-list>
+  </mat-card-content>
+</mat-card>

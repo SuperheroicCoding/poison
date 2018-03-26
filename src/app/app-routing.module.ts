@@ -16,7 +16,7 @@ export const routes: AppRoute[] = [
   {
     path: 'poisson',
     loadChildren: 'app/poisson/poisson.module#PoissonModule',
-    data: {linkText: 'Poisson Distribution Algorithm'}
+    data: {linkText: 'Poisson Distribution Algorithm (not working currently)'}
   },
   {
     path: 'reactionDiff',
@@ -41,7 +41,7 @@ export const routes: AppRoute[] = [
   {
     path: 'shaderExamples',
     loadChildren: 'app/shader-examples/shader-examples.module#ShaderExamplesModule',
-    data: {linkText: 'WebGL Shader Examples'}
+    data: {linkText: 'WebGL Shader examples with live code editor'}
   },
   {path: '**', redirectTo: 'home'}
 ];
