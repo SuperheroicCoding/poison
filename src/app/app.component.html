@@ -1,5 +1,6 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<mat-sidenav-container>
+<mat-sidenav-container class="page">
+
   <mat-sidenav class="navigationSidenav" #sidenav>
     <mat-nav-list>
       <app-nav-item *ngFor="let route of routerLinks"
@@ -10,9 +11,16 @@
     </mat-nav-list>
   </mat-sidenav>
   <section class="pageGrid">
-    <mat-toolbar role="header" class="pageTitle" color="accent">
+    <div class="shader-background" #shaderContainer>
+      <app-render-shader
+        [shaderCode]="shaderCode"
+        [canvasWidth]="shaderContainer.clientWidth"
+        [canvasHeight]="shaderContainer.clientHeight">
+      </app-render-shader>
+    </div>
+    <mat-toolbar role="header" class="pageTitle">
       <mat-toolbar-row>
-        <button mat-icon-button (click)="sidenav.open()">
+        <button class="sidenav-icon" mat-icon-button (click)="sidenav.open()">
           <mat-icon>menu</mat-icon>
         </button>
         <div>SuperheroicCoding Angular Demos</div>

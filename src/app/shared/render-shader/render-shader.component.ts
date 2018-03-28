@@ -9,7 +9,7 @@ import {
   Vector2,
   WebGLRenderer
 } from 'three';
-import {defaultVertexShader} from '../vertex-shader';
+import {defaultVertexShader} from './default-vertex-shader';
 import * as Stats from 'stats.js';
 
 @Component({
@@ -22,8 +22,10 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() shaderCode: string;
   @Input() vertexShader?: string;
-  @Input() runAnimation = true;
-  @Input() showFps = true;
+  @Input() runAnimation? = true;
+  @Input() showFps? = false;
+  @Input() canvasWidth: number;
+  @Input() canvasHeight: number;
 
   @ViewChild('webGlCanvas') shaderCanvas: ElementRef;
   @ViewChild('canvasContainer') canvasContainer: ElementRef;
@@ -40,8 +42,6 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
   private uniforms: any;
   private stats: Stats;
 
-  @Input() canvasWidth: number;
-  @Input() canvasHeight: number;
 
   constructor() {
   }
@@ -94,8 +94,10 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
 
   onResize() {
     console.log('onResize', this.canvasWidth, this.canvasHeight, this.renderer);
-    this.renderer.setSize(this.canvasWidth, this.canvasHeight);
-    this.uniforms.resolution.value = new Vector2(this.renderer.getSize().width, this.renderer.getSize().height);
+    if (this.canvasWidth && this.canvasHeight) {
+      this.renderer.setSize(this.canvasWidth, this.canvasHeight);
+      this.uniforms.resolution.value = new Vector2(this.renderer.getSize().width, this.renderer.getSize().height);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {

@@ -1,4 +1,4 @@
-<mat-toolbar color="primary">
+<mat-toolbar>
   <mat-toolbar-row>
     Some WebGl Shader Examples inspired by&nbsp;
     <a target="_blank" href="https://thebookofshaders.com">The Book of Shader</a>
@@ -19,7 +19,7 @@
     <span class="toolbar-spacer"></span>
   </mat-toolbar-row>
 </mat-toolbar>
-<mat-grid-list class="shaders-container" cols="{{(shadersPaged$ | async)?.length}}" rowHeight="fit" gutterSize="10">
+<mat-grid-list class="shaders-container" cols="{{(shadersPaged$ | async)?.length || 2}}" rowHeight="fit" gutterSize="10">
   <mat-grid-tile class="shader-container"
                  *ngFor="let shader of (shadersPaged$ | async); trackBy: trackByIndex">
     <mat-card class="code-card" appRaiseCard *ngIf="showCodeEditor">
@@ -37,8 +37,6 @@
           [canvasWidth]="rendererWidth"
           [canvasHeight]="rendererHeight">
         </app-render-shader>
-        <div class="shader-code" [innerHTML]="shader.code | safe">
-        </div>
       </mat-card-content>
     </mat-card>
   </mat-grid-tile>

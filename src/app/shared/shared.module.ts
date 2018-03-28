@@ -42,6 +42,7 @@ import {
 import {SafeHtmlPipe} from './safe-html.pipe';
 import {AceEditorModule} from 'ng2-ace-editor';
 import { CodeEditorComponent } from './code-editor/code-editor.component';
+import {RenderShaderComponent} from './render-shader/render-shader.component';
 
 @NgModule({
   imports:  [AceEditorModule],
@@ -67,9 +68,10 @@ import { CodeEditorComponent } from './code-editor/code-editor.component';
     RaiseCardDirective,
     SafeHtmlPipe,
     AceEditorModule,
-    CodeEditorComponent
+    CodeEditorComponent,
+    RenderShaderComponent
   ],
-  declarations: [RaiseCardDirective, SafeHtmlPipe, CodeEditorComponent]
+  declarations: [RaiseCardDirective, SafeHtmlPipe, CodeEditorComponent, RenderShaderComponent]
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders {

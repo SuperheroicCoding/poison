@@ -95,7 +95,7 @@ void main() {
     vec3 pct = vec3(st.x);
 
     pct.r = smoothstep(0.0, mouse.x, st.x);
-    pct.g = sin(st.x*PI * ((mouse.x + mouse.y) * 0.5));
+    pct.g = sin(st.x*PI * ((mouse.x + mouse.y)));
     pct.b = pow(abs(st.x), mouse.y);
 
     color = mix(colorA, colorB, pct);
@@ -406,7 +406,8 @@ float fbm ( in vec2 _st) {
 }
 
 void main() {
-    vec2 st = gl_FragCoord.xy/resolution.xy*3.;
+    vec2 dim = gl_FragCoord.xy/resolution.xy;
+    vec2 st = dim*vec2(3., 3. * resolution.y / resolution.x);
      st += st * abs(sin(time*0.1)*3.0);
     vec3 color = vec3(0.0);
 
@@ -438,43 +439,43 @@ void main() {
 }`, description: 'Smoke noise'
   },
   {
-    description: 'Colorfull cirlce', code: `
-#ifdef GL_ES
-precision mediump float;
-#endif
-
-#define TWO_PI 6.28318530718
-
-uniform vec2 resolution;
-uniform vec2 mouse;
-uniform float time;
-
-//  Function from Iñigo Quiles
-//  https://www.shadertoy.com/view/MsS3Wc
-vec3 hsb2rgb( in vec3 c ){
-    vec3 rgb = clamp(abs(mod(c.x*6.0+vec3(0.0,4.0,2.0),
-                             6.0)-3.0)-1.0,
-                     0.0,
-                     1.0 );
-    rgb = rgb*rgb*(3.0-2.0*rgb);
-    return c.z * mix( vec3(1.0), rgb, c.y);
-}
-
-void main(){
-    vec2 st = gl_FragCoord.xy/resolution.xy;
-    // repeat it
-    st = st * 2.;
-    float angle = sin(mouse.x * TWO_PI / 4.);
-    float radius = mouse.y;
-    vec3 color = hsb2rgb(vec3(angle, radius, 1.0));
-    float distToCenter = length(fract(st) - mouse) + sin(time * 4.) * 0.03;
-
-    float distanceCircle = smoothstep(distToCenter - 0.05, distToCenter, length(mouse - 0.5)) + 
-    smoothstep( distToCenter, distToCenter + 0.05, length(mouse - 0.5)); 
-    
-    color =  mix(color, vec3(distanceCircle), distToCenter);
-    gl_FragColor = vec4(color, 1.0);
-}
-  `
+      description: 'Colorfull cirlce', code: `
+  #ifdef GL_ES
+  precision mediump float;
+  #endif
+  
+  #define TWO_PI 6.28318530718
+  
+  uniform vec2 resolution;
+  uniform vec2 mouse;
+  uniform float time;
+  
+  //  Function from Iñigo Quiles
+  //  https://www.shadertoy.com/view/MsS3Wc
+  vec3 hsb2rgb( in vec3 c ){
+      vec3 rgb = clamp(abs(mod(c.x*6.0+vec3(0.0,4.0,2.0),
+                               6.0)-3.0)-1.0,
+                       0.0,
+                       1.0 );
+      rgb = rgb*rgb*(3.0-2.0*rgb);
+      return c.z * mix( vec3(1.0), rgb, c.y);
+  }
+  
+  void main(){
+      vec2 st = gl_FragCoord.xy/resolution.xy;
+      // repeat it
+      st = st * vec2(1., resolution.y / resolution.x) * 2.;
+      float angle = sin(mouse.x * TWO_PI / 4.);
+      float radius = mouse.y;
+      vec3 color = hsb2rgb(vec3(angle, radius, 1.0));
+      float distToCenter = length(fract(st) - mouse) + sin(time * 4.) * 0.03;
+  
+      float distanceCircle = smoothstep(distToCenter - 0.05, distToCenter, length(mouse - 0.5)) + 
+      smoothstep( distToCenter, distToCenter + 0.05, length(mouse - 0.5)); 
+      
+      color =  mix(color, vec3(distanceCircle), distToCenter);
+      gl_FragColor = vec4(color, 1.0);
+  }
+    `
   }
 ];
