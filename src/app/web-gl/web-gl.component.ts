@@ -7,7 +7,6 @@ import {
   Clock,
   Color,
   FogExp2,
-  Geometry,
   Material,
   Mesh,
   MeshBasicMaterial,
@@ -24,6 +23,7 @@ import {
   WebGLRenderer
 } from 'three';
 import {MandelbrotFragment, MandelbrotVertex} from './mandelbrot-shader';
+import {map} from 'rxjs/operators';
 
 
 const PIHALF = Math.PI / 2;
@@ -54,6 +54,7 @@ export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
   private width: number;
   private height: number;
   private pointLight: PointLight;
+  private pointLightSphere: Mesh;
   private clock: Clock;
   private controls: any;
 
@@ -64,16 +65,18 @@ export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
 
   ngOnInit(): void {
     this.activateLook$ =
-      Observable.merge(this.mousedown$
-        .map((event) => {
+      Observable.merge(
+        this.mousedown$.pipe(
+          map((event) => {
+            event.stopPropagation();
+            event.preventDefault();
+            return true;
+          })),
+        this.mouseup$.pipe(map((event) => {
           event.stopPropagation();
           event.preventDefault();
-          return true;
-        }), this.mouseup$.map((event) => {
-        event.stopPropagation();
-        event.preventDefault();
-        return false;
-      }));
+          return false;
+        })));
   }
 
   ngOnDestroy(): void {
@@ -106,12 +109,21 @@ export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
     spotLight.position.x = 3;
     spotLight.position.y = 2;
     this.scene.add(spotLight);
-
     const pointLight = this.createLight(0xff1111);
     pointLight.position.y = 3;
-    pointLight.add(new Mesh(new SphereGeometry(0.2, 8, 8), new MeshBasicMaterial({color: 0xff0000})));
+
     this.pointLight = pointLight;
+    const sphere = new Mesh(new SphereGeometry(0.2, 8, 8));
+    new MeshBasicMaterial({
+      color: 0xff1111
+    });
+    sphere.name = 'sphere';
+    sphere.position.set(pointLight.position.x, pointLight.position.y, pointLight.position.z);
+    this.pointLightSphere = sphere;
+    this.pointLight.add(sphere);
+
     this.scene.add(pointLight);
+
 
     const geometry = new BoxGeometry(1, 1, 1);
     const material = new MeshPhongMaterial({color: 0x6611dd, specular: 0x009900, shininess: 30, flatShading: true});
@@ -139,13 +151,6 @@ export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
     pointLight.shadow.camera.near = 1;
     pointLight.shadow.camera.far = 60;
     pointLight.shadow.bias = -0.005; // reduces self-shadowing on double-sided objects
-    const geometry = new SphereGeometry(12);
-    const material = new MeshBasicMaterial({
-      color: color
-    });
-    const sphere = new Mesh(geometry, material);
-    sphere.name = 'sphere';
-    pointLight.add(sphere);
     return pointLight;
   }
 
@@ -155,8 +160,8 @@ export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
     this.resize();
 
     const frameTime = this.clock.getDelta();
-    (this.checkerBoard.material as ShaderMaterial)
-      .uniforms.zoom.value = Math.cos(time * 0.0001) * 0.1;
+    /*(this.checkerBoard.material as ShaderMaterial)
+      .uniforms.zoom.value = Math.cos(time * 0.0001) * 0.1;*/
 
     this.cube.rotation.x += 0.5 * frameTime;
     this.cube.rotation.y += 0.5 * frameTime;
@@ -169,19 +174,10 @@ export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
       (Math.sin(time * 0.0005) + 1) * 0.5,
       (Math.cos(time * 0.0007) + 1) * 0.5
     );
-
-    const pointLightSphere = (this.pointLight.getObjectByName('sphere') as Mesh);
-
-    const material = new MeshBasicMaterial({
-      color: pointLightColor.getHex()
-    });
-
-    pointLightSphere.material = material;
-
-    const sphere = new Mesh(pointLightSphere.geometry as Geometry, material);
-    sphere.name = 'sphere';
-
     this.pointLight.color.set(pointLightColor);
+
+    let meshBasicMaterial = (this.pointLightSphere.material as MeshBasicMaterial);
+    meshBasicMaterial.color.set(pointLightColor);
 
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame((nextTime) => this.animate(nextTime));

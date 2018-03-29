@@ -8,6 +8,8 @@ interface NodeModule {
 declare module 'gpu.js';
 declare module 'p5';
 
+declare var Detector: any;
+
 interface KernelFunction {
   (arg?: any): any;
 

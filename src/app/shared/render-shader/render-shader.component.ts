@@ -1,6 +1,6 @@
 import {Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {
-  Camera,
+  Camera, CanvasRenderer,
   Mesh,
   OrthographicCamera,
   PlaneBufferGeometry,
@@ -11,6 +11,7 @@ import {
 } from 'three';
 import {defaultVertexShader} from './default-vertex-shader';
 import * as Stats from 'stats.js';
+
 
 @Component({
   selector: 'app-render-shader',
@@ -46,17 +47,16 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
   constructor() {
   }
 
-  ngOnDestroy(): void {
-    console.log('Renderer Dispose.');
-    this.renderer.forceContextLoss();
-    this.renderer.dispose();
-  }
+
 
   ngOnInit() {
-    this.renderer = new WebGLRenderer({
+    let renderParams = {
       antialias: true,
       canvas: this.shaderCanvas.nativeElement,
-    });
+    };
+    this.renderer = new WebGLRenderer(renderParams);
+
+    Detector.webgl ? new WebGLRenderer(renderParams): new CanvasRenderer(renderParams);
     this.uniforms = {
       time: {value: 1.0},
       resolution: {value: new Vector2(this.canvasWidth, this.canvasHeight)},
@@ -66,7 +66,6 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
     this.onResize();
 
     this.scene = new Scene();
-
     this.stats = new Stats();
     this.statsElem.nativeElement.appendChild(this.stats.dom);
 
@@ -85,6 +84,12 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
     this.shaderCanvas.nativeElement.ontouchmove = (e) => this.onMouseMove(e);
     this.scene.add(this.mesh);
     this.animate(1.0);
+  }
+
+  ngOnDestroy(): void {
+    console.log('ngOnDestroy: Renderer dispose.');
+    this.renderer.forceContextLoss();
+    this.renderer.dispose();
   }
 
   onMouseMove(e: MouseEvent) {
