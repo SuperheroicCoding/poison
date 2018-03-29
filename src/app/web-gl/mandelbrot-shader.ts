@@ -53,6 +53,5 @@ export const MandelbrotFragment = `
       addedLights.rgb += clamp(dot(-lightDirection, vNormal), 0.0, 1.0) * pointLights[l].color;
     }
     gl_FragColor = mix(gl_FragColor, addedLights, addedLights);
-    // gl_FragColor =  vec4(pointLights[0].color,1.);
   }
 `;
