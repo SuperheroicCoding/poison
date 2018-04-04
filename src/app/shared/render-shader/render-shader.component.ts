@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {
   Camera,
   CanvasRenderer,
@@ -46,7 +46,7 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
   private stats: Stats;
 
 
-  constructor() {
+  constructor(private ngZone: NgZone) {
   }
 
 
@@ -100,7 +100,7 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onResize() {
-    console.log('onResize', this.canvasWidth, this.canvasHeight, this.renderer);
+    console.log('onResize', this.canvasWidth, this.canvasHeight);
     if (this.canvasWidth && this.canvasHeight) {
       this.renderer.setSize(this.canvasWidth, this.canvasHeight);
       this.uniforms.resolution.value = new Vector2(this.canvasWidth, this.canvasHeight);
@@ -133,10 +133,12 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   animate(time: number) {
-    if (this.runAnimation) {
-      requestAnimationFrame(timestamp => this.animate(timestamp));
-    }
-    this.render(time);
+    this.ngZone.runOutsideAngular(() => {
+      if (this.runAnimation) {
+        requestAnimationFrame(timestamp => this.animate(timestamp));
+      }
+      this.render(time);
+    });
   }
 
 }

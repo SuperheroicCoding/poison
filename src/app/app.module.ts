@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {ApplicationRef, NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {SharedModule} from './shared/shared.module';
@@ -32,9 +32,11 @@ import {environment} from '../environments/environment';
   ],
   providers: [
     {
-    provide: ROUTER_LINKS, useValue: routes.filter((route) => route.data ? route.data.linkText : false)
-  }],
+      provide: ROUTER_LINKS, useValue: routes.filter((route) => route.data ? route.data.linkText : false)
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule {
 }
+
+
