@@ -98,7 +98,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
     return {
       a: this.grid[index], b: this.grid[index + 1]
     };
-  };
+  }
 
   private setCell(column: number, row: number, cell: Cell, width: number = this.width, arrayToSet: Float32Array = this.grid) {
     const index = (column + row * width) * 2;
@@ -180,7 +180,6 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
       function (x, y, grid, radius, width) {
 
         // even cells are for fluid A. Odd cells are fluid B.
-
         const oddEvenMod = this.mod(this.thread.x, 2.0);
         const col = (this.thread.x / 2) % width;
         const row = this.thread.x / (width * 2);
@@ -229,6 +228,6 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
         this.color(r, g, b);
       }
     ).setFloatTextures(true)
-      .setOutput([this.width, this.height])
+      .setOutput([this.width, this.height]);
   }
 }
