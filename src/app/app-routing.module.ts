@@ -14,14 +14,14 @@ export const routes: AppRoute[] = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
   {path: 'home', component: InfoComponent, data: {linkText: 'Home'}},
   {
-    path: 'poisson',
-    loadChildren: 'app/poisson/poisson.module#PoissonModule',
-    data: {linkText: 'Poisson Distribution Algorithm (not working currently)'}
+    path: 'shaderExamples',
+    loadChildren: 'app/shader-examples/shader-examples.module#ShaderExamplesModule',
+    data: {linkText: 'WebGL Shader examples with live code editor'}
   },
   {
-    path: 'reactionDiff',
-    loadChildren: 'app/reaction-diff/reaction-diff.module#ReactionDiffModule',
-    data: {linkText: 'Reaction Diffusion Algorithm'}
+    path: 'someGpuCalculations',
+    loadChildren: 'app/some-gpu-calculation/some-gpu-calculation.module#SomeGpuCalculationModule',
+    data: {linkText: 'Some Gpu Accelerated Calculations'}
   },
   {
     path: 'webGl',
@@ -34,14 +34,14 @@ export const routes: AppRoute[] = [
     data: {linkText: 'Neural Networks'}
   },
   {
-    path: 'someGpuCalculations',
-    loadChildren: 'app/some-gpu-calculation/some-gpu-calculation.module#SomeGpuCalculationModule',
-    data: {linkText: 'Some Gpu Accelerated Calculations'}
+    path: 'reactionDiff',
+    loadChildren: 'app/reaction-diff/reaction-diff.module#ReactionDiffModule',
+    data: {linkText: 'Reaction Diffusion Algorithm'}
   },
   {
-    path: 'shaderExamples',
-    loadChildren: 'app/shader-examples/shader-examples.module#ShaderExamplesModule',
-    data: {linkText: 'WebGL Shader examples with live code editor'}
+    path: 'poisson',
+    loadChildren: 'app/poisson/poisson.module#PoissonModule',
+    data: {linkText: 'Poisson Distribution Algorithm'}
   },
   {path: '**', redirectTo: 'home'}
 ];

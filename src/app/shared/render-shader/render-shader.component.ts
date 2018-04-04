@@ -1,9 +1,11 @@
 import {Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {
-  Camera, CanvasRenderer,
+  Camera,
+  CanvasRenderer,
   Mesh,
   OrthographicCamera,
   PlaneBufferGeometry,
+  Renderer,
   Scene,
   ShaderMaterial,
   Vector2,
@@ -32,7 +34,7 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('canvasContainer') canvasContainer: ElementRef;
   @ViewChild('stats') statsElem: ElementRef;
 
-  private renderer: WebGLRenderer;
+  private renderer: Renderer;
 
   private camera: Camera;
   private geometry: PlaneBufferGeometry;
@@ -48,15 +50,13 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-
   ngOnInit() {
-    let renderParams = {
+    const renderParams = {
       antialias: true,
       canvas: this.shaderCanvas.nativeElement,
     };
-    this.renderer = new WebGLRenderer(renderParams);
+    this.renderer = Detector.webgl ? new WebGLRenderer(renderParams) : new CanvasRenderer(renderParams);
 
-    Detector.webgl ? new WebGLRenderer(renderParams): new CanvasRenderer(renderParams);
     this.uniforms = {
       time: {value: 1.0},
       resolution: {value: new Vector2(this.canvasWidth, this.canvasHeight)},
@@ -87,9 +87,11 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('ngOnDestroy: Renderer dispose.');
-    this.renderer.forceContextLoss();
-    this.renderer.dispose();
+    if (this.renderer instanceof WebGLRenderer) {
+      console.log('ngOnDestroy: WebGLRenderer dispose.');
+      this.renderer.forceContextLoss();
+      this.renderer.dispose();
+    }
   }
 
   onMouseMove(e: MouseEvent) {
@@ -101,7 +103,7 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
     console.log('onResize', this.canvasWidth, this.canvasHeight, this.renderer);
     if (this.canvasWidth && this.canvasHeight) {
       this.renderer.setSize(this.canvasWidth, this.canvasHeight);
-      this.uniforms.resolution.value = new Vector2(this.renderer.getSize().width, this.renderer.getSize().height);
+      this.uniforms.resolution.value = new Vector2(this.canvasWidth, this.canvasHeight);
     }
   }
 

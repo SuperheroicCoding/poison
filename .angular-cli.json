@@ -18,6 +18,10 @@
       "tsconfig": "tsconfig.app.json",
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
+      "serviceWorker": true,
+      "styles": [
+        "styles.css"
+      ],
       "scripts": [
         "../node_modules/three/build/three.js",
         "../node_modules/three/examples/js/controls/OrbitControls.js",
@@ -25,9 +29,6 @@
         "../node_modules/ace-builds/src/ace.js",
         "../node_modules/ace-builds/src/mode-glsl.js",
         "../node_modules/ace-builds/src/theme-eclipse.js"
-      ],
-      "styles": [
-        "styles.css"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
@@ -62,6 +63,7 @@
   },
   "defaults": {
     "styleExt": "less",
-    "component": {}
+    "component": {
+    }
   }
 }

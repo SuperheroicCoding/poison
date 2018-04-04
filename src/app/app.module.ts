@@ -11,7 +11,8 @@ import {CoreModule} from './core/core.module';
 import {appRoutes, routes} from './app-routing.module';
 import {AboutComponent} from './info/about/about.component';
 import {ROUTER_LINKS} from './app-routes.token';
-
+import {ServiceWorkerModule} from '@angular/service-worker';
+import {environment} from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -26,9 +27,11 @@ import {ROUTER_LINKS} from './app-routes.token';
     BrowserModule,
     appRoutes,
     BrowserAnimationsModule,
-    SharedModule.forRoot()
+    SharedModule.forRoot(),
+    ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production})
   ],
-  providers: [{
+  providers: [
+    {
     provide: ROUTER_LINKS, useValue: routes.filter((route) => route.data ? route.data.linkText : false)
   }],
   bootstrap: [AppComponent]

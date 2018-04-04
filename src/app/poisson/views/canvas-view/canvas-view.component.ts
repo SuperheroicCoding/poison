@@ -62,7 +62,6 @@ export class CanvasViewComponent implements OnInit, AfterContentInit {
   }
 
   private draw(step: number) {
-
     this.canvasDrawService.setFillColor('black');
     this.canvasDrawService.fillRect(0, 0, this.width, this.height);
     if (this.circles) {
@@ -75,8 +74,8 @@ export class CanvasViewComponent implements OnInit, AfterContentInit {
       this.circles.forEach((circle) => this.canvasDrawService.drawCircle(circle, step));
     }
     if (this.actives) {
-      this.canvasDrawService.setFillColor('r');
-      this.actives.forEach((active) => this.canvasDrawService.drawVec(active, 1));
+      this.canvasDrawService.setFillColor('red');
+      this.actives.forEach((active) => this.canvasDrawService.drawVec(active, 2));
     }
     if (this.lines) {
       this.canvasDrawService.setStrokeColor('white');

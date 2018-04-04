@@ -5,9 +5,7 @@ export class Circle {
   }
 
   getColor(step: number): { h: number, s: number, l: number } {
-    const offsetX = 0;
-    const offsetY = 0;
-    const h = 365 * Math.abs(Math.sin((step + this.pos.x) * 0.03));
+    const h = 365 * Math.abs(Math.sin(this.pos.x * 0.03 + 5));
     const s = 100 * Math.abs(Math.cos(this.r));
     const l = 50;
     return {h, s, l};

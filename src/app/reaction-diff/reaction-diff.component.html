@@ -64,6 +64,7 @@
              name="speed"
              min="1"
              max="30"
+             [disabled]="!useGpu"
              [(ngModel)]="speed"
              (change)="updateSpeed()">
     </mat-input-container>
@@ -90,7 +91,7 @@
              [(ngModel)]="numberWebWorkers"
              (change)="updateNumberOfWebWorkers()">
     </mat-input-container>
-    <mat-checkbox [(ngModel)]="useGpu" (change)="updateUseGpu()">Use GPU
+    <mat-checkbox [(ngModel)]="useGpu" (change)="updateUseGpu()">Use gpu.js
     </mat-checkbox>
 
     <div>Calculation needs: {{calculationTime$ | async}}ms</div>
