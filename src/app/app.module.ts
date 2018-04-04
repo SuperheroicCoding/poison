@@ -13,6 +13,7 @@ import {AboutComponent} from './info/about/about.component';
 import {ROUTER_LINKS} from './app-routes.token';
 import {ServiceWorkerModule} from '@angular/service-worker';
 import {environment} from '../environments/environment';
+import { ServiceWorkerUpdateComponent } from './service-worker-update/service-worker-update.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import {environment} from '../environments/environment';
     TechnologyComponent,
     NavItemComponent,
     AboutComponent,
+    ServiceWorkerUpdateComponent,
   ],
   imports: [
     CoreModule.forRoot(),
@@ -28,7 +30,7 @@ import {environment} from '../environments/environment';
     appRoutes,
     BrowserAnimationsModule,
     SharedModule.forRoot(),
-    ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production})
+    ServiceWorkerModule.register('./ngsw-worker.js', {enabled: environment.production})
   ],
   providers: [
     {
