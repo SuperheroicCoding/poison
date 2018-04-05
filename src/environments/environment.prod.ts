@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  serviceWorkerCheckInterval: 600000
+  serviceWorkerCheckInterval: 30000
 };

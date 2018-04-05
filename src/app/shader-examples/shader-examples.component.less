@@ -1,10 +1,23 @@
+@headerSize: 250px;
+
 .toolbar-checkbox {
   margin-right: 10px;
 }
 
+.navigation-button {
+  z-index: 1;
+  position: absolute;
+  bottom: calc(~'(100%) / 2 - 30px');
+  opacity: 80%;
+  &.right{
+   right: 1rem;
+  }
+  &.left {
+    left: 1rem;
+  }
+}
+
 .shaders-container {
-  margin: 10px;
-  width: calc(~'100vw - 40px');
   height: calc(~'100vh - 250px');
 }
 

@@ -1,4 +1,9 @@
 <div class="stats" #stats [style.display]="showFps? 'block':'none'"></div>
 <div #canvasContainer class="canvasContainer">
-  <canvas [width]="canvasWidth" [height]="canvasHeight" #webGlCanvas></canvas>
+  <canvas #webGlCanvas
+          [width]="canvasWidth"
+          [height]="canvasHeight"
+          (touchmove)="onTouchMove($event)"
+          (mousemove)="onMouseMove($event)"
+  ></canvas>
 </div>

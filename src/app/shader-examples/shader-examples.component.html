@@ -1,43 +1,52 @@
-<mat-toolbar>
-  <mat-toolbar-row>
+<mat-card>
+  <mat-card-title>
     Some WebGl Shader Examples inspired by&nbsp;
     <a target="_blank" href="https://thebookofshaders.com">The Book of Shader</a>
-    <span class="toolbar-spacer"></span>
+  </mat-card-title>
+  <mat-card-content>
     <mat-checkbox class="toolbar-checkbox" [(ngModel)]="showCodeEditor">Show live code editor</mat-checkbox>
     <mat-checkbox class="toolbar-checkbox" [(ngModel)]="showFps">Show FPS</mat-checkbox>
-  </mat-toolbar-row>
-  <mat-toolbar-row>
-    <span class="toolbar-spacer"></span>
-    <mat-paginator
-      showFirstLastButtons="true"
-      [pageIndex]="(currentPage$ | async)?.pageIndex"
-      [length]="shaders.length"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="[1,2,3,4,5,6]"
-      (page)="changeCurrentShaderPage($event)">
-    </mat-paginator>
-    <span class="toolbar-spacer"></span>
-  </mat-toolbar-row>
-</mat-toolbar>
-<mat-grid-list class="shaders-container" cols="{{(shadersPaged$ | async)?.length || 2}}" rowHeight="fit" gutterSize="10">
-  <mat-grid-tile class="shader-container"
-                 *ngFor="let shader of (shadersPaged$ | async); trackBy: trackByIndex">
-    <mat-card class="code-card" appRaiseCard *ngIf="showCodeEditor">
-      <mat-card-title>Fragment-shader code</mat-card-title>
-      <mat-card-content class="code-editor">
-        <app-code-editor [(code)]="shader.code" mode="glsl"></app-code-editor>
-      </mat-card-content>
-    </mat-card>
-    <mat-card class="canvas-card" appRaiseCard>
-      <mat-card-title>{{shader.description}}</mat-card-title>
-      <mat-card-content #shaderRenderer class="shader-renderer">
-        <app-render-shader
-          [shaderCode]="shader.code"
-          [showFps]="showFps"
-          [canvasWidth]="rendererWidth"
-          [canvasHeight]="rendererHeight">
-        </app-render-shader>
-      </mat-card-content>
-    </mat-card>
-  </mat-grid-tile>
-</mat-grid-list>
+  </mat-card-content>
+</mat-card>
+<mat-card class="shaders-container">
+    <button mat-mini-fab color="primary" class="navigation-button left" (click)="previousPage()">
+      <mat-icon aria-label="Previous page">keyboard_arrow_left</mat-icon>
+    </button>
+    <mat-grid-list class="shader-container" cols="{{(shadersPaged$ | async)?.length || 2}}" rowHeight="fit"
+                   gutterSize="10">
+
+      <mat-grid-tile class="shader-container"
+                     *ngFor="let shader of (shadersPaged$ | async); trackBy: trackByIndex">
+        <mat-card class="code-card" appRaiseCard *ngIf="showCodeEditor">
+          <mat-card-title>Fragment-shader code</mat-card-title>
+          <mat-card-content class="code-editor">
+            <app-code-editor [(code)]="shader.code" mode="glsl"></app-code-editor>
+          </mat-card-content>
+        </mat-card>
+        <mat-card class="canvas-card" appRaiseCard>
+          <mat-card-title>{{shader.description}}</mat-card-title>
+          <mat-card-content #shaderRenderer class="shader-renderer">
+            <app-render-shader
+              [shaderCode]="shader.code"
+              [showFps]="showFps"
+              [canvasWidth]="rendererWidth"
+              [canvasHeight]="rendererHeight">
+            </app-render-shader>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+    <button mat-mini-fab color="primary" class="navigation-button right"
+    (click)="nextPage()">
+      <mat-icon aria-label="Next page">keyboard_arrow_right</mat-icon>
+    </button>
+</mat-card>
+<mat-paginator
+  showFirstLastButtons="true"
+  [pageIndex]="(currentPage$ | async)?.pageIndex"
+  [length]="shaders.length"
+  [pageSize]="pageEvent.pageSize"
+  [pageSizeOptions]="[1,2,3,4,5,6]"
+  [hidePageSize]="isSmallScreen"
+  (page)="changeCurrentShaderPage($event)">
+</mat-paginator>

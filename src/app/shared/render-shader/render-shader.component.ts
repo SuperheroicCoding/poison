@@ -22,7 +22,6 @@ import * as Stats from 'stats.js';
 })
 export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
 
-
   @Input() shaderCode: string;
   @Input() vertexShader?: string;
   @Input() runAnimation? = true;
@@ -81,7 +80,7 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
     this.mesh = new Mesh(this.geometry, this.material);
 
     this.shaderCanvas.nativeElement.onmousemove = (e) => this.onMouseMove(e);
-    this.shaderCanvas.nativeElement.ontouchmove = (e) => this.onMouseMove(e);
+    this.shaderCanvas.nativeElement.ontouchmove = (e) => this.onTouchMove(e);
     this.scene.add(this.mesh);
     this.animate(1.0);
   }
@@ -98,6 +97,14 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
     this.uniforms.mouse.value.x = e.offsetX / this.canvasWidth;
     this.uniforms.mouse.value.y = (this.canvasHeight - e.offsetY) / this.canvasHeight;
   }
+
+  onTouchMove(e: TouchEvent) {
+    console.log('onTouch',e);
+    let touch = e.touches[0];
+    this.uniforms.mouse.value.x = touch.clientX / this.canvasWidth;
+    this.uniforms.mouse.value.y = (this.canvasHeight - touch.clientY) / this.canvasHeight;
+  }
+
 
   onResize() {
     console.log('onResize', this.canvasWidth, this.canvasHeight);
