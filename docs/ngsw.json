@@ -18,6 +18,7 @@
         "/AngularExamples/6.023a776e256197bac4ca.chunk.js",
         "/AngularExamples/inline.58d727d425d3285c6a1c.bundle.js",
         "/AngularExamples/main.81473b843e608dcb2d53.bundle.js",
+        "/AngularExamples/main.bc3e4767edf294ccaef7.bundle.js",
         "/AngularExamples/polyfills.ddd18f33b7d95c2e1707.bundle.js",
         "/AngularExamples/scripts.31783642af6abccd5514.bundle.js",
         "/AngularExamples/styles.41ba67385b0a1ab4b4b9.bundle.css"
@@ -60,10 +61,11 @@
     "/AngularExamples/inline.58d727d425d3285c6a1c.bundle.js": "1a3a40bc163d917a503e84c465e04b74c81a3cbf",
     "/AngularExamples/assets/logos/typescript.svg": "4ff0ab7bac5d0478e03a5d1591cd1e4345cd01d9",
     "/AngularExamples/main.81473b843e608dcb2d53.bundle.js": "6b2794e716d8483541a221a9acb6c349a454a207",
+    "/AngularExamples/main.bc3e4767edf294ccaef7.bundle.js": "62bb203d03fa89192c26044dc62c88fab73e953a",
     "/AngularExamples/polyfills.ddd18f33b7d95c2e1707.bundle.js": "c8a65055a99d3e2ee3df2d9255b177f873341050",
     "/AngularExamples/scripts.31783642af6abccd5514.bundle.js": "de397d1b71730c785dc5e0edca31ed5e7ab7b962",
     "/AngularExamples/styles.41ba67385b0a1ab4b4b9.bundle.css": "26782832d421f841ef74dfdb4bc87710dcbe313d",
     "/AngularExamples/favicon.ico": "84161b857f5c547e3699ddfbffc6d8d737542e01",
-    "/AngularExamples/index.html": "898552f260c8b3cd5fe91d59c0181f317ec9c9a6"
+    "/AngularExamples/index.html": "5850f187a8e8129b8ea88f4cba5c9eb6d2b95ce7"
   }
 }
