@@ -1,11 +1,6 @@
-<mat-card>
-  <mat-card>
-    <button mat-raised-button (click)="togglePlay()">{{play ? 'Pause': 'Play'}}</button>
-    <button mat-raised-button color="accent" (click)="reset()">Reset</button>
-  </mat-card>
-  <mat-card>
-    <mat-card-title>Configs</mat-card-title>
-
+<mat-card appRaiseCard>
+  <mat-card-title>Configs</mat-card-title>
+  <mat-card-content class="configs">
     <mat-input-container>
       <input matInput placeholder="Min Radius between points" id="radius" type="number" step="0.1" name="radius"
              min="5.0" [(ngModel)]="radius"
@@ -17,11 +12,16 @@
              (ngModelChange)=kChanged($event)>
     </mat-input-container>
     <mat-input-container>
-      <input matInput placeholder="Iterations per frame" id="iterationsPerFrame" type="number" name="iterationsPerFrame"
+      <input matInput placeholder="Iterations per frame" id="iterationsPerFrame" type="number"
+             name="iterationsPerFrame"
              min="1"
              [(ngModel)]="iterationsPerFrame"
              (ngModelChange)=iterationsPerFrameChanged($event)>
     </mat-input-container>
-
-  </mat-card>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button (click)="togglePlay()">{{play ? 'Pause': 'Play'}}</button>
+    <button mat-raised-button color="accent" (click)="reset()">Reset</button>
+  </mat-card-actions>
 </mat-card>
+

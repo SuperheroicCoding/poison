@@ -1,3 +1,7 @@
 .simContent {
   display: flex;
+  flex-wrap: wrap;
+}
+mat-card{
+  margin-right: 1rem;
 }
