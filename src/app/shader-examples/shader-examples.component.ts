@@ -38,9 +38,7 @@ export class ShaderExamplesComponent implements AfterContentInit {
 
   ngAfterContentInit() {
     this.currentPage$ = this.currentPageSubject.asObservable().pipe(
-      tap(console.log.bind(console, 'pageEvent')),
       distinctUntilChanged((p1, p2) => p1.pageIndex === p2.pageIndex && p1.pageSize === p2.pageSize),
-      tap(console.log.bind(console, 'pageEvent after distinct')),
       tap(pageEvent => this.pageEvent = pageEvent),
       debounceTime<PageEvent>(400),
       share()
