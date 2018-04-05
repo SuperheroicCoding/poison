@@ -7,7 +7,7 @@ export interface ShaderDef {
 export const shaders: ShaderDef[] = [{
   code: `
     #ifdef GL_ES
-    precision mediump float;
+    precision highp float;
     #endif
      
     void main() {
@@ -18,7 +18,7 @@ export const shaders: ShaderDef[] = [{
   {
     code: `
     #ifdef GL_ES
-    precision mediump float;
+    precision highp float;
     #endif
 
     uniform float time;
@@ -31,7 +31,7 @@ export const shaders: ShaderDef[] = [{
   {
     code: `
     #ifdef GL_ES
-    precision mediump float;
+    precision highp float;
     #endif
 
     uniform float time;
@@ -46,7 +46,7 @@ export const shaders: ShaderDef[] = [{
   {
     code: `
     #ifdef GL_ES
-    precision mediump float;
+    precision highp float;
     #endif
     
     uniform vec2 resolution;
@@ -71,7 +71,7 @@ export const shaders: ShaderDef[] = [{
   {
     code: `
 #ifdef GL_ES
-precision mediump float;
+precision highp float;
 #endif
 
 #define PI 3.14159265359
@@ -111,7 +111,7 @@ void main() {
   },
   {
     code: `#ifdef GL_ES
-precision mediump float;
+precision highp float;
 #endif
 
 #define TWO_PI 6.28318530718
@@ -151,7 +151,7 @@ void main(){
   },
   {
     code: `#ifdef GL_ES
-precision mediump float;
+precision highp float;
 #endif
 
 uniform vec2 resolution;
@@ -181,7 +181,7 @@ void main() {
   },
   {
     code: `#ifdef GL_ES
-precision mediump float;
+precision highp float;
 #endif
 
 #define PI 3.14159265359
@@ -210,7 +210,7 @@ void main() {
   },
   {
     code: `#ifdef GL_ES
-precision mediump float;
+precision highp float;
 #endif
 
 #define PI 3.14159265359
@@ -241,7 +241,7 @@ void main() {
   },
   {
     code: `#ifdef GL_ES
-precision mediump float;
+precision highp float;
 #endif
 
 uniform vec2 resolution;
@@ -266,7 +266,7 @@ void main(){
 }`, description: 'Rectangle'
   }, {
     code: `#ifdef GL_ES
-precision mediump float;
+precision highp float;
 #endif
 
 uniform vec2 resolution;
@@ -293,7 +293,7 @@ void main(){
   },
   {
     code: `#ifdef GL_ES
-precision mediump float;
+precision highp float;
 #endif
 
 uniform vec2 resolution;
@@ -356,7 +356,7 @@ void main() {
 }`, description: 'Cellular Noise'
   }, {
     code: `#ifdef GL_ES
-precision mediump float;
+precision highp float;
 #endif
 
 uniform vec2 resolution;
@@ -441,7 +441,7 @@ void main() {
   {
       description: 'Colorfull cirlce', code: `
   #ifdef GL_ES
-  precision mediump float;
+  precision highp float;
   #endif
   
   #define TWO_PI 6.28318530718
