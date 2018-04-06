@@ -59,7 +59,7 @@ export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
   private camera: PerspectiveCamera;
   private cube: Mesh;
   private lastFrameTime: number;
-  private checkerBoard: Mesh;
+  private plane: Mesh;
   private width: number;
   private height: number;
   private pointLight: PointLight;
@@ -142,10 +142,15 @@ export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
     this.cube.position.y = 0.75;
     this.scene.add(this.cube);
 
-    this.checkerBoard = this.createMandlebrotPlane();
-    this.checkerBoard.rotation.x = -PIHALF;
-    this.checkerBoard.receiveShadow = true;
-    this.scene.add(this.checkerBoard);
+    this.plane = this.createMandlebrotPlane();
+    this.plane.rotation.x = -PIHALF;
+    this.plane.rotation.z =  -0.85 * Math.PI;
+    this.plane.translateX(7.5);
+    this.plane.translateY(0.5);
+
+    this.plane.scale.setLength(0.7);
+    this.plane.receiveShadow = true;
+    this.scene.add(this.plane);
 
     this.lastFrameTime = 0;
 
@@ -234,7 +239,7 @@ export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
   // Resize by clientWidth and clientHeight
   private resize() {
     const canvas: HTMLCanvasElement = this.webGlCanvas.nativeElement;
-    const width = canvas.parentElement.clientWidth;
+    const width = Math.min(canvas.parentElement.clientWidth, 1024);
     const height = canvas.parentElement.clientHeight;
     if (width !== this.width ||
       height !== this.height) {
