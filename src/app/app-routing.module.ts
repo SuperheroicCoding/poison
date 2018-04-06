@@ -11,8 +11,7 @@ export interface AppRoute extends Route {
 }
 
 export const routes: AppRoute[] = [
-  {path: '', pathMatch: 'full', redirectTo: 'home'},
-  {path: 'home', component: InfoComponent, data: {linkText: 'Home'}},
+  {path: '', component: InfoComponent, data: {linkText: 'Home'}},
   {
     path: 'shaderExamples',
     loadChildren: 'app/shader-examples/shader-examples.module#ShaderExamplesModule',
@@ -43,7 +42,7 @@ export const routes: AppRoute[] = [
     loadChildren: 'app/poisson/poisson.module#PoissonModule',
     data: {linkText: 'Poisson Distribution Algorithm'}
   },
-  {path: '**', redirectTo: 'home'}
+  {path: '**', redirectTo: ''}
 ];
 
 export const appRoutes: ModuleWithProviders = RouterModule.forRoot(routes);
