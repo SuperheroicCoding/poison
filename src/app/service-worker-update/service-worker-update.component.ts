@@ -5,6 +5,7 @@ import {delay, finalize, flatMap, map, publishBehavior, tap} from 'rxjs/operator
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs/Observable';
 import {UpdateAvailableEvent} from '@angular/service-worker/src/low_level';
+import {ServiceWorkerLogUpdateService} from '../core/service-worker-log-update.service';
 
 
 @Component({
@@ -17,11 +18,10 @@ export class ServiceWorkerUpdateComponent implements OnInit {
   updatesAvailable: Observable<boolean>;
 
 
-  constructor(private updates: SwUpdate, private  zone: NgZone) {
+  constructor(private updates: SwUpdate, private  zone: NgZone, updateLogger: ServiceWorkerLogUpdateService) {
     if (environment.production) {
-
+      updateLogger.startLogging();
       this.updatesAvailable = updates.available.pipe(
-        tap(updateEvent => console.log('Update Event', updateEvent)),
         map((updateEvent: UpdateAvailableEvent) => true),
         publishBehavior(false));
 
