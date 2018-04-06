@@ -23,4 +23,6 @@ export class ServiceWorkerLogUpdateService {
       console.log('ServiceWorker not used. Because in dev mode!');
     }
   }
+
+
 }

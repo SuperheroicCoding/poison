@@ -1,10 +1,11 @@
-import {Component, NgZone, OnInit} from '@angular/core';
+import {Component, NgZone} from '@angular/core';
 import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
 import {SwUpdate} from '@angular/service-worker';
 import {delay, finalize, flatMap, map, tap} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 import {UpdateAvailableEvent} from '@angular/service-worker/src/low_level';
 import {ServiceWorkerLogUpdateService} from '../core/service-worker-log-update.service';
+import {ServiceWorkerUpdateService} from '../core/service-worker-update.service';
 
 
 @Component({
@@ -12,15 +13,16 @@ import {ServiceWorkerLogUpdateService} from '../core/service-worker-log-update.s
   templateUrl: './service-worker-update.component.html',
   styleUrls: ['./service-worker-update.component.less']
 })
-export class ServiceWorkerUpdateComponent implements OnInit {
+export class ServiceWorkerUpdateComponent {
   private _isLoading = false;
   updatesAvailable = false;
 
 
-  constructor(private updates: SwUpdate, private  zone: NgZone, updateLogger: ServiceWorkerLogUpdateService) {
+  constructor(private swUpdates: SwUpdate, private  zone: NgZone, updateLogger: ServiceWorkerLogUpdateService, private  updateService: ServiceWorkerUpdateService) {
     if (environment.production) {
       updateLogger.startLogging();
-      updates.available.pipe(
+      updateService.showSnackOnUpdateAvailable();
+      swUpdates.available.pipe(
         map((updateEvent: UpdateAvailableEvent) => true)
       )
         .subscribe(available => this.updatesAvailable = available);
@@ -28,7 +30,7 @@ export class ServiceWorkerUpdateComponent implements OnInit {
       zone.runOutsideAngular(() => {
         IntervalObservable.create(environment.serviceWorkerCheckInterval).pipe(
           tap(intervalTime => this.isLoading = true),
-          flatMap(intervalTime => this.updates.checkForUpdate()),
+          flatMap(intervalTime => this.swUpdates.checkForUpdate()),
           delay(200), // to make the spinner visible
           finalize(() => this.isLoading = false)
         )
@@ -37,9 +39,6 @@ export class ServiceWorkerUpdateComponent implements OnInit {
             (error) => console.error(error));
       });
     }
-  }
-
-  ngOnInit() {
   }
 
   get isLoading() {
@@ -51,7 +50,7 @@ export class ServiceWorkerUpdateComponent implements OnInit {
   }
 
   activateUpdate() {
-    this.updates.activateUpdate().then(() => document.location.reload());
+    this.updateService.activateUpdate();
   }
 
 }

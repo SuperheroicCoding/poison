@@ -3,7 +3,6 @@ import {AppRoute} from './app-routing.module';
 import {TitleService} from './core/title.service';
 import {ROUTER_LINKS} from './app-routes.token';
 import {shader} from './title-shader';
-import {ServiceWorkerLogUpdateService} from './core/service-worker-log-update.service';
 
 
 @Component({
@@ -17,8 +16,7 @@ export class AppComponent {
   // we need title service to update page title.
   // the logUpdate service is used to log service worker changes.
   constructor(private titleService: TitleService,
-              @Inject(ROUTER_LINKS) public routerLinks: AppRoute[],
-              private logUpdate: ServiceWorkerLogUpdateService) {
+              @Inject(ROUTER_LINKS) public routerLinks: AppRoute[]) {
   }
 }
 

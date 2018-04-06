@@ -2,8 +2,12 @@ import {ModuleWithProviders, NgModule, Optional, SkipSelf} from '@angular/core';
 import {TitleService} from './title.service';
 import {RandomService} from './random.service';
 import {ServiceWorkerLogUpdateService} from './service-worker-log-update.service';
+import {ServiceWorkerUpdateService} from './service-worker-update.service';
+import {MatSnackBarModule} from '@angular/material';
 
-@NgModule({})
+@NgModule({
+  imports: [MatSnackBarModule]
+})
 export class CoreModule {
   static forRoot(): ModuleWithProviders {
     return {
@@ -11,7 +15,8 @@ export class CoreModule {
       providers: [
         TitleService,
         RandomService,
-        ServiceWorkerLogUpdateService
+        ServiceWorkerLogUpdateService,
+        ServiceWorkerUpdateService
       ],
     };
   }
