@@ -1,4 +1,4 @@
-import {ApplicationRef, NgModule} from '@angular/core';
+import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {SharedModule} from './shared/shared.module';
@@ -13,7 +13,7 @@ import {AboutComponent} from './info/about/about.component';
 import {ROUTER_LINKS} from './app-routes.token';
 import {ServiceWorkerModule} from '@angular/service-worker';
 import {environment} from '../environments/environment';
-import { ServiceWorkerUpdateComponent } from './service-worker-update/service-worker-update.component';
+import {ServiceWorkerUpdateComponent} from './service-worker-update/service-worker-update.component';
 
 @NgModule({
   declarations: [

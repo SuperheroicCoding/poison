@@ -28,6 +28,11 @@ export const routes: AppRoute[] = [
     data: {linkText: 'Mandelbrot plane, lights objects with three.js'}
   },
   {
+    path: 'tensorflowExamples',
+    loadChildren: 'app/tensorflow-examples/tensorflow-examples.module#TensorflowExamplesModule',
+    data: {linkText: 'Tensorflow examples'}
+  },
+  {
     path: 'neuralNetwork',
     loadChildren: 'app/neural-network/neural-network.module#NeuralNetworkModule',
     data: {linkText: 'Neural Networks'}

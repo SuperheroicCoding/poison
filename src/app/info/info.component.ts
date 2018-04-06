@@ -16,6 +16,7 @@ export class InfoComponent implements OnInit {
     new Technology('p5js', 'https://p5js.org', 'assets/logos/p5.svg'),
     new Technology('three.js', 'https://threejs.org/', 'assets/logos/three-js.png'),
     new Technology('gpu.js', 'http://gpu.rocks/', 'assets/logos/gpu-js.png'),
+    new Technology('tensorflow.js', 'https://js.tensorflow.org', 'assets/logos/tensorflow-js.png'),
   ];
 
   constructor() {
