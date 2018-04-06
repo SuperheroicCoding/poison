@@ -1,5 +1,5 @@
 {
-  "configVersion": 1,
+  "configVersion": 2,
   "index": "/AngularExamples/index.html",
   "assetGroups": [
     {
@@ -9,6 +9,7 @@
       "urls": [
         "/AngularExamples/favicon.ico",
         "/AngularExamples/index.html",
+        "/AngularExamples/404.html",
         "/AngularExamples/0.6ff66744ae28197c08af.chunk.js",
         "/AngularExamples/1.607bd7a2f2a0edb79ab6.chunk.js",
         "/AngularExamples/2.9aba57f918c85dc9038a.chunk.js",
@@ -64,6 +65,7 @@
     "/AngularExamples/scripts.31783642af6abccd5514.bundle.js": "de397d1b71730c785dc5e0edca31ed5e7ab7b962",
     "/AngularExamples/styles.a4568f74e9e0df3149ab.bundle.css": "e1fdfece14fe0f54e4ccc8d243f629201d43a04d",
     "/AngularExamples/favicon.ico": "84161b857f5c547e3699ddfbffc6d8d737542e01",
-    "/AngularExamples/index.html": "83c202fffe560448374d18ae6f346effef6a0837"
+    "/AngularExamples/index.html": "83c202fffe560448374d18ae6f346effef6a0837",
+    "/AngularExamples/404.html": "83c202fffe560448374d18ae6f346effef6a0837"
   }
 }
