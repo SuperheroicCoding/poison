@@ -1,5 +1,5 @@
 <span *ngIf="isLoading">Checking for new version</span>
 <mat-spinner *ngIf="isLoading" [diameter]="40">
 </mat-spinner>
-<button *ngIf="updatesAvailable | async" (click)="activateUpdate()">Get new version!</button>
+<button color="warn" mat-button *ngIf="updatesAvailable" (click)="activateUpdate()">Get new version!</button>
 
