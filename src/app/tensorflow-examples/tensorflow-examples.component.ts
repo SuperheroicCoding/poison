@@ -7,10 +7,9 @@ import {PolynominalRegretionService} from './polynominal-regretion.service';
   styleUrls: ['./tensorflow-examples.component.less']
 })
 export class TensorflowExamplesComponent implements OnInit {
-  private randomCoefficients: { a: number; b: number; c: number; d: number };
-  private learnedCoefficients: { a: number; b: number; c: number; d: number };
-  private currentLoss: number;
-
+  randomCoefficients: { a: number; b: number; c: number; d: number };
+  learnedCoefficients: { a: number; b: number; c: number; d: number };
+  currentLoss: number;
 
   constructor(public polyService: PolynominalRegretionService) {
   }
@@ -23,7 +22,6 @@ export class TensorflowExamplesComponent implements OnInit {
     await this.polyService.learnCoefficients(10);
     this.learnedCoefficients = this.polyService.currentCoefficients;
     const currentLossData = this.polyService.loss(this.polyService.predictionsAfter, this.polyService.trainingData.ys).dataSync();
-    console.log(currentLossData);
     this.currentLoss = currentLossData[0];
   }
 
