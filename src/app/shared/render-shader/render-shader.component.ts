@@ -99,15 +99,16 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onTouchMove(e: TouchEvent) {
-    console.log('onTouch',e);
-    let touch = e.touches[0];
-    this.uniforms.mouse.value.x = touch.clientX / this.canvasWidth;
-    this.uniforms.mouse.value.y = (this.canvasHeight - touch.clientY) / this.canvasHeight;
+    const touch = e.touches[0];
+    const x = touch.clientX;
+    const y = touch.clientY;
+    const canvasElement: HTMLCanvasElement = this.canvasContainer.nativeElement;
+    this.uniforms.mouse.value.x = (x - canvasElement.offsetLeft) / this.canvasWidth;
+    this.uniforms.mouse.value.y = (this.canvasHeight - (touch.clientY - canvasElement.offsetTop)) / this.canvasHeight;
   }
 
 
   onResize() {
-    console.log('onResize', this.canvasWidth, this.canvasHeight);
     if (this.canvasWidth && this.canvasHeight) {
       this.renderer.setSize(this.canvasWidth, this.canvasHeight);
       this.uniforms.resolution.value = new Vector2(this.canvasWidth, this.canvasHeight);

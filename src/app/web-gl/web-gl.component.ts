@@ -1,4 +1,13 @@
-import {AfterContentInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
 import {
@@ -34,7 +43,7 @@ declare const THREE: any;
 @Component({
   selector: 'app-web-gl',
   templateUrl: './web-gl.component.html',
-  styleUrls: ['./web-gl.component.css']
+  styleUrls: ['./web-gl.component.less']
 })
 export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
 
@@ -60,7 +69,7 @@ export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private activateLook$: Observable<boolean>;
 
-  constructor() {
+  constructor(private zone: NgZone) {
   }
 
   ngOnInit(): void {
@@ -87,9 +96,9 @@ export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
     this.clock = new Clock();
     this.scene = new Scene();
     this.scene.fog = new FogExp2(0xcccccc, 0.002);
-    const canvas = this.webGlCanvas.nativeElement;
-    this.width = canvas.innerWidth;
-    this.height = canvas.innerHeight;
+    const canvas: HTMLCanvasElement = this.webGlCanvas.nativeElement;
+    this.width = canvas.clientWidth;
+    this.height = canvas.clientHeight;
     this.camera = new PerspectiveCamera(75, this.width / this.height, 0.1, 1000);
     this.camera.rotation.x = -Math.PI / 5;
     this.camera.position.z = -0.6;
@@ -156,31 +165,32 @@ export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
 
 
   private animate(time?: number) {
+    this.zone.runOutsideAngular(() => {
+      this.resize();
 
-    this.resize();
+      const frameTime = this.clock.getDelta();
+      /*(this.checkerBoard.material as ShaderMaterial)
+        .uniforms.zoom.value = Math.cos(time * 0.0001) * 0.1;*/
 
-    const frameTime = this.clock.getDelta();
-    /*(this.checkerBoard.material as ShaderMaterial)
-      .uniforms.zoom.value = Math.cos(time * 0.0001) * 0.1;*/
+      this.cube.rotation.x += 0.5 * frameTime;
+      this.cube.rotation.y += 0.5 * frameTime;
 
-    this.cube.rotation.x += 0.5 * frameTime;
-    this.cube.rotation.y += 0.5 * frameTime;
+      this.pointLight.position.x = Math.sin(time * 0.0007) * 3;
+      this.pointLight.position.y = 3 + Math.cos(time * 0.0005) * 2;
+      this.pointLight.position.z = Math.cos(time * 0.0003) * 3;
+      const pointLightColor = new Color(
+        (Math.cos(time * 0.0003) + 1) * 0.5,
+        (Math.sin(time * 0.0005) + 1) * 0.5,
+        (Math.cos(time * 0.0007) + 1) * 0.5
+      );
+      this.pointLight.color.set(pointLightColor);
 
-    this.pointLight.position.x = Math.sin(time * 0.0007) * 3;
-    this.pointLight.position.y = 3 + Math.cos(time * 0.0005) * 2;
-    this.pointLight.position.z = Math.cos(time * 0.0003) * 3;
-    const pointLightColor = new Color(
-      (Math.cos(time * 0.0003) + 1) * 0.5,
-      (Math.sin(time * 0.0005) + 1) * 0.5,
-      (Math.cos(time * 0.0007) + 1) * 0.5
-    );
-    this.pointLight.color.set(pointLightColor);
+      let meshBasicMaterial = (this.pointLightSphere.material as MeshBasicMaterial);
+      meshBasicMaterial.color.set(pointLightColor);
 
-    let meshBasicMaterial = (this.pointLightSphere.material as MeshBasicMaterial);
-    meshBasicMaterial.color.set(pointLightColor);
-
-    this.renderer.render(this.scene, this.camera);
-    requestAnimationFrame((nextTime) => this.animate(nextTime));
+      this.renderer.render(this.scene, this.camera);
+      requestAnimationFrame((nextTime) => this.animate(nextTime));
+    });
   }
 
   private createCheckerBoard(segments: number = 20): Mesh {
@@ -223,13 +233,13 @@ export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
 
   // Resize by clientWidth and clientHeight
   private resize() {
-    const canvas = this.webGlCanvas.nativeElement;
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
+    const canvas: HTMLCanvasElement = this.webGlCanvas.nativeElement;
+    const width = canvas.parentElement.clientWidth;
+    const height = canvas.parentElement.clientHeight;
     if (width !== this.width ||
       height !== this.height) {
-      this.renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
-      this.camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      this.renderer.setSize(width, height, true);
+      this.camera.aspect = width / height;
       this.camera.updateProjectionMatrix();
       this.width = width;
       this.height = height;

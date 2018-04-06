@@ -1,4 +1,16 @@
-<canvas #webGlCanvas
-        (mouseup)="mouseup$.emit($event)"
-        (mousedown)="mousedown$.emit($event)">
-</canvas>
+<mat-card appRaiseCard>
+  <mat-card-title>
+    Example for three.js.
+  </mat-card-title>
+  <mat-card-subtitle>
+    Just some objects, lights and a plane with a custom mandelbrot shader.
+  </mat-card-subtitle>
+  <mat-card-content>
+    <canvas #webGlCanvas
+            (mouseup)="mouseup$.emit($event)"
+            (mousedown)="mousedown$.emit($event)">
+    </canvas>
+  </mat-card-content>
+  <mat-card-footer></mat-card-footer>
+</mat-card>
+

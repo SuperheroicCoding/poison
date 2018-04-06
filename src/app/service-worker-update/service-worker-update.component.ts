@@ -1,9 +1,10 @@
 import {Component, NgZone, OnInit} from '@angular/core';
 import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
 import {SwUpdate} from '@angular/service-worker';
-import {delay, finalize, flatMap, map, tap} from 'rxjs/operators';
+import {delay, finalize, flatMap, map, publishBehavior, tap} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs/Observable';
+import {UpdateAvailableEvent} from '@angular/service-worker/src/low_level';
 
 
 @Component({
@@ -21,7 +22,8 @@ export class ServiceWorkerUpdateComponent implements OnInit {
 
       this.updatesAvailable = updates.available.pipe(
         tap(updateEvent => console.log('Update Event', updateEvent)),
-        map(updateEvent => true));
+        map((updateEvent: UpdateAvailableEvent) => true),
+        publishBehavior(false));
 
       zone.runOutsideAngular(() => {
         IntervalObservable.create(environment.serviceWorkerCheckInterval).pipe(

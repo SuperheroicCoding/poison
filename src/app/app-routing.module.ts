@@ -26,7 +26,7 @@ export const routes: AppRoute[] = [
   {
     path: 'webGl',
     loadChildren: 'app/web-gl/web-gl.module#WebGlModule',
-    data: {linkText: 'WebGl Examples'}
+    data: {linkText: 'Mandelbrot plane, lights objects with three.js'}
   },
   {
     path: 'neuralNetwork',
