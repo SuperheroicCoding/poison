@@ -17,7 +17,7 @@ interface ShaderModel extends ShaderDef {
   styleUrls: ['./shader-examples.component.less']
 })
 export class ShaderExamplesComponent implements AfterContentInit {
-  shaders: ShaderModel[] = shaders.map((shader: ShaderDef) => Object.assign({fullSize: false}, shader));
+  shaders: ShaderModel[] = shaders.map((shader: ShaderDef) => Object.assign({fullSize: false}, shader)).reverse();
   showFps = false;
   showCodeEditor = false;
   shadersPaged$: Observable<ShaderModel[]>;

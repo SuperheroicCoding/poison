@@ -1,4 +1,14 @@
-import {Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  NgZone,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {
   Camera,
   CanvasRenderer,
@@ -100,13 +110,31 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
 
   onTouchMove(e: TouchEvent) {
     const touch = e.touches[0];
-    const x = touch.clientX;
-    const y = touch.clientY;
-    const canvasElement: HTMLCanvasElement = this.canvasContainer.nativeElement;
-    this.uniforms.mouse.value.x = (x - canvasElement.offsetLeft) / this.canvasWidth;
-    this.uniforms.mouse.value.y = (this.canvasHeight - (touch.clientY - canvasElement.offsetTop)) / this.canvasHeight;
+    const x = touch.pageX - this.getOffsetLeft(e.target);
+    const y = touch.pageY - this.getOffsetTop(e.target);
+    this.uniforms.mouse.value.x = Math.max(Math.min(x / this.canvasWidth, 1.0), 0.0);
+    this.uniforms.mouse.value.y = Math.max(Math.min((this.canvasHeight - y) / this.canvasHeight, 1.0), 0.0);
   }
 
+  private getOffsetLeft(elem) {
+    let offsetLeft = 0;
+    do {
+      if (!isNaN(elem.offsetLeft)) {
+        offsetLeft += elem.offsetLeft;
+      }
+    } while (elem = elem.offsetParent);
+    return offsetLeft;
+  }
+
+  private getOffsetTop(elem) {
+    let offsetTop = 0;
+    do {
+      if (!isNaN(elem.offsetTop)) {
+        offsetTop += elem.offsetTop;
+      }
+    } while (elem = elem.offsetParent);
+    return offsetTop;
+  }
 
   onResize() {
     if (this.canvasWidth && this.canvasHeight) {

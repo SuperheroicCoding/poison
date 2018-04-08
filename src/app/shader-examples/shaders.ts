@@ -13,7 +13,7 @@ export const shaders: ShaderDef[] = [{
     void main() {
       gl_FragColor = vec4(1.0,0.0,1.0,1.0);
     }`,
-  description: 'Just pink, but at 30fps!'
+  description: 'Just pink!'
 },
   {
     code: `
