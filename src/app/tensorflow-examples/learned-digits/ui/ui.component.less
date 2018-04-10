@@ -1,0 +1,27 @@
+.results {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.accuracy-result, .loss-result {
+  flex: 1 1 50%;
+}
+
+::ng-deep {
+  .images {
+    display: flex;
+    flex-wrap: wrap;
+    .pred-container {
+      margin-right: 2rem;
+      .pred {
+        background-color: green;
+        &.pred-incorrect {
+          background-color: red;
+        }
+      }
+    }
+  }
+}
+

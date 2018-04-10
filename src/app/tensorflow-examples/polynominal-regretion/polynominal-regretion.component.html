@@ -1,0 +1,49 @@
+<mat-card appRaiseCard>
+  <mat-card-title>Fitting data to a syntetic curve</mat-card-title>
+  <mat-card-subtitle>Utilizing tensorflow.js for polynominal regretion and vega to plot<br>
+    Inspired from <a href="https://github.com/tensorflow/tfjs-examples/tree/master/polynomial-regression-core"
+                     target="_blank">Tensorflow.js example</a>
+  </mat-card-subtitle>
+  <mat-card-content class="drawings">
+    <app-data-drawer
+      caption="Training data (synthetic)"
+      coeffCaption="True coefficients:"
+      [coeff]="polyService.trueCoefficients"
+      [data]="polyService.trainingData">
+    </app-data-drawer>
+    <app-data-drawer
+      caption="Fit curve with random coefficients (before training)"
+      coeffCaption="Random coefficients:"
+      [coeff]="randomCoefficients"
+      [data]="polyService.trainingData"
+      [predictions]="polyService.predictionsBefore">
+    </app-data-drawer>
+    <app-data-drawer
+      caption="Fit curve with learned coefficients (after training)"
+      coeffCaption="Learned coefficients:"
+      [coeff]="learnedCoefficients"
+      [data]="polyService.trainingData"
+      [predictions]="polyService.predictionsAfter">
+    </app-data-drawer>
+
+  </mat-card-content>
+  <mat-card-actions>
+    <button
+      [disabled]="isLearning"
+      mat-raised-button
+      color="accent"
+      (click)="learn()"
+      matTooltip="Do you see how the toolbar animation is flickering? That's because the gpu is utilized."
+      matTooltipPosition="after">
+      Learn (50 iterations)
+    </button>
+    <button
+      [disabled]="isLearning"
+      mat-raised-button
+      color="accent"
+      (click)="setRandomCoefficients()">
+      Set random training data
+    </button>
+    <span>Current loss: {{currentLoss?.toFixed(5)}}</span>
+  </mat-card-actions>
+</mat-card>

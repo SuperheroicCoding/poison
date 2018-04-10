@@ -1,5 +1,5 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {PolynominalRegretionService} from './polynominal-regretion.service';
+import {Component, OnInit} from '@angular/core';
+import {environment} from '../../environments/environment';
 
 @Component({
   selector: 'app-tensorflow-examples',
@@ -7,34 +7,15 @@ import {PolynominalRegretionService} from './polynominal-regretion.service';
   styleUrls: ['./tensorflow-examples.component.less']
 })
 export class TensorflowExamplesComponent implements OnInit {
-  randomCoefficients: { a: number; b: number; c: number; d: number };
-  learnedCoefficients: { a: number; b: number; c: number; d: number };
-  currentLoss: number;
-  isLearning = false;
 
-  constructor(public polyService: PolynominalRegretionService) {
-  }
+  navLinks = [
+    {path: 'polynominalregretion', label: 'Polynominal regretion'},
+    {path: 'learnedDigits', label: 'Learned digits (MNIST)', hidden: !environment.production}
+  ];
 
-  async ngOnInit() {
-    this.randomCoefficients = this.polyService.currentCoefficients;
-  }
+  constructor() { }
 
-  async learn() {
-    this.isLearning = true;
-    await this.polyService.learnCoefficients(50, 10);
-    this.learnedCoefficients = this.polyService.currentCoefficients;
-    const currentLossData = await this.polyService.loss(this.polyService.predictionsAfter, this.polyService.trainingData.ys).data();
-    this.currentLoss = currentLossData[0];
-    this.isLearning = false;
-  }
-
-  setRandomCoefficients() {
-    this.polyService.trueCoefficients = {
-      a: Math.random() * 10 - 5,
-      b: Math.random() * 10 - 5,
-      c: Math.random() * 10 - 5,
-      d: Math.random() * 10 - 5
-    };
+  ngOnInit() {
   }
 
 }

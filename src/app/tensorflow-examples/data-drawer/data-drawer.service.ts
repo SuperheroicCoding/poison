@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Tensor} from '@tensorflow/tfjs';
 import renderChart from 'vega-embed';
+import embed from 'vega-embed';
 
 @Injectable()
 export class DataDrawerService {
@@ -74,5 +75,7 @@ export class DataDrawerService {
       `<span>a=${coeff.a.toFixed(3)}, b=${coeff.b.toFixed(3)}, c=${
         coeff.c.toFixed(3)},  d=${coeff.d.toFixed(3)}</span>`;
   }
+
+
 
 }

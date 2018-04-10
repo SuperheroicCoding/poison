@@ -1,0 +1,15 @@
+<div class="results">
+  <div class="accuracy-result">
+    <div>{{'Last accuracy: ' + accuracyLabel}}</div>
+    <div #accuracyCanvas></div>
+  </div>
+  <div class="loss-result">
+    <div>{{'Last loss: ' + lossLabel}}</div>
+    <div #lossCanvas></div>
+  </div>
+
+  <div *ngIf="batch">Predicted images</div>
+  <div class="images" #images>
+  </div>
+</div>
+
