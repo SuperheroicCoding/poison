@@ -21,7 +21,7 @@ export class TensorflowExamplesComponent implements OnInit {
 
   async learn() {
     this.isLearning = true;
-    await this.polyService.learnCoefficients(10);
+    await this.polyService.learnCoefficients(50);
     this.learnedCoefficients = this.polyService.currentCoefficients;
     const currentLossData = await this.polyService.loss(this.polyService.predictionsAfter, this.polyService.trainingData.ys).data();
     this.currentLoss = currentLossData[0];

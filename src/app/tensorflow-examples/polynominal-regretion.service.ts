@@ -146,7 +146,7 @@ export class PolynominalRegretionService {
   async learnCoefficients(iterations = this.numIterations) {
     // Train the model!
     for (let i = 0; i < iterations; i++) {
-      await this.train(this.trainingData.xs, this.trainingData.ys, 2);
+      await this.train(this.trainingData.xs, this.trainingData.ys, Math.floor(iterations / 5));
       this.predictionsAfter = this.predict(this.trainingData.xs);
     }
   }
