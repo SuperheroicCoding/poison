@@ -63,8 +63,8 @@ export class PolynominalRegretionService {
     return this._trainingData;
   }
 
-  addTrainingPoint(x,y){
-    this.dataService.addDataPoint(x,y,this._trainingData);
+  addTrainingPoint(x, y) {
+    this.dataService.addDataPoint(x, y, this._trainingData);
   }
 
   setPolynominal(a: number = Math.random(), b: number = Math.random(), c: number = Math.random(), d: number = Math.random()) {
@@ -143,10 +143,10 @@ export class PolynominalRegretionService {
       });
   }
 
-  async learnCoefficients(iterations = this.numIterations) {
+  async learnCoefficients(iterations = this.numIterations, batchSize = 10) {
     // Train the model!
-    for (let i = 0; i < iterations; i++) {
-      await this.train(this.trainingData.xs, this.trainingData.ys, Math.floor(iterations / 5));
+    for (let i = iterations; i > 0; i -= batchSize) {
+      await this.train(this.trainingData.xs, this.trainingData.ys, Math.min(batchSize, i));
       this.predictionsAfter = this.predict(this.trainingData.xs);
     }
   }
