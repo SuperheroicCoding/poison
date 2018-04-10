@@ -11,8 +11,9 @@ export class UiComponent implements OnChanges {
   @ViewChild('lossCanvas') lossCanvas: ElementRef;
   @ViewChild('accuracyCanvas') accuracyCanvas: ElementRef;
   @ViewChild('images') images: ElementRef;
-  private lossLabel: string;
-  private accuracyLabel: string;
+
+  lossLabel: string;
+  accuracyLabel: string;
 
   @Input() batch: any;
   @Input() predictions: any;
