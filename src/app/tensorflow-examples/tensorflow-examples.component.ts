@@ -10,7 +10,7 @@ export class TensorflowExamplesComponent implements OnInit {
   randomCoefficients: { a: number; b: number; c: number; d: number };
   learnedCoefficients: { a: number; b: number; c: number; d: number };
   currentLoss: number;
-  private isLearning = false;
+  isLearning = false;
 
   constructor(public polyService: PolynominalRegretionService) {
   }

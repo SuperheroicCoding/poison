@@ -14,10 +14,12 @@ export class CodeEditorComponent implements OnInit {
   @Input() get code(): string {
     return this.codeValue;
   };
+  @Input() codeTitle?: string;
 
   @Output() codeChange: EventEmitter<string> = new EventEmitter<string>();
 
   options:any = {maxLines: 1000, printMargin: false};
+
 
   set code(code) {
     this.codeValue = code;

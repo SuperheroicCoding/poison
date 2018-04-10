@@ -8,7 +8,8 @@
     <mat-checkbox class="toolbar-checkbox" [(ngModel)]="showFps">Show FPS</mat-checkbox>
   </mat-card-content>
 </mat-card>
-<mat-card class="shaders-container">
+<mat-card class="shaders-container" (swipeleft)="nextPage()"
+          (swiperight)="previousPage()">
   <button mat-mini-fab color="primary" class="navigation-button left" (click)="previousPage()">
     <mat-icon aria-label="Previous page">keyboard_arrow_left</mat-icon>
   </button>
@@ -20,12 +21,17 @@
                      *ngIf="showCodeEditor"
                      [colspan]="4"
                      [rowspan]="6">
-        <app-code-editor class="code-editor" [(code)]="shader.code" mode="glsl"></app-code-editor>
+        <app-code-editor
+          class="code-editor"
+          [codeTitle]="shader.description"
+          [(code)]="shader.code"
+          mode="glsl">
+        </app-code-editor>
       </mat-grid-tile>
       <mat-grid-tile class="shader-tile"
                      [colspan]="showCodeEditor? 2 : 6"
                      [rowspan]="showCodeEditor? 2 : 6">
-        <mat-grid-tile-header>{{shader.description}}</mat-grid-tile-header>
+        <mat-grid-tile-header *ngIf="!showCodeEditor">{{shader.description}}</mat-grid-tile-header>
         <div #shaderRenderer class="shader-renderer">
           <app-render-shader
             [shaderCode]="shader.code"

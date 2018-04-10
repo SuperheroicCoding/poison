@@ -45,7 +45,7 @@ import { CodeEditorComponent } from './code-editor/code-editor.component';
 import {RenderShaderComponent} from './render-shader/render-shader.component';
 
 @NgModule({
-  imports:  [AceEditorModule],
+  imports:  [CommonModule, AceEditorModule],
   exports: [
     CommonModule,
     FormsModule,
