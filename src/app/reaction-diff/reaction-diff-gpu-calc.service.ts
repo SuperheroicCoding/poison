@@ -32,10 +32,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
     calcCellWeights$.subscribe((weights) => this.setWeights(weights));
     addChemicalRadius$.subscribe((radius) => this.addChemicalRadius = radius);
     speed$.subscribe((speed) => this.speed = speed);
-    this.createCalcNextGpuKernel();
-    this.createAddChemicalsKernel();
-    this.createImageKernel();
-    this.initGrid();
+    this.reset();
   }
 
   reset(): void {
@@ -43,6 +40,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
     this.createAddChemicalsKernel();
     this.createImageKernel();
     this.initGrid();
+    this.addChemical(this.width / 2, this.height / 2);
   }
 
   addChemical(x: number, y: number): void {

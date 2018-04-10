@@ -2,10 +2,12 @@ import {AfterContentInit, Component, ElementRef, ViewChild} from '@angular/core'
 import {ShaderDef, shaders} from './shaders';
 import {MatPaginator, PageEvent} from '@angular/material';
 import {Subject} from 'rxjs/Subject';
-import {debounceTime, distinctUntilChanged, map, share, tap} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, filter, map, mergeMapTo, share, tap} from 'rxjs/operators';
 import {Observable} from 'rxjs/Observable';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {animate, keyframes, transition, trigger} from '@angular/animations';
+import {fadeInLeft, fadeInRight, fadeOutLeft, fadeOutRight} from './leftInOut.animation';
 
 interface ShaderModel extends ShaderDef {
   fullSize: boolean;
@@ -14,7 +16,16 @@ interface ShaderModel extends ShaderDef {
 @Component({
   selector: 'app-shader-examples',
   templateUrl: './shader-examples.component.html',
-  styleUrls: ['./shader-examples.component.less']
+  styleUrls: ['./shader-examples.component.less'],
+  animations: [
+    trigger('animator', [
+      transition('void => *', animate(1000, keyframes(fadeInRight))),
+      transition('* => fadeOutLeft', animate(200, keyframes(fadeOutLeft))),
+      transition('* => fadeOutRight', animate(200, keyframes(fadeOutRight))),
+      transition('fadeOutRight => *', animate(400, keyframes(fadeInLeft))),
+      transition('fadeOutLeft => *', animate(400, keyframes(fadeInRight))),
+    ])
+  ]
 })
 export class ShaderExamplesComponent implements AfterContentInit {
   shaders: ShaderModel[] = shaders.map((shader: ShaderDef) => Object.assign({fullSize: false}, shader)).reverse();
@@ -32,6 +43,8 @@ export class ShaderExamplesComponent implements AfterContentInit {
 
   isSmallScreen = false;
   pageEvent: PageEvent = {pageSize: 2, pageIndex: 0, length: this.shaders.length};
+  animationState: string;
+  private animationEnded$: BehaviorSubject<boolean>;
 
   constructor(private breakpointObserver: BreakpointObserver) {
   }
@@ -43,10 +56,16 @@ export class ShaderExamplesComponent implements AfterContentInit {
       debounceTime<PageEvent>(400),
       share()
     );
+
+    this.animationEnded$ = new BehaviorSubject<boolean>(true);
+
     this.shadersPaged$ = this.currentPage$
       .pipe(
         debounceTime<PageEvent>(400),
-        map((event => {
+        mergeMapTo(this.animationEnded$),
+        filter(animationEnded => animationEnded),
+        map((ignored => {
+          const event = this.pageEvent;
           return this.shaders.slice(event.pageSize * event.pageIndex, event.pageSize * event.pageIndex + event.pageSize);
         })),
         share()
@@ -68,6 +87,8 @@ export class ShaderExamplesComponent implements AfterContentInit {
       const currentPage = {length: this.shaders.length, pageIndex: 0, pageSize: 2};
       this.changeCurrentShaderPage(currentPage);
     }
+
+
   }
 
   changeCurrentShaderPage($event: PageEvent) {
@@ -78,14 +99,14 @@ export class ShaderExamplesComponent implements AfterContentInit {
     if (this.shaderRenderer && this.shaderRenderer.nativeElement) {
       return this.shaderRenderer.nativeElement.clientHeight;
     }
-    return 1;
+    return 0;
   }
 
   get rendererWidth() {
     if (this.shaderRenderer && this.shaderRenderer.nativeElement) {
       return this.shaderRenderer.nativeElement.clientWidth;
     }
-    return 1;
+    return 0;
   }
 
   trackByIndex(index, elem) {
@@ -98,6 +119,7 @@ export class ShaderExamplesComponent implements AfterContentInit {
     } else {
       this.paginator.lastPage();
     }
+    this.startAnimation('fadeOutRight');
   }
 
   nextPage() {
@@ -106,6 +128,19 @@ export class ShaderExamplesComponent implements AfterContentInit {
     } else {
       this.paginator.firstPage();
     }
+    this.startAnimation('fadeOutLeft');
+  }
+
+  startAnimation(state) {
+    if (!this.animationState) {
+      this.animationEnded$.next(false);
+      this.animationState = state;
+    }
+  }
+
+  resetAnimationState() {
+    this.animationState = '';
+    this.animationEnded$.next(true);
   }
 
 }

@@ -13,6 +13,7 @@ import * as p5 from 'p5';
 
 import {ColorMapperService} from '../color-mapper.service';
 import {ReactionDiffCalculator} from '../reaction-diff-calculator';
+import {Subject} from 'rxjs/Subject';
 
 @Component({
   selector: 'app-p5-view',
@@ -29,6 +30,8 @@ export class P5ViewComponent implements OnChanges {
   @Input() run = false;
   @Input() showFps = false;
   @Output() mousePressed: EventEmitter<{ x: number, y: number }> = new EventEmitter();
+
+  private addChemical: Subject<{x:number,y:number}> = new Subject<{x: number, y: number}>();
   private scetch: any;
   private frameRate = 1;
 
@@ -82,22 +85,18 @@ export class P5ViewComponent implements OnChanges {
       }
     };
 
-    p.mouseDragged = () => {
+    const addChemical = () => {
       const x = p.floor(p.mouseX);
       const y = p.floor(p.mouseY);
       if (x > -1 && x < p.width && y > -1 && y < p.height) {
-        // this.mousePressed.emit({x, y});
         this.calcService.addChemical(x, y);
       }
     };
-    p.mouseClicked = () => {
-      const x = p.floor(p.mouseX);
-      const y = p.floor(p.mouseY);
-      if (x > -1 && x < p.width && y > -1 && y < p.height) {
-        // this.mousePressed.emit({x, y});
-        this.calcService.addChemical(x, y);
-      }
-    };
+
+    p.mouseClicked = addChemical;
+    p.mouseDragged = addChemical;
+    p.touchMoved = addChemical;
+    p.touchStarted = addChemical;
   }
 
   private getGrid(): Float32Array {

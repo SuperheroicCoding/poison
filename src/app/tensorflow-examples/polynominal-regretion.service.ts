@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
-import * as tf from '@tensorflow/tfjs';
-import {Rank, SGDOptimizer, Tensor, Variable, Scalar} from '@tensorflow/tfjs';
+import {nextFrame, Rank, Scalar, scalar, SGDOptimizer, Tensor, tidy, train, Variable, variable} from '@tensorflow/tfjs';
 import {DataGeneratorService} from './data-generator.service';
 
 /**
@@ -37,7 +36,6 @@ export class PolynominalRegretionService {
   constructor(private dataService: DataGeneratorService) {
     this.setPolynominal();
     this.createOptimizer();
-    this.predictionsBefore = this.predict(this.trainingData.xs);
   }
 
   set trueCoefficients(coefficients) {
@@ -65,18 +63,22 @@ export class PolynominalRegretionService {
     return this._trainingData;
   }
 
+  addTrainingPoint(x,y){
+    this.dataService.addDataPoint(x,y,this._trainingData);
+  }
+
   setPolynominal(a: number = Math.random(), b: number = Math.random(), c: number = Math.random(), d: number = Math.random()) {
-    this.a = tf.variable(tf.scalar(a));
-    this.b = tf.variable(tf.scalar(b));
-    this.c = tf.variable(tf.scalar(c));
-    this.d = tf.variable(tf.scalar(d));
+    this.a = variable(scalar(a));
+    this.b = variable(scalar(b));
+    this.c = variable(scalar(c));
+    this.d = variable(scalar(d));
   }
 
   // Step 2. Create an optimizer, we will use this later. You can play
   // with some of these values to see how the model perfoms.
   createOptimizer(numIterations = 75, learningRate = 0.5) {
     this.numIterations = numIterations;
-    this.optimizer = tf.train.sgd(learningRate);
+    this.optimizer = train.sgd(learningRate);
   }
 
   /*
@@ -90,8 +92,8 @@ export class PolynominalRegretionService {
  */
   private predict(x) {
     // y = a * x ^ 3 + b * x ^ 2 + c * x + d
-    return tf.tidy(() => {
-      return this.a.mul(x.pow(tf.scalar(3, 'int32')))
+    return tidy(() => {
+      return this.a.mul(x.pow(scalar(3, 'int32')))
         .add(this.b.mul(x.square()))
         .add(this.c.mul(x))
         .add(this.d as Tensor);
@@ -127,7 +129,7 @@ export class PolynominalRegretionService {
       });
 
       // Use tf.nextFrame to not block the browser.
-      await tf.nextFrame();
+      await nextFrame();
     }
   }
 
@@ -143,8 +145,9 @@ export class PolynominalRegretionService {
 
   async learnCoefficients(iterations = this.numIterations) {
     // Train the model!
-    await this.train(this.trainingData.xs, this.trainingData.ys, iterations);
-    this.predictionsAfter = this.predict(this.trainingData.xs);
+    for (let i = 0; i < iterations; i++) {
+      await this.train(this.trainingData.xs, this.trainingData.ys, 2);
+      this.predictionsAfter = this.predict(this.trainingData.xs);
+    }
   }
-
 }

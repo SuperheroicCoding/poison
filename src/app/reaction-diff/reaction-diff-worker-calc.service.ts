@@ -8,7 +8,7 @@ import {Subject} from 'rxjs/Subject';
 import {Cell} from './cell';
 import {Subscription} from 'rxjs/Subscription';
 import {AddChemicalsParams} from './add-chemicals-param';
-import {filter} from 'rxjs/operators';
+import {filter, throttle, throttleTime} from 'rxjs/operators';
 import {ReactionDiffCalculator} from './reaction-diff-calculator';
 import {ColorMapperService} from './color-mapper.service';
 
@@ -189,7 +189,9 @@ export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
 
   private initAddChemicals$() {
     this.addChemicalsSubject$ = new Subject<WorkerPostParams<AddChemicalsParams>>();
-    this.addChemicalsSubject$.mapWorker(addChemicals)
+    this.addChemicalsSubject$
+      //.pipe(throttleTime(50))
+      .mapWorker(addChemicals)
       .subscribe((gridBuffer) => {
         this.grid = new Float32Array(gridBuffer);
         this.canCalculate = true;

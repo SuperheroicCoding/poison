@@ -9,37 +9,38 @@
   </mat-card-content>
 </mat-card>
 <mat-card class="shaders-container">
-    <button mat-mini-fab color="primary" class="navigation-button left" (click)="previousPage()">
-      <mat-icon aria-label="Previous page">keyboard_arrow_left</mat-icon>
-    </button>
-    <mat-grid-list class="shader-container" cols="{{(shadersPaged$ | async)?.length || 2}}" rowHeight="fit"
-                   gutterSize="10">
-
-      <mat-grid-tile class="shader-container"
-                     *ngFor="let shader of (shadersPaged$ | async); trackBy: trackByIndex">
-        <mat-card class="code-card" appRaiseCard *ngIf="showCodeEditor">
-          <mat-card-title>Fragment-shader code</mat-card-title>
-          <mat-card-content class="code-editor">
-            <app-code-editor [(code)]="shader.code" mode="glsl"></app-code-editor>
-          </mat-card-content>
-        </mat-card>
-        <mat-card class="canvas-card" appRaiseCard>
-          <mat-card-title>{{shader.description}}</mat-card-title>
-          <mat-card-content #shaderRenderer class="shader-renderer">
-            <app-render-shader
-              [shaderCode]="shader.code"
-              [showFps]="showFps"
-              [canvasWidth]="rendererWidth"
-              [canvasHeight]="rendererHeight">
-            </app-render-shader>
-          </mat-card-content>
-        </mat-card>
+  <button mat-mini-fab color="primary" class="navigation-button left" (click)="previousPage()">
+    <mat-icon aria-label="Previous page">keyboard_arrow_left</mat-icon>
+  </button>
+  <mat-grid-list [@animator]="animationState" (@animator.done)="resetAnimationState()" class="shaders-grid-list"
+                 cols="{{(shadersPaged$ | async)?.length * 6 || 12}}" rows="6" rowHeight="fit"
+                 gutterSize="10">
+    <ng-container *ngFor="let shader of (shadersPaged$ | async); trackBy: trackByIndex">
+      <mat-grid-tile class="editor-tile"
+                     *ngIf="showCodeEditor"
+                     [colspan]="4"
+                     [rowspan]="6">
+        <app-code-editor class="code-editor" [(code)]="shader.code" mode="glsl"></app-code-editor>
       </mat-grid-tile>
-    </mat-grid-list>
-    <button mat-mini-fab color="primary" class="navigation-button right"
-    (click)="nextPage()">
-      <mat-icon aria-label="Next page">keyboard_arrow_right</mat-icon>
-    </button>
+      <mat-grid-tile class="shader-tile"
+                     [colspan]="showCodeEditor? 2 : 6"
+                     [rowspan]="showCodeEditor? 2 : 6">
+        <mat-grid-tile-header>{{shader.description}}</mat-grid-tile-header>
+        <div #shaderRenderer class="shader-renderer">
+          <app-render-shader
+            [shaderCode]="shader.code"
+            [showFps]="showFps"
+            [canvasWidth]="shaderRenderer.clientWidth"
+            [canvasHeight]="shaderRenderer.clientHeight">
+          </app-render-shader>
+        </div>
+      </mat-grid-tile>
+    </ng-container>
+  </mat-grid-list>
+  <button mat-mini-fab color="primary" class="navigation-button right"
+          (click)="nextPage()">
+    <mat-icon aria-label="Next page">keyboard_arrow_right</mat-icon>
+  </button>
 </mat-card>
 <mat-paginator
   showFirstLastButtons="true"

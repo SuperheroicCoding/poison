@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PolynominalRegretionService} from './polynominal-regretion.service';
 
 @Component({
@@ -10,6 +10,7 @@ export class TensorflowExamplesComponent implements OnInit {
   randomCoefficients: { a: number; b: number; c: number; d: number };
   learnedCoefficients: { a: number; b: number; c: number; d: number };
   currentLoss: number;
+  private isLearning = false;
 
   constructor(public polyService: PolynominalRegretionService) {
   }
@@ -19,10 +20,12 @@ export class TensorflowExamplesComponent implements OnInit {
   }
 
   async learn() {
+    this.isLearning = true;
     await this.polyService.learnCoefficients(10);
     this.learnedCoefficients = this.polyService.currentCoefficients;
-    const currentLossData = this.polyService.loss(this.polyService.predictionsAfter, this.polyService.trainingData.ys).dataSync();
+    const currentLossData = await this.polyService.loss(this.polyService.predictionsAfter, this.polyService.trainingData.ys).data();
     this.currentLoss = currentLossData[0];
+    this.isLearning = false;
   }
 
   setRandomCoefficients() {
@@ -33,6 +36,5 @@ export class TensorflowExamplesComponent implements OnInit {
       d: Math.random() * 10 - 5
     };
   }
-
 
 }
