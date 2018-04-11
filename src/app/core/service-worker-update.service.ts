@@ -10,17 +10,18 @@ export class ServiceWorkerUpdateService {
   }
 
   showSnackOnUpdateAvailable() {
-    if (environment.production) {
-      this.swUpdate.available.subscribe(evt => {
-        const snack = this.snackbar.open('Update Available', 'Reload', {
-          duration: 6000, horizontalPosition: 'center', verticalPosition: 'bottom'
-        });
-        snack.onAction()
-          .subscribe(() => {
-            this.activateUpdate().then(() => snack.dismiss());
-          });
-      });
+    if (!environment.production) {
+      return;
     }
+    this.swUpdate.available.subscribe(evt => {
+      const snack = this.snackbar.open('Update Available', 'Reload', {
+        duration: 6000, horizontalPosition: 'center', verticalPosition: 'bottom'
+      });
+      snack.onAction()
+        .subscribe(() => {
+          this.activateUpdate().then(() => snack.dismiss());
+        });
+    });
   }
 
   activateUpdate() {

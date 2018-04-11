@@ -4,11 +4,12 @@ import {TensorflowExamplesComponent} from './tensorflow-examples.component';
 import {LearnedDigitsComponent} from './learned-digits/learned-digits.component';
 import {PolynominalRegretionComponent} from './polynominal-regretion/polynominal-regretion.component';
 
-const routes: Routes = [
-  {path: '', component: TensorflowExamplesComponent},
-  {path: 'polynominalregretion', component: PolynominalRegretionComponent},
-  {path: 'learnedDigits', component: LearnedDigitsComponent}
-];
+const routes: Routes = [{
+  path: '', component: TensorflowExamplesComponent, children: [
+    {path: 'polynominalregretion', component: PolynominalRegretionComponent},
+    {path: 'learnedDigits', component: LearnedDigitsComponent}
+  ]
+}];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

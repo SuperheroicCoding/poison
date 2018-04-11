@@ -21,6 +21,9 @@ export class UiComponent implements OnChanges {
   @Input() lossValues: any;
   @Input() accuracyValues: any;
 
+  totalCorrect: number;
+  totalPredictions: number;
+
   constructor() {
   }
 
@@ -39,7 +42,8 @@ export class UiComponent implements OnChanges {
 
   showTestResults(batch, predictions, labels) {
     const testExamples = batch.xs.shape[0];
-    let totalCorrect = 0;
+    this.totalPredictions = testExamples;
+    this.totalCorrect = 0;
     (this.images.nativeElement as HTMLDivElement).innerHTML = '';
 
     for (let i = 0; i < testExamples; i++) {
@@ -56,6 +60,7 @@ export class UiComponent implements OnChanges {
       const prediction = predictions[i];
       const label = labels[i];
       const correct = prediction === label;
+      this.totalCorrect += correct ? 1 : 0;
 
       pred.className = `pred ${(correct ? 'pred-correct' : 'pred-incorrect')}`;
       pred.innerText = `pred: ${prediction}`;
@@ -72,9 +77,11 @@ export class UiComponent implements OnChanges {
       this.lossCanvas.nativeElement, {
         '$schema': 'https://vega.github.io/schema/vega-lite/v2.json',
         'data': {'values': lossValues},
-        'mark': {'type': 'line'},
+        'mark': {
+          'type': 'line',
+          'orient': 'vertical'
+        },
         'width': 260,
-        'orient': 'vertical',
         'encoding': {
           'x': {'field': 'batch', 'type': 'quantitative'},
           'y': {'field': 'loss', 'type': 'quantitative'},
@@ -92,8 +99,7 @@ export class UiComponent implements OnChanges {
         '$schema': 'https://vega.github.io/schema/vega-lite/v2.json',
         'data': {'values': accuracyValues},
         'width': 260,
-        'mark': {'type': 'line', 'legend': null},
-        'orient': 'vertical',
+        'mark': {'type': 'line', 'orient': 'vertical', 'legend': null},
         'encoding': {
           'x': {'field': 'batch', 'type': 'quantitative'},
           'y': {'field': 'accuracy', 'type': 'quantitative'},

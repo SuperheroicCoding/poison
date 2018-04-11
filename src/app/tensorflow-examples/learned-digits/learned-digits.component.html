@@ -13,7 +13,8 @@
         Fetching MNIST images...
       </div>
     </div>
-    <app-ui *ngIf="!isLoading"
+    <div *ngIf="errorLoadingData" class="mat-error">There was an error loading the data. Try again later.</div>
+    <app-ui *ngIf="!isLoading && !errorLoadingData"
             [batch]="batch"
             [labels]="labels"
             [predictions]="predictions"
@@ -23,13 +24,13 @@
   </mat-card-content>
   <mat-card-actions>
     <button color="accent"
-            [disabled]="isLoading || isTraining"
+            [disabled]="isLoading || isTraining || errorLoadingData"
             mat-raised-button
             (click)="train()">
       Train
     </button>
     <button color="accent"
-            [disabled]="isLoading || isTraining"
+            [disabled]="isLoading || errorLoadingData"
             mat-raised-button
             (click)="predict()">
       Predict

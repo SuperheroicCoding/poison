@@ -6,6 +6,7 @@ import {environment} from '../../environments/environment';
 import {UpdateAvailableEvent} from '@angular/service-worker/src/low_level';
 import {ServiceWorkerLogUpdateService} from '../core/service-worker-log-update.service';
 import {ServiceWorkerUpdateService} from '../core/service-worker-update.service';
+import {FromObservable} from 'rxjs/observable/FromObservable';
 
 
 @Component({
@@ -19,26 +20,31 @@ export class ServiceWorkerUpdateComponent {
 
 
   constructor(private swUpdates: SwUpdate, private  zone: NgZone, updateLogger: ServiceWorkerLogUpdateService, private  updateService: ServiceWorkerUpdateService) {
-    if (environment.production) {
-      updateLogger.startLogging();
-      updateService.showSnackOnUpdateAvailable();
-      swUpdates.available.pipe(
-        map((updateEvent: UpdateAvailableEvent) => true)
-      )
-        .subscribe(available => this.updatesAvailable = available);
-
-      zone.runOutsideAngular(() => {
-        IntervalObservable.create(environment.serviceWorkerCheckInterval).pipe(
-          tap(intervalTime => this.isLoading = true),
-          flatMap(intervalTime => this.swUpdates.checkForUpdate()),
-          delay(200), // to make the spinner visible
-          finalize(() => this.isLoading = false)
-        )
-          .subscribe(
-            () => this.isLoading = false,
-            (error) => console.error(error));
-      });
+    if (!environment.production) {
+      return;
     }
+    updateLogger.startLogging();
+    updateService.showSnackOnUpdateAvailable();
+    console.log('Service Worker enabled?', this.swUpdates.isEnabled);
+
+    zone.runOutsideAngular(() => {
+      IntervalObservable.create(environment.serviceWorkerCheckInterval).pipe(
+        tap(intervalTime => this.isLoading = true),
+        tap(() => console.log('service worker is checking for new update.')),
+        flatMap(intervalTime => this.zone.run(() => FromObservable.create(this.swUpdates.checkForUpdate()))),
+        delay(200), // to make the spinner visible
+        finalize(() => this.isLoading = false)
+      )
+        .subscribe(
+          () => this.isLoading = false,
+          (error) => console.error(error));
+    });
+
+    swUpdates.available.pipe(
+      map((updateEvent: UpdateAvailableEvent) => true)
+    )
+      .subscribe(available => this.updatesAvailable = available);
+
   }
 
   get isLoading() {

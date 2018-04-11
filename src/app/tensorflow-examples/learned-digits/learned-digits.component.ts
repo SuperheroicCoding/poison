@@ -10,6 +10,7 @@ import {LearnedDigitsModelService} from './learned-digits-model.service';
 export class LearnedDigitsComponent implements OnInit {
   isLoading: boolean;
   hasBeenTrained = false;
+  errorLoadingData = false;
 
   constructor(private data: MnistDataService, private deepnet: LearnedDigitsModelService) {
 
@@ -17,9 +18,15 @@ export class LearnedDigitsComponent implements OnInit {
 
   ngOnInit() {
     setTimeout(async () => {
-      this.isLoading = true;
-      await this.data.load();
-      this.isLoading = false;
+      try {
+        this.isLoading = true;
+        await this.data.load();
+      } catch (error) {
+        console.error('error loading mnist data', error);
+        this.errorLoadingData = true;
+      } finally {
+        this.isLoading = false;
+      }
     }, 200);
   }
 
