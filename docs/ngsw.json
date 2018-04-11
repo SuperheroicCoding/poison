@@ -10,15 +10,15 @@
         "/AngularExamples/favicon.ico",
         "/AngularExamples/index.html",
         "/AngularExamples/0.72a8cd8a6a3322a1f411.chunk.js",
-        "/AngularExamples/1.b5a0ad2fc23e1d594730.chunk.js",
+        "/AngularExamples/1.2369627784effb7e0331.chunk.js",
         "/AngularExamples/2.a5895161308af7f0c514.chunk.js",
         "/AngularExamples/3.3563a23c11b409be8844.chunk.js",
         "/AngularExamples/4.d2053c519104e040c84b.chunk.js",
         "/AngularExamples/5.4e0f79b342156b1850a5.chunk.js",
         "/AngularExamples/6.23c7838d67a8e2209c8b.chunk.js",
         "/AngularExamples/7.c10565b32f2a91166ff7.chunk.js",
-        "/AngularExamples/inline.8be7c0615ed474ae396e.bundle.js",
-        "/AngularExamples/main.8c522af583cd20bf5ee0.bundle.js",
+        "/AngularExamples/inline.a1f4b0e2b694c6eeae48.bundle.js",
+        "/AngularExamples/main.49529eb13a8bd4ce721e.bundle.js",
         "/AngularExamples/polyfills.2770f1aa3a7997392ca8.bundle.js",
         "/AngularExamples/scripts.31783642af6abccd5514.bundle.js",
         "/AngularExamples/styles.a4568f74e9e0df3149ab.bundle.css"
@@ -49,7 +49,7 @@
   "hashTable": {
     "/AngularExamples/0.72a8cd8a6a3322a1f411.chunk.js": "3ed56767e7a9640e326b6eecace2dd2076acb6a8",
     "/AngularExamples/assets/wood.jpeg": "4730b3f4d0df41b2189219db036e164721ea0ec4",
-    "/AngularExamples/1.b5a0ad2fc23e1d594730.chunk.js": "a3e5a9df8aa2f6b4f34a29be89e4efc1ccfdd21b",
+    "/AngularExamples/1.2369627784effb7e0331.chunk.js": "0743c7efc02f4a52aa1544a468e6c8def08a9202",
     "/AngularExamples/assets/logos/angular-cli.svg": "cb3e92c7bd3dcae87dc103e4f3d128ce15b84cd6",
     "/AngularExamples/2.a5895161308af7f0c514.chunk.js": "b674a1e5bf08a9d63c396fcb905ae7f9c46f79bc",
     "/AngularExamples/assets/logos/angular-material.svg": "77d8b188ec7234e3a67604bb708329c503c1f201",
@@ -63,15 +63,15 @@
     "/AngularExamples/assets/logos/tensorflow-js.png": "efa8b0c8a3534e10370d94acb8e214539f3a5628",
     "/AngularExamples/7.c10565b32f2a91166ff7.chunk.js": "8aa00487f7aca0ce2f3a986b0daa791c8cb5b431",
     "/AngularExamples/assets/logos/three-js.png": "dc3c0b5f29b472a4962b31a7c5e12981f1315f48",
-    "/AngularExamples/inline.8be7c0615ed474ae396e.bundle.js": "a0f57414db031edcdab331aafd5bd02449792ebc",
+    "/AngularExamples/inline.a1f4b0e2b694c6eeae48.bundle.js": "2918a9b105b118f0d9359865a34dad34c2ffeb6a",
     "/AngularExamples/assets/logos/typescript.svg": "4ff0ab7bac5d0478e03a5d1591cd1e4345cd01d9",
-    "/AngularExamples/main.8c522af583cd20bf5ee0.bundle.js": "6c885eb2aa047d93953e643aa303bfc52cac5d02",
+    "/AngularExamples/main.49529eb13a8bd4ce721e.bundle.js": "bccb075b2e97e65c3b08c9cd5e5c22f7e46d8c38",
     "/AngularExamples/assets/mnist/mnist_images.png": "0f001230be44050cf245d25dfb4039107861d826",
     "/AngularExamples/polyfills.2770f1aa3a7997392ca8.bundle.js": "9acd24dd30f0bb8c87cfbfa33f30082fff6d64c6",
     "/AngularExamples/assets/mnist/mnist_labels_uint8": "e8b25f8fdc852e98c014d6153524d9e0cab4b675",
     "/AngularExamples/scripts.31783642af6abccd5514.bundle.js": "de397d1b71730c785dc5e0edca31ed5e7ab7b962",
     "/AngularExamples/styles.a4568f74e9e0df3149ab.bundle.css": "e1fdfece14fe0f54e4ccc8d243f629201d43a04d",
     "/AngularExamples/favicon.ico": "84161b857f5c547e3699ddfbffc6d8d737542e01",
-    "/AngularExamples/index.html": "fc2af4eab7ae22daea38e72429e3b075097054b4"
+    "/AngularExamples/index.html": "0dcbdd6377b1a1c25c9c0d17c8391cb8702ad762"
   }
 }
