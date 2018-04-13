@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MnistDataService} from './mnist-data.service';
 import {LearnedDigitsModelService} from './learned-digits-model.service';
+import {HeadlineAnimationService} from '../../core/headline-animation.service';
 
 @Component({
   selector: 'app-learned-digits',
@@ -12,8 +13,8 @@ export class LearnedDigitsComponent implements OnInit {
   hasBeenTrained = false;
   errorLoadingData = false;
 
-  constructor(private data: MnistDataService, private deepnet: LearnedDigitsModelService) {
-
+  constructor(private data: MnistDataService, private deepnet: LearnedDigitsModelService,
+              public headlineAnimation: HeadlineAnimationService) {
   }
 
   ngOnInit() {
@@ -31,12 +32,15 @@ export class LearnedDigitsComponent implements OnInit {
   }
 
   async train() {
-    await this.deepnet.train();
+    await this.headlineAnimation.runWithoutAnimations(async () => {
+        await this.deepnet.train();
+      }
+    );
     this.hasBeenTrained = true;
   }
 
   predict() {
-    this.deepnet.predict();
+    this.headlineAnimation.runWithoutAnimations(() => this.deepnet.predict());
   }
 
   get isTraining() {

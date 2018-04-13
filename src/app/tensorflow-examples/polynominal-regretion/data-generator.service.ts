@@ -32,8 +32,6 @@ export class DataGeneratorService {
         const ymax = ys.max();
         const yrange = ymax.sub(ymin);
         const ysNormalized = ys.sub(ymin).div(yrange);
-        console.log(xs, ysNormalized);
-
         return {
           xs,
           ys: ysNormalized

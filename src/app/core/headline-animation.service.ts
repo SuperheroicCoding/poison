@@ -21,5 +21,12 @@ export class HeadlineAnimationService {
     this._runAnimation.next(true);
   }
 
+  runWithoutAnimations<T>(runnable: () => T): T {
+    this.stopAnimation();
+    const result = runnable();
+    this.startAnimation();
+    return result;
+  }
+
 
 }

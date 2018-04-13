@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {PolynominalRegretionService} from './polynominal-regretion.service';
+import {HeadlineAnimationService} from '../../core/headline-animation.service';
 
 @Component({
   selector: 'app-tensorflow-examples',
@@ -12,7 +13,7 @@ export class PolynominalRegretionComponent implements OnInit {
   currentLoss: number;
   isLearning = false;
 
-  constructor(public polyService: PolynominalRegretionService) {
+  constructor(public polyService: PolynominalRegretionService, public headlineAnimation: HeadlineAnimationService) {
   }
 
   async ngOnInit() {
@@ -21,11 +22,13 @@ export class PolynominalRegretionComponent implements OnInit {
 
   async learn() {
     this.isLearning = true;
+    this.headlineAnimation.stopAnimation();
     await this.polyService.learnCoefficients(50, 10);
     this.learnedCoefficients = this.polyService.currentCoefficients;
     const currentLossData = await this.polyService.loss(this.polyService.predictionsAfter, this.polyService.trainingData.ys).data();
     this.currentLoss = currentLossData[0];
     this.isLearning = false;
+    this.headlineAnimation.startAnimation();
   }
 
   setRandomCoefficients() {

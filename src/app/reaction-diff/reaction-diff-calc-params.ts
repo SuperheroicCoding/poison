@@ -3,4 +3,5 @@ export interface ReactionDiffCalcParams {
   diffRateB: number;
   feedRate: number;
   killRate: number;
+  dynamicKillFeed: boolean;
 }

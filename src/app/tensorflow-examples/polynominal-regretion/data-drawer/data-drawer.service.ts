@@ -23,7 +23,7 @@ export class DataDrawerService {
       'width': 300,
       'height': 300,
       'data': {'values': values},
-      'mark': 'point',
+      'mark': {'type': 'point', 'orient': 'vertical'},
       'encoding': {
         'x': {'field': 'x', 'type': 'quantitative'},
         'y': {'field': 'y', 'type': 'quantitative'}
@@ -49,14 +49,14 @@ export class DataDrawerService {
       'data': {'values': values},
       'layer': [
         {
-          'mark': 'point',
+          'mark': {'type': 'point', 'orient': 'vertical'},
           'encoding': {
             'x': {'field': 'x', 'type': 'quantitative'},
             'y': {'field': 'y', 'type': 'quantitative'}
           }
         },
         {
-          'mark': 'line',
+          'mark':{'type': 'line', 'orient': 'vertical'},
           'encoding': {
             'x': {'field': 'x', 'type': 'quantitative'},
             'y': {'field': 'pred', 'type': 'quantitative'},

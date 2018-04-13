@@ -4,30 +4,24 @@ import {ReactionDiffCalculator} from './reaction-diff-calculator';
 import {Observable} from 'rxjs/Observable';
 import {Cell} from './cell';
 import {GpuJsService, inp} from './gpujs.service';
-import {ColorMapperService} from './color-mapper.service';
 
 export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   grid: Float32Array;
   numberThreads = 1;
   private weights: number[];
   private addChemicalRadius: number;
-  private diffRateA: number;
-  private diffRateB: number;
-  private feedRate: number;
-  private killRate: number;
   private calcNextKernel: KernelFunction;
   private speed: number;
   private addChemicalsKernel: KernelFunction;
   private imageKernel: KernelFunction;
-  private image: HTMLCanvasElement;
+  private calcParams: ReactionDiffCalcParams;
 
   constructor(private width: number, private height: number,
               calcParams$: Observable<ReactionDiffCalcParams>,
               calcCellWeights$: Observable<CellWeights>,
               addChemicalRadius$: Observable<number>,
               speed$: Observable<number>,
-              private  gpuJs: GpuJsService,
-              private colorMapper: ColorMapperService) {
+              private  gpuJs: GpuJsService) {
     calcParams$.subscribe((calcParams) => this.setCalcParams(calcParams));
     calcCellWeights$.subscribe((weights) => this.setWeights(weights));
     addChemicalRadius$.subscribe((radius) => this.addChemicalRadius = radius);
@@ -67,12 +61,15 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
     for (let i = 0; i < this.speed; i++) {
       this.grid = this.calcNextKernel(
         inp(this.grid, [this.width * this.height * 2]),
-        this.weights,
-        this.diffRateA,
-        this.diffRateB,
-        this.feedRate,
-        this.killRate,
-        this.width
+        this.weights, [
+          this.calcParams.diffRateA,
+          this.calcParams.diffRateB,
+          this.calcParams.feedRate,
+          this.calcParams.killRate,
+          this.width,
+          this.height,
+          this.calcParams.dynamicKillFeed
+        ]
       );
     }
     performance.mark('calcNext-end');
@@ -80,12 +77,12 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   }
 
   initGrid() {
-    this.grid = new Float32Array(this.width * this.height * 2);
-    for (let x = 0; x < this.width; x++) {
-      for (let y = 0; y < this.height; y++) {
-        this.setCell(x, y, {a: 1, b: 0});
+      this.grid = new Float32Array(this.width * this.height * 2);
+      for (let x = 0; x < this.width; x++) {
+        for (let y = 0; y < this.height; y++) {
+          this.setCell(x, y, {a: 1, b: 0});
+        }
       }
-    }
   }
 
 
@@ -100,10 +97,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   }
 
   private setCalcParams(calcParams: ReactionDiffCalcParams) {
-    this.diffRateA = calcParams.diffRateA;
-    this.diffRateB = calcParams.diffRateB;
-    this.feedRate = calcParams.feedRate;
-    this.killRate = calcParams.killRate;
+    this.calcParams = calcParams;
   }
 
   drawImage(p: any) {
@@ -116,21 +110,21 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   }
 
   private createCalcNextGpuKernel() {
-    const cellIndex = function (x, columnOffset, rowOffset, width) {
-      return x + ((columnOffset * 2) + (rowOffset * width * 2));
+    const cellIndex = function (x, columnOffset, rowOffset, width, height) {
+      return this.clamp(x + ((columnOffset * 2) + (rowOffset * width * 2)), 0, width * height * 2);
     };
 
-    const calcWeightedSum = function (grid, weights: number[], x, width) {
+    const calcWeightedSum = function (grid, weights: number[], x, width, height) {
       let sum = 0.0;
-      sum += grid[cellIndex(x, -1, -1, width)] * weights[0];
-      sum += grid[cellIndex(x, 0, -1, width)] * weights[1];
-      sum += grid[cellIndex(x, 1, -1, width)] * weights[2];
-      sum += grid[cellIndex(x, -1, 0, width)] * weights[3];
-      sum += grid[cellIndex(x, 0, 0, width)] * weights[4];
-      sum += grid[cellIndex(x, 1, 0, width)] * weights[5];
-      sum += grid[cellIndex(x, -1, 1, width)] * weights[6];
-      sum += grid[cellIndex(x, 0, 1, width)] * weights[7];
-      sum += grid[cellIndex(x, 1, 1, width)] * weights[8];
+      sum += grid[cellIndex(x, -1, -1, width, height)] * weights[0];
+      sum += grid[cellIndex(x, 0, -1, width, height)] * weights[1];
+      sum += grid[cellIndex(x, 1, -1, width, height)] * weights[2];
+      sum += grid[cellIndex(x, -1, 0, width, height)] * weights[3];
+      sum += grid[cellIndex(x, 0, 0, width, height)] * weights[4];
+      sum += grid[cellIndex(x, 1, 0, width, height)] * weights[5];
+      sum += grid[cellIndex(x, -1, 1, width, height)] * weights[6];
+      sum += grid[cellIndex(x, 0, 1, width, height)] * weights[7];
+      sum += grid[cellIndex(x, 1, 1, width, height)] * weights[8];
       return sum;
     };
 
@@ -143,19 +137,33 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
     };
 
     this.calcNextKernel = this.gpuJs.createKernel(
-      function (grid, weights: number[], dA, dB, f, k, width) {
+      function (grid, weights: number[], calcParams: number[]) {
+        const dA = calcParams[0];
+        const dB = calcParams[1];
+        const f = calcParams[2];
+        const k = calcParams[3];
+        const width = calcParams[4];
+        const height = calcParams[5];
+        const dynkillfeed = calcParams[6];
         const oddEvenMod = this.thread.x % 2;
         const indexA = this.thread.x - oddEvenMod;
         const indexB = indexA + 1;
         const a = grid[indexA];
         const b = grid[indexB];
-        const laplaceA = calcWeightedSum(grid, weights, indexA, width);
-        const laplaceB = calcWeightedSum(grid, weights, indexB, width);
+        const xNormed = Math.floor((this.thread.x / 2) % width) / width;
+        const yNormed = Math.floor((this.thread.x / 2) / width) / height;
+        const kT = this.mix(k, 0.045 + (xNormed * 0.025), dynkillfeed);
+        const fT = this.mix(f, 0.1 + (yNormed * -0.09), dynkillfeed);
+
+        const laplaceA = calcWeightedSum(grid, weights, indexA, width, height);
+        const laplaceB = calcWeightedSum(grid, weights, indexB, width, height);
 
         const abb = a * b * b;
 
-        return (oddEvenMod - 1) * -calcNextA(a, dA, laplaceA, abb, f)
-          + (oddEvenMod * (b + (dB * laplaceB) + abb - ((k + f) * b)));
+        const result = (oddEvenMod - 1) * -calcNextA(a, dA, laplaceA, abb, fT)
+          + (oddEvenMod * (b + (dB * laplaceB) + abb - ((kT + fT) * b)));
+
+        return this.clamp(result, 0, 1);
       }
     )
       .setOutput([this.width * this.height * 2])
@@ -192,7 +200,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
 
   private createImageKernel() {
 
-     this.imageKernel = this.gpuJs.createKernel(
+    this.imageKernel = this.gpuJs.createKernel(
       function (grid, width, height) {
         const flatIndex = (this.thread.x + ((height - this.thread.y) * width)) * 2;
         const oddEvenMod = flatIndex % 2;

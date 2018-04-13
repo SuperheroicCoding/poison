@@ -21,6 +21,7 @@ export class ReactionDiffConfigService {
     diffRateB: 0.5,
     feedRate: 0.055,
     killRate: 0.062,
+    dynamicKillFeed: false
   };
 
   static mitosisParams: ReactionDiffCalcParams = {
@@ -28,6 +29,7 @@ export class ReactionDiffConfigService {
     diffRateB: 0.5,
     feedRate: 0.0367,
     killRate: 0.0649,
+    dynamicKillFeed: false
   };
   // coral growth" simulation (f=.0545, k=.062)
   static coralGrowthParams: ReactionDiffCalcParams = {
@@ -35,6 +37,15 @@ export class ReactionDiffConfigService {
     diffRateB: 0.5,
     feedRate: 0.0545,
     killRate: 0.062,
+    dynamicKillFeed: false
+  };
+
+  static dynamicParameter: ReactionDiffCalcParams = {
+    diffRateA: 1.0,
+    diffRateB: 0.5,
+    feedRate: 0.00,
+    killRate: 0.00,
+    dynamicKillFeed: true
   };
 
   static defaultWeights = {
@@ -52,6 +63,9 @@ export class ReactionDiffConfigService {
   }, {
     name: 'Mitosis',
     value: ReactionDiffConfigService.mitosisParams
+  },{
+    name: 'Dynamic kill and feedrate. Only GPU!',
+    value: ReactionDiffConfigService.dynamicParameter
   }
   ];
 
