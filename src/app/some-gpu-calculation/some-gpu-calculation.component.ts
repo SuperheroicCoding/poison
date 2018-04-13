@@ -123,8 +123,8 @@ export class SomeGpuCalculationComponent implements AfterViewInit, OnDestroy {
       speed);
 
     const gpuCanvas: HTMLCanvasElement = this.gpuColorizer.getCanvas();
-    performance.mark('createCanvasWithGPU-end');
     ctx.drawImage(gpuCanvas, 0, 0);
+    performance.mark('createCanvasWithGPU-end');
     performance.measure('createCanvasWithGPU', 'createCanvasWithGPU-start', 'createCanvasWithGPU-end');
   }
 }

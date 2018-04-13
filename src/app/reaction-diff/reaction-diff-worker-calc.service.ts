@@ -11,10 +11,13 @@ import {AddChemicalsParams} from './add-chemicals-param';
 import {filter, throttle, throttleTime} from 'rxjs/operators';
 import {ReactionDiffCalculator} from './reaction-diff-calculator';
 import {ColorMapperService} from './color-mapper.service';
+import * as P5 from 'p5';
+import {DataP5Scetch} from '../neural-network/shared/data-view/data-p5-scetch';
 
 export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
 
   public grid: Float32Array;
+  public image: HTMLImageElement;
   public numberThreads = 8;
   private calcRunning = 0;
   private diffRateA;
@@ -176,6 +179,7 @@ export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
       performance.mark('calcNext-end');
       performance.measure('calcNext', 'calcNext-start', 'calcNext-end');
     }
+
   }
 
   addChemical(x, y) {
@@ -190,9 +194,8 @@ export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
   private initAddChemicals$() {
     this.addChemicalsSubject$ = new Subject<WorkerPostParams<AddChemicalsParams>>();
     this.addChemicalsSubject$
-      //.pipe(throttleTime(50))
       .mapWorker(addChemicals)
-      .subscribe((gridBuffer) => {
+      .subscribe(gridBuffer => {
         this.grid = new Float32Array(gridBuffer);
         this.canCalculate = true;
       });
@@ -209,19 +212,19 @@ export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
     this.initCalcWorkers$();
   }
 
-  getImage(p: any) {
-    const img = p.createImage(this.width, this.height);
+  drawImage(graphics: any) {
+    const img = graphics.createImage(this.width, this.height);
     img.loadPixels();
     for (let x = 0; x < this.grid.length - 1; x = x + 2) {
       const pix = (x * 2);
-      const cellColor = this.colorMapper.calcColorFor({a: this.grid[x], b: this.grid[x + 1]}, p);
+      const cellColor = this.colorMapper.calcColorFor({a: this.grid[x], b: this.grid[x + 1]}, graphics);
       img.pixels[pix] = cellColor.r;
       img.pixels[pix + 1] = cellColor.b;
       img.pixels[pix + 2] = cellColor.g;
       img.pixels[pix + 3] = 255;
     }
     img.updatePixels();
-    return img;
+    graphics.image(img,0,0);
   }
 }
 

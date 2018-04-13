@@ -31,17 +31,20 @@ export class P5ViewComponent implements OnChanges {
   @Input() showFps = false;
   @Output() mousePressed: EventEmitter<{ x: number, y: number }> = new EventEmitter();
 
-  private addChemical: Subject<{x:number,y:number}> = new Subject<{x: number, y: number}>();
+  private addChemical: Subject<{ x: number, y: number }> = new Subject<{ x: number, y: number }>();
   private scetch: any;
   private frameRate = 1;
+  private offBuff;
 
   constructor(private colorMapper: ColorMapperService) {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.simWidth || changes.simHeight || changes.speed) {
+    if (changes.simWidth || changes.simHeight) {
       if (this.scetch) {
-        this.scetch.resizeCanvas(Math.floor(this.simWidth), Math.floor(this.simHeight));
+        this.scetch.resizeCanvas(this.simWidth, this.simHeight);
+        this.offBuff.remove();
+        this.offBuff = this.scetch.createGraphics(this.simWidth, this.simHeight);
       } else {
         this.scetch = new p5((p) => this.initP5(p), this.drawArea.nativeElement);
       }
@@ -49,40 +52,28 @@ export class P5ViewComponent implements OnChanges {
   }
 
   private initP5(p: any) {
+
     p.setup = () => {
-      p.createCanvas(Math.floor(this.simWidth), Math.floor(this.simHeight));
+      p.createCanvas(this.simWidth, this.simHeight);
+      this.offBuff = p.createGraphics(this.simWidth, this.simHeight);
+      this.calcService.drawImage(this.offBuff);
     };
 
     p.draw = () => {
-      p.background(51);
-      const grid = this.getGrid();
-      if (grid) {
-
-        const img = p.createImage(this.simWidth, this.simHeight);
-        img.loadPixels();
-        for (let x = 0; x < grid.length - 1; x = x + 2) {
-          const pix = (x * 2);
-          const cellColor = this.colorMapper.calcColorFor({a: grid[x], b: grid[x + 1]}, p);
-          img.pixels[pix] = cellColor.r;
-          img.pixels[pix + 1] = cellColor.b;
-          img.pixels[pix + 2] = cellColor.g;
-          img.pixels[pix + 3] = 255;
-        }
-        img.updatePixels();
-        p.image(img, 0, 0);
-        p.pop();
+      if (this.run) {
+        p.background(51);
+        this.calcService.calcNext();
+        this.calcService.drawImage(this.offBuff);
       }
+      p.image(this.offBuff, 0, 0);
+
       if (this.showFps) {
         const frameRate = p.frameRate();
         this.frameRate = this.frameRate * 0.8 + frameRate * 0.2;
         p.fill('green');
         p.text('fps: ' + p.floor(this.frameRate), 10, 10);
       }
-      if (this.run) {
-        for (let i = 0; i < 1; i++) {
-          this.calcService.calcNext();
-        }
-      }
+
     };
 
     const addChemical = () => {

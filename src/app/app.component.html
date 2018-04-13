@@ -14,7 +14,9 @@
       <app-render-shader
         [shaderCode]="shaderCode"
         [canvasWidth]="shaderContainer.clientWidth"
-        [canvasHeight]="shaderContainer.clientHeight">
+        [canvasHeight]="shaderContainer.clientHeight"
+        [runAnimation]="runAnimation | async"
+      >
       </app-render-shader>
     </div>
     <mat-toolbar role="header" class="pageTitle">

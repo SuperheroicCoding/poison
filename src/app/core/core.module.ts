@@ -4,6 +4,7 @@ import {RandomService} from './random.service';
 import {ServiceWorkerLogUpdateService} from './service-worker-log-update.service';
 import {ServiceWorkerUpdateService} from './service-worker-update.service';
 import {MatSnackBarModule} from '@angular/material';
+import {HeadlineAnimationService} from './headline-animation.service';
 
 @NgModule({
   imports: [MatSnackBarModule]
@@ -16,7 +17,8 @@ export class CoreModule {
         TitleService,
         RandomService,
         ServiceWorkerLogUpdateService,
-        ServiceWorkerUpdateService
+        ServiceWorkerUpdateService,
+        HeadlineAnimationService
       ],
     };
   }

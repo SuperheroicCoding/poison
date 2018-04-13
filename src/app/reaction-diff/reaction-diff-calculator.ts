@@ -11,4 +11,6 @@ export interface ReactionDiffCalculator {
   updateNumberThreads(numberWebWorkers: number): void;
 
   calcNext(): void;
+
+  drawImage(p: any): void;
 }

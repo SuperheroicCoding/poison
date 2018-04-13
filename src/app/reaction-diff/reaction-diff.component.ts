@@ -8,6 +8,7 @@ import {Observable} from 'rxjs/Observable';
 import {MatSelectChange} from '@angular/material';
 import {flatMap, map} from 'rxjs/operators';
 import {ReactionDiffCalculator} from './reaction-diff-calculator';
+import {HeadlineAnimationService} from '../core/headline-animation.service';
 
 @Component({
   selector: 'app-reaction-diff',
@@ -18,7 +19,7 @@ import {ReactionDiffCalculator} from './reaction-diff-calculator';
 export class ReactionDiffComponent implements OnInit {
 
   public calcService: ReactionDiffCalculator;
-  public start = false;
+  private _start = false;
   public showFps = true;
   public width = 200;
   public height = 200;
@@ -32,7 +33,7 @@ export class ReactionDiffComponent implements OnInit {
   public useGpu = true;
   calculationTime$: Observable<number>;
 
-  constructor(private calcFactory: ReactionDiffCalcServiceFactory, private configService: ReactionDiffConfigService) {
+  constructor(private calcFactory: ReactionDiffCalcServiceFactory, private configService: ReactionDiffConfigService, private headlineAnimationService: HeadlineAnimationService) {
   }
 
   public ngOnInit(): void {
@@ -66,6 +67,20 @@ export class ReactionDiffComponent implements OnInit {
           .reduce((acc, next) => acc + next.duration / measuresmentsToTake, 0);
         return calcTime;
       }));
+  }
+
+  get start() {
+    return this._start;
+  }
+
+  set start(start: boolean) {
+    if (start && this.useGpu) {
+      this.headlineAnimationService.stopAnimation();
+    }
+    else {
+      this.headlineAnimationService.startAnimation();
+    }
+    this._start = start;
   }
 
   public toggleRunSim(): void {

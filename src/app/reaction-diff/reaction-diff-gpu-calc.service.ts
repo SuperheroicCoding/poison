@@ -55,10 +55,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   resize(width: number, height: number): void {
     this.width = width;
     this.height = height;
-    this.createCalcNextGpuKernel();
-    this.createAddChemicalsKernel();
-    this.createImageKernel();
-    this.initGrid();
+    this.reset();
   }
 
   updateNumberThreads(numberWebWorkers: number): void {
@@ -91,12 +88,6 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
     }
   }
 
-  private getCell = (column: number, row: number): Cell => {
-    const index = (column + row * this.width) * 2;
-    return {
-      a: this.grid[index], b: this.grid[index + 1]
-    };
-  }
 
   private setCell(column: number, row: number, cell: Cell, width: number = this.width, arrayToSet: Float32Array = this.grid) {
     const index = (column + row * width) * 2;
@@ -115,19 +106,19 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
     this.killRate = calcParams.killRate;
   }
 
-  getImage(p: any) {
-    this.imageKernel(inp(this.grid, [this.width * this.height * 2]));
+  drawImage(p: any) {
+    this.imageKernel.setOutput([this.width, this.height]);
+    this.imageKernel(inp(this.grid, [this.width * this.height * 2]), this.width, this.height);
     const canvas = this.imageKernel.getCanvas();
-    const dataURL = canvas.toDataURL('image/png');
-    const img = p.loadImage(dataURL);
-    return img;
+    let context = (p.canvas as HTMLCanvasElement).getContext('2d');
+    context.drawImage(canvas, 0, canvas.height - this.height, this.width, this.height, 0, 0, this.width, this.height);
+    return null;
   }
 
   private createCalcNextGpuKernel() {
     const cellIndex = function (x, columnOffset, rowOffset, width) {
       return x + ((columnOffset * 2) + (rowOffset * width * 2));
     };
-
 
     const calcWeightedSum = function (grid, weights: number[], x, width) {
       let sum = 0.0;
@@ -201,31 +192,58 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
 
   private createImageKernel() {
 
-    this.imageKernel = this.gpuJs.createKernel(
-      function (grid) {
-        const oddEvenMod = this.thread.x % 2;
-        const indexA = this.thread.x - oddEvenMod;
+     this.imageKernel = this.gpuJs.createKernel(
+      function (grid, width, height) {
+        const flatIndex = (this.thread.x + ((height - this.thread.y) * width)) * 2;
+        const oddEvenMod = flatIndex % 2;
+        const indexA = flatIndex - oddEvenMod;
         const indexB = indexA + 1;
         const aVal = grid[indexA];
         const bVal = grid[indexB];
-        let r = 0;
-        let g = 0;
-        let b = 0;
+
+        // background color
+        const rbg = 0.1;
+        const gbg = 0.25;
+        const bbg = 0.1;
+
+        // a color
+        const ra = aVal;
+        const ga = aVal;
+        const ba = 0.8;
+
+        // b color
+        const rb = 0;
+        const gb = 0;
+        const bb = bVal * 0.4;
+
+        // resulting color
+        let rr = 0;
+        let gr = 0;
+        let br = 0;
 
         if (aVal === 0) {
-          b = bVal;
+          rr = this.mix(rbg, rb, bVal);
+          gr = this.mix(gbg, gb, bVal);
+          br = this.mix(bbg, bb, bVal);
         } else if (bVal === 0) {
-          r = 0.5 * aVal;
-          g = 0.5 * aVal;
-          b = 0.8;
+          rr = this.mix(rbg, ra, 0.5);
+          gr = this.mix(gbg, ga, 0.5);
+          br = this.mix(bbg, ba, 0.5);
+        } else if (aVal < bVal) {
+          const rel = aVal / bVal;
+          rr = this.mix(rb, ra, rel);
+          gr = this.mix(gb, ga, rel);
+          br = this.mix(bb, ba, rel);
         } else {
-          r = 0.5 * aVal;
-          g = 0.5 * aVal;
-          b = 0.4 + (0.5 * bVal);
+          const rel = bVal / aVal;
+          rr = this.mix(ra, rb, rel);
+          gr = this.mix(ga, gb, rel);
+          br = this.mix(ba, bb, rel);
         }
-        this.color(r, g, b);
+        this.color(rr, gr, br);
       }
-    ).setFloatTextures(true)
-      .setOutput([this.width, this.height]);
+    )
+      .setFloatTextures(true)
+      .setGraphical(true);
   }
 }

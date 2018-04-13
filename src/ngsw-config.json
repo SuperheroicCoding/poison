@@ -1,8 +1,9 @@
 {
   "index": "/index.html",
   "assetGroups": [{
-    "name": "AngularExamples",
-    "installMode": "prefetch",
+    "name": "app",
+    "installMode": "lazy",
+    "updateMode": "prefetch",
     "resources": {
       "files": [
         "/favicon.ico",
