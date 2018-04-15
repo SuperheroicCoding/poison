@@ -20,10 +20,6 @@ export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
   public image: HTMLImageElement;
   public numberThreads = 8;
   private calcRunning = 0;
-  private diffRateA;
-  private diffRateB;
-  private feedRate;
-  private killRate;
   private weights: CellWeights;
   private addChemicalRadius: number;
   private workerSubjects$: Subject<WorkerPostParams<CalcNextParam>>[];
@@ -31,6 +27,7 @@ export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
   private canCalculate = true;
   private workerSubscriptions: Subscription[];
   private addChemicalsSubject$: Subject<WorkerPostParams<AddChemicalsParams>>;
+  private calcParams: ReactionDiffCalcParams;
 
   constructor(private width: number,
               private height: number,
@@ -48,10 +45,7 @@ export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
   }
 
   private setCalcParams(calcParams: ReactionDiffCalcParams) {
-    this.diffRateA = calcParams.diffRateA;
-    this.diffRateB = calcParams.diffRateB;
-    this.feedRate = calcParams.feedRate;
-    this.killRate = calcParams.killRate;
+    this.calcParams = calcParams;
   }
 
   private init() {
@@ -139,14 +133,10 @@ export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
     }
 
     const offsetLength = Math.round(this.height / this.numberThreads);
-    const bufferBytes = this.width * this.height * 2 * Float32Array.BYTES_PER_ELEMENT;
     let offsetRow = 0;
     performance.mark('calcNext-start');
     for (let i = 0; i < this.numberThreads; i++) {
-      // const arrayBuffer = new ArrayBuffer(bufferBytes);
-      // const view = new Float32Array(arrayBuffer);
       const view = new Float32Array(this.grid);
-      // view.set(this.grid);
       const offsetLengthAdjusted = (offsetRow + offsetLength) > this.height ? this.height - offsetRow : offsetLength;
 
       this.workerSubjects$[i].next({
@@ -154,10 +144,11 @@ export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
           width: this.width,
           height: this.height,
           gridBuffer: view.buffer,
-          dA: this.diffRateA,
-          dB: this.diffRateB,
-          f: this.feedRate,
-          k: this.killRate,
+          dA: this.calcParams.diffRateA,
+          dB: this.calcParams.diffRateB,
+          f: this.calcParams.feedRate,
+          k: this.calcParams.killRate,
+          dynamicKillFeed: this.calcParams.dynamicKillFeed,
           w: this.weights,
           offsetRow: offsetRow,
           offsetLength: offsetLengthAdjusted
@@ -195,7 +186,7 @@ export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
     this.addChemicalsSubject$ = new Subject<WorkerPostParams<AddChemicalsParams>>();
     this.addChemicalsSubject$
       .mapWorker(addChemicals)
-      .subscribe(gridBuffer => {
+      .subscribe((gridBuffer: ArrayBufferLike) => {
         this.grid = new Float32Array(gridBuffer);
         this.canCalculate = true;
       });

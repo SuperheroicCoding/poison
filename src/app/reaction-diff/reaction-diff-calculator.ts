@@ -1,5 +1,4 @@
 export interface ReactionDiffCalculator {
-  grid: Float32Array;
   numberThreads: number;
 
   reset(): void;

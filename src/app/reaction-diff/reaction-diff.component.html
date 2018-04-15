@@ -79,19 +79,6 @@
              [(ngModel)]="addChemicalRadius"
              (change)="updateAddChemicalRadius()">
     </mat-input-container>
-
-    <mat-input-container class="small" mat-tooltip="x and y sets kill and feed rate">
-      <input matInput id="dynamicParams"
-             placeholder="Dynamic parameters"
-             type="number"
-             step="1"
-             name="speed"
-             min="1"
-             max="30"
-             [disabled]="!useGpu"
-             [(ngModel)]="speed"
-             (change)="updateSpeed()">
-    </mat-input-container>
     <mat-input-container class="small">
       <input matInput id="numberThreads"
              placeholder="web workers to calculate"

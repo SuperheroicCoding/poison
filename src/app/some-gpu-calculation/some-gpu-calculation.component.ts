@@ -1,7 +1,6 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
-import {input} from 'gpu.js/dist';
 import {combineLatest, map, mergeMap, scan, startWith, timeInterval} from 'rxjs/operators';
 import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
 import {animationFrame} from 'rxjs/scheduler/animationFrame';
@@ -10,7 +9,7 @@ import {interval} from 'rxjs/observable/interval';
 import {of} from 'rxjs/observable/of';
 import {TimeInterval} from 'rxjs/Rx';
 import {Subscription} from 'rxjs/Subscription';
-import {GpuJsService} from './gpujs.service';
+import {GpuJsService} from '../core/gpujs.service';
 
 @Component({
   selector: 'app-some-gpu-calculation',

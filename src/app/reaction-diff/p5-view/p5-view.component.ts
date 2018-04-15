@@ -89,9 +89,5 @@ export class P5ViewComponent implements OnChanges {
     p.touchMoved = addChemical;
     p.touchStarted = addChemical;
   }
-
-  private getGrid(): Float32Array {
-    return this.calcService.grid;
-  }
 }
 

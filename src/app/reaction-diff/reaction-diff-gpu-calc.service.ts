@@ -3,7 +3,7 @@ import {CellWeights, weightsToArray} from './cell-weights';
 import {ReactionDiffCalculator} from './reaction-diff-calculator';
 import {Observable} from 'rxjs/Observable';
 import {Cell} from './cell';
-import {GpuJsService, inp} from './gpujs.service';
+import {GpuJsService, inp, KernelFunction} from '../core/gpujs.service';
 
 export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   grid: Float32Array;
@@ -152,8 +152,8 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
         const b = grid[indexB];
         const xNormed = Math.floor((this.thread.x / 2) % width) / width;
         const yNormed = Math.floor((this.thread.x / 2) / width) / height;
-        const kT = this.mix(k, 0.045 + (xNormed * 0.025), dynkillfeed);
-        const fT = this.mix(f, 0.1 + (yNormed * -0.09), dynkillfeed);
+        const kT = this.mix(k, k + (xNormed * 0.025), dynkillfeed);
+        const fT = this.mix(f, (f + 0.09) + (yNormed * -0.09), dynkillfeed);
 
         const laplaceA = calcWeightedSum(grid, weights, indexA, width, height);
         const laplaceB = calcWeightedSum(grid, weights, indexB, width, height);

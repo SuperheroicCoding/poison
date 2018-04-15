@@ -8,6 +8,7 @@ export interface CalcNextParam {
   dB: number;
   f: number;
   k: number;
+  dynamicKillFeed: boolean,
   w: CellWeights;
   offsetRow: number;
   offsetLength: number;

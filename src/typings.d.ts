@@ -14,24 +14,4 @@ declare module 'vega' {
 
 declare var Detector: any;
 
-interface KernelFunction {
-  (arg?: any): any;
 
-  (...argArray: any[]): any;
-
-  setGraphical(on: boolean): KernelFunction;
-
-  setOutput(outputDef: number[]): KernelFunction;
-
-  setFloatTextures(activate: boolean): KernelFunction;
-
-  getCanvas(): HTMLCanvasElement;
-
-  setOutputToTexture(outputToTexture: boolean);
-
-  setFunctions(functions: Function[]);
-}
-
-interface GPU {
-  createKernel(kernelFunction: Function, parameters?: { mode: 'gpu' | 'cpu' }): KernelFunction;
-}

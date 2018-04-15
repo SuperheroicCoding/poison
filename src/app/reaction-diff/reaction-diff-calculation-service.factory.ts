@@ -3,7 +3,7 @@ import {ReactionDiffCalculator} from './reaction-diff-calculator';
 import {ReactionDiffConfigService} from './reaction-diff-config.service';
 import {ReactionDiffGpuCalcService} from './reaction-diff-gpu-calc.service';
 import {ReactionDiffWorkerCalcService} from './reaction-diff-worker-calc.service';
-import {GpuJsService} from './gpujs.service';
+import {GpuJsService} from '../core/gpujs.service';
 import {ColorMapperService} from './color-mapper.service';
 
 @Injectable()

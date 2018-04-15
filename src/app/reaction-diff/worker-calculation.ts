@@ -10,7 +10,8 @@ export const calcNextDiffStep = function (input: CalcNextParam): WorkerPostParam
     k,
     w,
     offsetRow,
-    offsetLength
+    offsetLength,
+    dynamicKillFeed
   } = input;
   const grid = new Float32Array(gridBuffer);
 
@@ -69,19 +70,25 @@ export const calcNextDiffStep = function (input: CalcNextParam): WorkerPostParam
 
   const calcNextCell = (cell: Cell,
                         laplaceA: number,
-                        laplaceB: number): Cell => {
+                        laplaceB: number,x:number,y:number): Cell => {
 
+    let dynK = k;
+    let dynF = f;
+    if(dynamicKillFeed){
+      dynK = dynK + ((x / width) * 0.025);
+      dynF = dynF + ((y / height) * 0.09);
+    }
     const abb = cell.a * cell.b * cell.b;
 
     const nextA = cell.a +
       (dA * laplaceA) -
       abb +
-      (f * (1 - cell.a));
+      (dynF * (1 - cell.a));
 
     const nextB = cell.b +
       (dB * laplaceB) +
       abb -
-      ((k + f) * cell.b);
+      ((dynK + dynF) * cell.b);
 
     return {a: constrain(nextA), b: constrain(nextB)};
   };
@@ -96,7 +103,7 @@ export const calcNextDiffStep = function (input: CalcNextParam): WorkerPostParam
         setCell(x, y, calcNextCell(
           getCell(x, y),
           lap.sumA,
-          lap.sumB));
+          lap.sumB, x,y));
       }
     }
   }

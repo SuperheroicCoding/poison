@@ -40,11 +40,11 @@ export class ReactionDiffConfigService {
     dynamicKillFeed: false
   };
 
-  static dynamicParameter: ReactionDiffCalcParams = {
+  static dynamicKillFeed: ReactionDiffCalcParams = {
     diffRateA: 1.0,
     diffRateB: 0.5,
-    feedRate: 0.00,
-    killRate: 0.00,
+    feedRate: 0.01,
+    killRate: 0.045,
     dynamicKillFeed: true
   };
 
@@ -64,8 +64,8 @@ export class ReactionDiffConfigService {
     name: 'Mitosis',
     value: ReactionDiffConfigService.mitosisParams
   },{
-    name: 'Dynamic kill and feedrate. Only GPU!',
-    value: ReactionDiffConfigService.dynamicParameter
+    name: 'Dynamic kill and feedrate.',
+    value: ReactionDiffConfigService.dynamicKillFeed
   }
   ];
 

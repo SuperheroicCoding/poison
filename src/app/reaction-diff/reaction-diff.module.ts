@@ -7,7 +7,7 @@ import {SharedModule} from '../shared/shared.module';
 import {WeightsConfigComponent} from './weights-config/weights-config.component';
 import {ReactionDiffConfigService} from './reaction-diff-config.service';
 import {ColorMapperService} from './color-mapper.service';
-import {GpuJsService} from './gpujs.service';
+import {GpuJsService} from '../core/gpujs.service';
 
 @NgModule({
   imports: [

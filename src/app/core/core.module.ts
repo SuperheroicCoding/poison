@@ -5,6 +5,7 @@ import {ServiceWorkerLogUpdateService} from './service-worker-log-update.service
 import {ServiceWorkerUpdateService} from './service-worker-update.service';
 import {MatSnackBarModule} from '@angular/material';
 import {HeadlineAnimationService} from './headline-animation.service';
+import {GpuJsService} from './gpujs.service';
 
 @NgModule({
   imports: [MatSnackBarModule]
@@ -18,7 +19,8 @@ export class CoreModule {
         RandomService,
         ServiceWorkerLogUpdateService,
         ServiceWorkerUpdateService,
-        HeadlineAnimationService
+        HeadlineAnimationService,
+        GpuJsService
       ],
     };
   }
