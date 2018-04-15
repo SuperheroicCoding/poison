@@ -10,10 +10,7 @@ import {
   ViewChild
 } from '@angular/core';
 import * as p5 from 'p5';
-
-import {ColorMapperService} from '../color-mapper.service';
 import {ReactionDiffCalculator} from '../reaction-diff-calculator';
-import {Subject} from 'rxjs/Subject';
 
 @Component({
   selector: 'app-p5-view',
@@ -31,12 +28,11 @@ export class P5ViewComponent implements OnChanges {
   @Input() showFps = false;
   @Output() mousePressed: EventEmitter<{ x: number, y: number }> = new EventEmitter();
 
-  private addChemical: Subject<{ x: number, y: number }> = new Subject<{ x: number, y: number }>();
   private scetch: any;
   private frameRate = 1;
   private offBuff;
 
-  constructor(private colorMapper: ColorMapperService) {
+  constructor() {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
