@@ -77,12 +77,12 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   }
 
   initGrid() {
-      this.grid = new Float32Array(this.width * this.height * 2);
-      for (let x = 0; x < this.width; x++) {
-        for (let y = 0; y < this.height; y++) {
-          this.setCell(x, y, {a: 1, b: 0});
-        }
+    this.grid = new Float32Array(this.width * this.height * 2);
+    for (let x = 0; x < this.width; x++) {
+      for (let y = 0; y < this.height; y++) {
+        this.setCell(x, y, {a: 1, b: 0});
       }
+    }
   }
 
 
@@ -175,7 +175,6 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
 
     this.addChemicalsKernel = this.gpuJs.createKernel(
       function (x, y, grid, radius, width) {
-
         // even cells are for fluid A. Odd cells are fluid B.
         const oddEvenMod = this.mod(this.thread.x, 2.0);
         const col = (this.thread.x / 2) % width;
@@ -187,11 +186,11 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
         // we only want to change values for fluid B (oddEvenMod = 1) and when radius > radPos.
         const isFluidB = oddEvenMod * this.step(radPos, radius);
 
-        // we invert the result to get fluidA or fluid B if radius
-        const resultA = ((isFluidB * -1.0) + 1) * grid[this.thread.x];
 
-        const resultB  = isFluidB * (this.thread.x + this.smoothstep(radius, 0.0, radPos * radPos));
-        return this.clamp(resultB + resultA, 0.0, 1.0);
+        const resultB = isFluidB * (this.thread.x + this.smoothstep(radius, 0.0, radPos * radPos));
+        return this.clamp(resultB +
+          ((isFluidB * -1.0) + 1) * grid[this.thread.x]
+          , 0.0, 1.0);
       }
     )
       .setOutput([this.width * this.height * 2])

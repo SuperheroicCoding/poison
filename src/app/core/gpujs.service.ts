@@ -12,7 +12,7 @@ export class GpuJsService implements GPUJS {
     this.delegateGPU = new GpuJs();
   }
 
-  createKernel(kernelFunction: Function, parameters?: { mode: 'gpu' | 'cpu' }): KernelFunction {
+  createKernel(kernelFunction: Function| string, parameters?: { mode: 'gpu' | 'cpu' }): KernelFunction {
     return this.delegateGPU.createKernel(kernelFunction, parameters);
   }
 

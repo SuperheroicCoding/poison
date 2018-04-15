@@ -15,9 +15,9 @@
         "/AngularExamples/3.3563a23c11b409be8844.chunk.js",
         "/AngularExamples/4.b169fbae2330dfa39be1.chunk.js",
         "/AngularExamples/5.4e0f79b342156b1850a5.chunk.js",
-        "/AngularExamples/6.82671124e0ea88ca00cd.chunk.js",
+        "/AngularExamples/6.fd2ac39fdff08278feb7.chunk.js",
         "/AngularExamples/7.c10565b32f2a91166ff7.chunk.js",
-        "/AngularExamples/inline.d2ad71329a93faf7f769.bundle.js",
+        "/AngularExamples/inline.99133a8aab8503891e7b.bundle.js",
         "/AngularExamples/main.6cfd326616eeb047fa65.bundle.js",
         "/AngularExamples/polyfills.2770f1aa3a7997392ca8.bundle.js",
         "/AngularExamples/scripts.31783642af6abccd5514.bundle.js",
@@ -59,11 +59,11 @@
     "/AngularExamples/assets/logos/gpu-js.png": "1327a2df54f4f7885891e8f91ea668a6f3ba37f9",
     "/AngularExamples/5.4e0f79b342156b1850a5.chunk.js": "4f6345c3797e51e37683b4bb5fd9bb951aa70a4f",
     "/AngularExamples/assets/logos/p5.svg": "8a9c417a48686956b46f6be428bb5781684052a0",
-    "/AngularExamples/6.82671124e0ea88ca00cd.chunk.js": "d5388e9a9e53fa867f21ca21a0df684382f7d491",
+    "/AngularExamples/6.fd2ac39fdff08278feb7.chunk.js": "6f1b98a6ff7d869b18df0ec88190eadf4e05ff58",
     "/AngularExamples/assets/logos/tensorflow-js.png": "efa8b0c8a3534e10370d94acb8e214539f3a5628",
     "/AngularExamples/7.c10565b32f2a91166ff7.chunk.js": "8aa00487f7aca0ce2f3a986b0daa791c8cb5b431",
     "/AngularExamples/assets/logos/three-js.png": "dc3c0b5f29b472a4962b31a7c5e12981f1315f48",
-    "/AngularExamples/inline.d2ad71329a93faf7f769.bundle.js": "87c4033c57809f52f9afdf0a9678dc165de3db73",
+    "/AngularExamples/inline.99133a8aab8503891e7b.bundle.js": "7677eade5d326f7f0a1163cf0307645229c6d48c",
     "/AngularExamples/assets/logos/typescript.svg": "4ff0ab7bac5d0478e03a5d1591cd1e4345cd01d9",
     "/AngularExamples/main.6cfd326616eeb047fa65.bundle.js": "e84cb879e3f9b8b5f46a6c1f30bdbdbecb067ae3",
     "/AngularExamples/assets/mnist/mnist_images.png": "0f001230be44050cf245d25dfb4039107861d826",
@@ -72,6 +72,6 @@
     "/AngularExamples/scripts.31783642af6abccd5514.bundle.js": "de397d1b71730c785dc5e0edca31ed5e7ab7b962",
     "/AngularExamples/styles.a4568f74e9e0df3149ab.bundle.css": "e1fdfece14fe0f54e4ccc8d243f629201d43a04d",
     "/AngularExamples/favicon.ico": "84161b857f5c547e3699ddfbffc6d8d737542e01",
-    "/AngularExamples/index.html": "7033fc147ad1638959273c5a9f6f3da1cb7c042b"
+    "/AngularExamples/index.html": "8485d51b49269edfbeff0316d76291d17d30e10a"
   }
 }
