@@ -185,13 +185,13 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
         const radPos = Math.sqrt((i * i) + (j * j));
 
         // we only want to change values for fluid B (oddEvenMod = 1) and when radius > radPos.
-        let result = oddEvenMod * this.step(radPos, radius);
+        const isFluidB = oddEvenMod * this.step(radPos, radius);
 
         // we invert the result to get fluidA or fluid B if radius
-        const fluid = ((result * -1.0) + 1) * grid[this.thread.x];
+        const resultA = ((isFluidB * -1.0) + 1) * grid[this.thread.x];
 
-        result = result * (this.thread.x + this.smoothstep(radius, 0.0, radPos * radPos));
-        return this.clamp(result + fluid, 0.0, 1.0);
+        const resultB  = isFluidB * (this.thread.x + this.smoothstep(radius, 0.0, radPos * radPos));
+        return this.clamp(resultB + resultA, 0.0, 1.0);
       }
     )
       .setOutput([this.width * this.height * 2])
