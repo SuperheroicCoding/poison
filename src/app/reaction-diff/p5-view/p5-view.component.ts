@@ -31,6 +31,8 @@ export class P5ViewComponent implements OnChanges {
   private scetch: any;
   private frameRate = 1;
   private offBuff;
+  private drawOnce = false;
+  private calcOnce = false;
 
   constructor() {
   }
@@ -41,6 +43,7 @@ export class P5ViewComponent implements OnChanges {
         this.scetch.resizeCanvas(this.simWidth, this.simHeight);
         this.offBuff.remove();
         this.offBuff = this.scetch.createGraphics(this.simWidth, this.simHeight);
+        this.drawOnce = true;
       } else {
         this.scetch = new p5((p) => this.initP5(p), this.drawArea.nativeElement);
       }
@@ -56,10 +59,15 @@ export class P5ViewComponent implements OnChanges {
     };
 
     p.draw = () => {
-      if (this.run) {
+      if (this.run || this.calcOnce) {
         p.background(51);
         this.calcService.calcNext();
         this.calcService.drawImage(this.offBuff);
+        this.calcOnce = false;
+      }
+      if (this.drawOnce) {
+        this.calcService.drawImage(this.offBuff);
+        this.drawOnce = false;
       }
       p.image(this.offBuff, 0, 0);
 
@@ -77,6 +85,7 @@ export class P5ViewComponent implements OnChanges {
       const y = p.floor(p.mouseY);
       if (x > -1 && x < p.width && y > -1 && y < p.height) {
         this.calcService.addChemical(x, y);
+        this.calcOnce = true;
       }
     };
 

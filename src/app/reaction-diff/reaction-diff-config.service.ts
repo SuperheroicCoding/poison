@@ -48,6 +48,15 @@ export class ReactionDiffConfigService {
     dynamicKillFeed: true
   };
 
+  // pulsating" simulation (f=.0545, k=.062)
+  static pulsatingParams: ReactionDiffCalcParams = {
+    diffRateA: 1.0,
+    diffRateB: 0.5,
+    feedRate: 0.026,
+    killRate: 0.059,
+    dynamicKillFeed: false
+  };
+
   static defaultWeights = {
     topLeft: 0.05, topCenter: 0.2, topRight: 0.05,
     left: 0.2, center: -1.0, right: 0.2,
@@ -63,9 +72,12 @@ export class ReactionDiffConfigService {
   }, {
     name: 'Mitosis',
     value: ReactionDiffConfigService.mitosisParams
-  },{
+  }, {
     name: 'Dynamic kill and feedrate.',
     value: ReactionDiffConfigService.dynamicKillFeed
+  }, {
+    name: 'Pulsation',
+    value: ReactionDiffConfigService.pulsatingParams
   }
   ];
 

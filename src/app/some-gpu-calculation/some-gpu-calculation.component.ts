@@ -9,7 +9,7 @@ import {interval} from 'rxjs/observable/interval';
 import {of} from 'rxjs/observable/of';
 import {TimeInterval} from 'rxjs/Rx';
 import {Subscription} from 'rxjs/Subscription';
-import {GpuJsService, KernelFunction} from '../core/gpujs.service';
+import {GpuJsService, GraphicalKernelFunction} from '../core/gpujs.service';
 
 @Component({
   selector: 'app-some-gpu-calculation',
@@ -24,7 +24,7 @@ export class SomeGpuCalculationComponent implements AfterViewInit, OnDestroy {
   additionForm: FormGroup;
   calculationTime$: Observable<string>;
 
-  private gpuColorizer: KernelFunction;
+  private gpuColorizer: GraphicalKernelFunction;
   private subscription: Subscription;
 
   constructor(private fb: FormBuilder, private gpu: GpuJsService) {

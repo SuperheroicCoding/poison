@@ -18,7 +18,7 @@
         "/AngularExamples/6.fd2ac39fdff08278feb7.chunk.js",
         "/AngularExamples/7.c10565b32f2a91166ff7.chunk.js",
         "/AngularExamples/inline.99133a8aab8503891e7b.bundle.js",
-        "/AngularExamples/main.6cfd326616eeb047fa65.bundle.js",
+        "/AngularExamples/main.7e6ced6b1e71d205e8dc.bundle.js",
         "/AngularExamples/polyfills.2770f1aa3a7997392ca8.bundle.js",
         "/AngularExamples/scripts.31783642af6abccd5514.bundle.js",
         "/AngularExamples/styles.a4568f74e9e0df3149ab.bundle.css"
@@ -65,13 +65,13 @@
     "/AngularExamples/assets/logos/three-js.png": "dc3c0b5f29b472a4962b31a7c5e12981f1315f48",
     "/AngularExamples/inline.99133a8aab8503891e7b.bundle.js": "7677eade5d326f7f0a1163cf0307645229c6d48c",
     "/AngularExamples/assets/logos/typescript.svg": "4ff0ab7bac5d0478e03a5d1591cd1e4345cd01d9",
-    "/AngularExamples/main.6cfd326616eeb047fa65.bundle.js": "e84cb879e3f9b8b5f46a6c1f30bdbdbecb067ae3",
+    "/AngularExamples/main.7e6ced6b1e71d205e8dc.bundle.js": "4e127b33327320c1fb82db6f577f635ce2083749",
     "/AngularExamples/assets/mnist/mnist_images.png": "0f001230be44050cf245d25dfb4039107861d826",
     "/AngularExamples/polyfills.2770f1aa3a7997392ca8.bundle.js": "9acd24dd30f0bb8c87cfbfa33f30082fff6d64c6",
     "/AngularExamples/assets/mnist/mnist_labels_uint8": "e8b25f8fdc852e98c014d6153524d9e0cab4b675",
     "/AngularExamples/scripts.31783642af6abccd5514.bundle.js": "de397d1b71730c785dc5e0edca31ed5e7ab7b962",
     "/AngularExamples/styles.a4568f74e9e0df3149ab.bundle.css": "e1fdfece14fe0f54e4ccc8d243f629201d43a04d",
     "/AngularExamples/favicon.ico": "84161b857f5c547e3699ddfbffc6d8d737542e01",
-    "/AngularExamples/index.html": "8485d51b49269edfbeff0316d76291d17d30e10a"
+    "/AngularExamples/index.html": "eb1b29a509036abd1a5a98ecaf69dd06ba598dc0"
   }
 }

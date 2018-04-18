@@ -3,18 +3,19 @@ import {CellWeights, weightsToArray} from './cell-weights';
 import {ReactionDiffCalculator} from './reaction-diff-calculator';
 import {Observable} from 'rxjs/Observable';
 import {Cell} from './cell';
-import {GpuJsService, inp, KernelFunction} from '../core/gpujs.service';
+import {GpuJsService, GpuJsTexture, GraphicalKernelFunction, inp, KernelFunction} from '../core/gpujs.service';
 
 export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
-  grid: Float32Array;
+  grid: ArrayLike<number> | GpuJsTexture;
   numberThreads = 1;
+  private lastNextCalc = 0;
   private weights: number[];
   private addChemicalRadius: number;
-  private calcNextKernel: KernelFunction;
+  private calcNextKernels: KernelFunction<ArrayLike<number> | GpuJsTexture>[] = [];
   private speed: number;
-  private addChemicalsKernel: KernelFunction;
-  private imageKernel: KernelFunction;
+  private imageKernel: GraphicalKernelFunction;
   private calcParams: ReactionDiffCalcParams;
+  private nextAddChemicals: (number | number | number | number)[] = [0, 0, 0, 0];
 
   constructor(private width: number, private height: number,
               calcParams$: Observable<ReactionDiffCalcParams>,
@@ -25,13 +26,17 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
     calcParams$.subscribe((calcParams) => this.setCalcParams(calcParams));
     calcCellWeights$.subscribe((weights) => this.setWeights(weights));
     addChemicalRadius$.subscribe((radius) => this.addChemicalRadius = radius);
-    speed$.subscribe((speed) => this.speed = speed);
+    speed$.subscribe((speed) => {
+      this.speed = speed;
+    });
     this.reset();
   }
 
   reset(): void {
+    this.calcNextKernels = [];
+    this.calcNextKernels.push(this.createCalcNextGpuKernel());
+    this.calcNextKernels.push(this.createCalcNextGpuKernel());
     this.createCalcNextGpuKernel();
-    this.createAddChemicalsKernel();
     this.createImageKernel();
     this.initGrid();
     this.addChemical(this.width / 2, this.height / 2);
@@ -39,11 +44,9 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
 
   addChemical(x: number, y: number): void {
     const r = this.addChemicalRadius;
-    this.grid = this.addChemicalsKernel(
-      x, y,
-      inp(this.grid, [this.width * this.height * 2]),
-      r,
-      this.width);
+    this.nextAddChemicals = [x,
+      y,
+      r, 1.0];
   }
 
   resize(width: number, height: number): void {
@@ -58,19 +61,25 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
 
   calcNext(): void {
     performance.mark('calcNext-start');
+    let calcParams = [
+      this.calcParams.diffRateA,
+      this.calcParams.diffRateB,
+      this.calcParams.feedRate,
+      this.calcParams.killRate,
+      this.width,
+      this.height,
+      this.calcParams.dynamicKillFeed
+    ];
+
     for (let i = 0; i < this.speed; i++) {
-      this.grid = this.calcNextKernel(
-        inp(this.grid, [this.width * this.height * 2]),
-        this.weights, [
-          this.calcParams.diffRateA,
-          this.calcParams.diffRateB,
-          this.calcParams.feedRate,
-          this.calcParams.killRate,
-          this.width,
-          this.height,
-          this.calcParams.dynamicKillFeed
-        ]
+      this.grid = this.calcNextKernels[this.lastNextCalc](
+        this.getGridInput(),
+        this.weights,
+        calcParams,
+        this.nextAddChemicals
       );
+      this.lastNextCalc = (this.lastNextCalc + 1) % this.calcNextKernels.length;
+      this.nextAddChemicals = [0, 0, 0, 0];
     }
     performance.mark('calcNext-end');
     performance.measure('calcNext', 'calcNext-start', 'calcNext-end');
@@ -86,10 +95,10 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   }
 
 
-  private setCell(column: number, row: number, cell: Cell, width: number = this.width, arrayToSet: Float32Array = this.grid) {
+  private setCell(column: number, row: number, cell: Cell, width: number = this.width) {
     const index = (column + row * width) * 2;
-    arrayToSet[index] = cell.a;
-    arrayToSet[index + 1] = cell.b;
+    this.grid[index] = cell.a;
+    this.grid[index + 1] = cell.b;
   }
 
   private setWeights(weights: CellWeights) {
@@ -101,15 +110,21 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   }
 
   drawImage(p: any) {
-    this.imageKernel.setOutput([this.width, this.height]);
-    this.imageKernel(inp(this.grid, [this.width * this.height * 2]), this.width, this.height);
+    this.imageKernel(this.getGridInput(), this.width, this.height);
     const canvas = this.imageKernel.getCanvas();
     let context = (p.canvas as HTMLCanvasElement).getContext('2d');
     context.drawImage(canvas, 0, canvas.height - this.height, this.width, this.height, 0, 0, this.width, this.height);
     return null;
   }
 
-  private createCalcNextGpuKernel() {
+  getGridInput() {
+    if (this.grid.constructor.name === 'Texture') {
+      return this.grid;
+    }
+    return inp(this.grid, [this.width * this.height * 2]);
+  }
+
+  private createCalcNextGpuKernel(): KernelFunction<ArrayLike<number> | GpuJsTexture> {
     const cellIndex = function (x, columnOffset, rowOffset, width, height) {
       return this.clamp(x + ((columnOffset * 2) + (rowOffset * width * 2)), 0, width * height * 2);
     };
@@ -136,22 +151,44 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
       return Math.min(1.0, Math.max(0.0, nextA));
     };
 
-    this.calcNextKernel = this.gpuJs.createKernel(
-      function (grid, weights: number[], calcParams: number[]) {
+    const calcFluidBToAdd = function (grid, x, y, radius, width) {
+      // even cells are for fluid A. Odd cells are fluid B.
+      const isFluidB = this.mod(this.thread.x, 2.0);
+      const col = (this.thread.x / 2) % width;
+      const row = this.thread.x / (width * 2);
+      const i = Math.abs(x - col);
+      const j = Math.abs(y - row);
+      const radPos = (i * i) + (j * j);
+
+      // we only want to change values for fluid B (oddEvenMod = 1) and when radius > radPos.
+      const isInRadiusAndFluidB = isFluidB * this.step(radPos, radius * radius);
+
+      const fluidBToAdd = isInRadiusAndFluidB * (this.smoothstep(radius * radius, radPos, 0.0));
+      return this.clamp(fluidBToAdd, 0.0, 1.0);
+    };
+
+    return this.gpuJs.createKernel(
+      function (grid, weights: number[], calcParams: number[], addChemicalsParams: [number, number, number, number]) {
         const dA = calcParams[0];
         const dB = calcParams[1];
         const f = calcParams[2];
         const k = calcParams[3];
         const width = calcParams[4];
         const height = calcParams[5];
+
         const dynkillfeed = calcParams[6];
         const oddEvenMod = this.thread.x % 2;
         const indexA = this.thread.x - oddEvenMod;
         const indexB = indexA + 1;
         const a = grid[indexA];
-        const b = grid[indexB];
+        let b = grid[indexB];
         const xNormed = Math.floor((this.thread.x / 2) % width) / width;
         const yNormed = Math.floor((this.thread.x / 2) / width) / height;
+
+        const [x, y, radius, addChems] = addChemicalsParams;
+
+        b = b + (addChems * calcFluidBToAdd(grid, x, y, radius, width));
+
         const kT = this.mix(k, k + (xNormed * 0.025), dynkillfeed);
         const fT = this.mix(f, (f + 0.09) + (yNormed * -0.09), dynkillfeed);
 
@@ -164,43 +201,20 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
           + (oddEvenMod * (b + (dB * laplaceB) + abb - ((kT + fT) * b)));
 
         return this.clamp(result, 0, 1);
+
       }
-    )
-      .setOutput([this.width * this.height * 2])
+      , {output: [this.width * this.height * 2]})
       .setFloatTextures(true)
-      .setFunctions([calcWeightedSum, cellIndex, calcNextA]);
-  }
-
-  private createAddChemicalsKernel() {
-
-    this.addChemicalsKernel = this.gpuJs.createKernel(
-      function (x, y, grid, radius, width) {
-        // even cells are for fluid A. Odd cells are fluid B.
-        const oddEvenMod = this.mod(this.thread.x, 2.0);
-        const col = (this.thread.x / 2) % width;
-        const row = this.thread.x / (width * 2);
-        const i = Math.abs(x - col);
-        const j = Math.abs(y - row);
-        const radPos = Math.sqrt((i * i) + (j * j));
-
-        // we only want to change values for fluid B (oddEvenMod = 1) and when radius > radPos.
-        const isFluidB = oddEvenMod * this.step(radPos, radius);
-
-
-        const resultB = isFluidB * (this.thread.x + this.smoothstep(radius, 0.0, radPos * radPos));
-        return this.clamp(resultB +
-          ((isFluidB * -1.0) + 1) * grid[this.thread.x]
-          , 0.0, 1.0);
-      }
-    )
-      .setOutput([this.width * this.height * 2])
-      .setFloatTextures(true);
+      .setFloatOutput(true)
+      .setOutputToTexture(true)
+      .setFunctions([calcWeightedSum, cellIndex, calcNextA, calcFluidBToAdd]);
   }
 
   private createImageKernel() {
 
     this.imageKernel = this.gpuJs.createKernel(
       function (grid, width, height) {
+
         const flatIndex = (this.thread.x + ((height - this.thread.y) * width)) * 2;
         const oddEvenMod = flatIndex % 2;
         const indexA = flatIndex - oddEvenMod;
@@ -249,8 +263,25 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
         }
         this.color(rr, gr, br);
       }
-    )
+      , {output: [this.width, this.height]})
       .setFloatTextures(true)
       .setGraphical(true);
   }
+
+  /*  private createCalcNextMultiKernel() {
+      let kernels = [];
+      for (let i = 0; i < this.speed; i++) {
+        kernels.push(this.createCalcNextGpuKernel());
+      }
+
+      this.gpuJs.combineKernels(kernels, function(grid, weights: number[], calcParams: number[], addChemicalsParams: [number, number, number, number]){
+        let result = grid;
+        for(let i=0; i < this.constants.kernels; i++){
+          result = kernels[i](result, weights,calcParams, addChemicalsParams);
+        }
+        return result;
+      })
+        .setConstants({ kernels: this.speed });
+
+    }*/
 }
