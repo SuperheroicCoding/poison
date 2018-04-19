@@ -13,7 +13,10 @@ export class GpuJsService implements GPUJS {
   }
 
   createKernel(kernelFunction: Function | string, settings?: BuildKernelSettings): KernelFunction<ArrayLike<number>> {
-    return this.delegateGPU.createKernel(kernelFunction, settings);
+    console.log('create kernel start');
+    const result = this.delegateGPU.createKernel(kernelFunction, settings);
+    console.log('create kernel end');
+    return result;
   }
 
   createKernelMap(kernels: { [key: string]: Function }, megaKernelFunc: Function): KernelFunction<{ [key: string]: ArrayLike<number> }> {

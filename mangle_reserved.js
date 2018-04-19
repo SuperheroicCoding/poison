@@ -52,4 +52,4 @@
   'fluidBToAdd',
   'dynkillfeed',
   'addChems'
-],}
+]}
