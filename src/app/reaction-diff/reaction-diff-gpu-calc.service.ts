@@ -76,7 +76,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
     for (let i = 0; i < repeat; i++) {
       // using texture swap to prevent input texture == output texture webGl error;
       this.grid = this.calcNextKernels[this.lastNextCalc](
-        this.getGridInput(),
+        this.grid,
         this.weights,
         calcParams,
         this.nextAddChemicals
@@ -85,7 +85,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
       this.nextAddChemicals = [0, 0, 0, 0];
     }
 
-    this.imageKernel(this.getGridInput());
+    this.imageKernel(this.grid);
     this.nextImage = this.imageKernel.getCanvas();
 
     performance.mark('calcNext-end');
@@ -125,13 +125,6 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
     }
     const context = (p.canvas as HTMLCanvasElement).getContext('2d');
     context.drawImage(this.nextImage, 0, this.nextImage.height - this.height, this.width, this.height, 0, 0, this.width, this.height);
-  }
-
-  getGridInput() {
-    if (this.grid.constructor.name === 'Texture') {
-      return this.grid;
-    }
-    return inp(this.grid, {x: this.width, y: this.height, z: 2});
   }
 
   private createCalcNextGpuKernel(): TextureKernelFunction {
