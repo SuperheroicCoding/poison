@@ -232,10 +232,10 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
         b = b + (addChems * calcFluidBToAdd(grid, x, y, radius));
         const abb = a * b * b;
 
-        const result = (this.thread.z - 1) * -calcNextA(a, dA, laplaceA, abb, fT)
+        const fluid = (this.thread.z - 1) * -calcNextA(a, dA, laplaceA, abb, fT)
           + (this.thread.z * (b + (dB * laplaceB) + abb - ((kT + fT) * b)));
 
-        return this.clamp(result, 0, 1);
+        return this.clamp(fluid, 0, 1);
 
       }, {output: [this.width, this.height, 2]})
       .setFloatTextures(true)
