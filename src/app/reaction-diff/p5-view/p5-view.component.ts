@@ -43,7 +43,6 @@ export class P5ViewComponent implements OnChanges {
         this.scetch.resizeCanvas(this.simWidth, this.simHeight);
         this.offBuff.remove();
         this.offBuff = this.scetch.createGraphics(this.simWidth, this.simHeight);
-        this.drawOnce = true;
       } else {
         this.scetch = new p5((p) => this.initP5(p), this.drawArea.nativeElement);
       }
@@ -55,20 +54,17 @@ export class P5ViewComponent implements OnChanges {
     p.setup = () => {
       p.createCanvas(this.simWidth, this.simHeight);
       this.offBuff = p.createGraphics(this.simWidth, this.simHeight);
-      this.calcService.drawImage(this.offBuff);
     };
 
     p.draw = () => {
-      if (this.run || this.calcOnce) {
+      if (this.run) {
         p.background(51);
         this.calcService.calcNext();
-        this.calcService.drawImage(this.offBuff);
-        this.calcOnce = false;
       }
-      if (this.drawOnce) {
-        this.calcService.drawImage(this.offBuff);
-        this.drawOnce = false;
-      }
+
+      this.calcService.drawImage(this.offBuff);
+      this.drawOnce = false;
+
       p.image(this.offBuff, 0, 0);
 
       if (this.showFps) {

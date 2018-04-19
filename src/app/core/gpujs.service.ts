@@ -43,15 +43,15 @@ export interface KernelFunction<T> {
 
   setGraphical(on: boolean): GraphicalKernelFunction;
 
-  setOutput(outputDef: number[]): KernelFunction<ArrayLike<number>>;
+  setOutput(outputDef: number[]): this;
 
-  setFloatTextures(activate: boolean): KernelFunction<ArrayLike<number>>;
+  setFloatTextures(activate: boolean): this;
 
-  setFloatOutput(activate: boolean): KernelFunction<ArrayLike<number>>;
+  setFloatOutput(activate: boolean): this;
 
-  setOutputToTexture(outputToTexture: boolean): KernelFunction<GpuJsTexture>;
+  setOutputToTexture(outputToTexture: boolean): TextureKernelFunction;
 
-  setFunctions(functions: Function[]): this;
+  setFunctions(functions: Function[] | { [key: string]: (...argArray: any[]) => number }): this;
 
   setConstants(constants: { [key: string]: number }): this;
 
@@ -59,6 +59,10 @@ export interface KernelFunction<T> {
 
 export interface GraphicalKernelFunction extends KernelFunction<void> {
   getCanvas(): HTMLCanvasElement;
+}
+
+export interface TextureKernelFunction extends KernelFunction<GpuJsTexture> {
+  detachTextureCache(): void;
 }
 
 export interface GPUJS {

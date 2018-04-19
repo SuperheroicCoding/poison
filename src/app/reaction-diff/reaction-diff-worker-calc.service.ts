@@ -8,17 +8,15 @@ import {Subject} from 'rxjs/Subject';
 import {Cell} from './cell';
 import {Subscription} from 'rxjs/Subscription';
 import {AddChemicalsParams} from './add-chemicals-param';
-import {filter, throttle, throttleTime} from 'rxjs/operators';
+import {filter} from 'rxjs/operators';
 import {ReactionDiffCalculator} from './reaction-diff-calculator';
 import {ColorMapperService} from './color-mapper.service';
-import * as P5 from 'p5';
-import {DataP5Scetch} from '../neural-network/shared/data-view/data-p5-scetch';
 
 export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
 
   public grid: Float32Array;
   public image: HTMLImageElement;
-  public numberThreads = 8;
+  public numberThreads = 6;
   private calcRunning = 0;
   private weights: CellWeights;
   private addChemicalRadius: number;

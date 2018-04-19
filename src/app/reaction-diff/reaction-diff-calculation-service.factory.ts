@@ -16,10 +16,13 @@ export class ReactionDiffCalcServiceFactory {
   public createCalcService(width: number, height: number, useGpuJs: boolean = true) {
     if (useGpuJs) {
       this.lastCalcService = new ReactionDiffGpuCalcService(
-        width, height,
+        width,
+        height,
         this.configService.calcParams$,
         this.configService.calcCellWeights$,
-        this.configService.addChemicalRadius$, this.configService.speed$, this.gpuJsService);
+        this.configService.addChemicalRadius$,
+        this.configService.speed$,
+        this.gpuJsService);
     } else {
       this.lastCalcService = new ReactionDiffWorkerCalcService(
         width,

@@ -10,12 +10,12 @@
 </mat-toolbar>
 
 <section class="diffContent">
-  <mat-card>
+  <mat-card class="sim-card">
     <mat-card-title>Simulation
       <mat-card-subtitle>Click to add fluid</mat-card-subtitle>
     </mat-card-title>
-    <section></section>
     <app-p5-view
+      *ngIf="calcService"
       [simWidth]="width"
       [simHeight]="height"
       [calcService]="calcService"
@@ -63,10 +63,10 @@
              step="1"
              name="speed"
              min="1"
-             max="30"
+             max="300"
              [disabled]="!useGpu"
-             [(ngModel)]="speed"
-             (change)="updateSpeed()">
+             [ngModel]="speed"
+             (ngModelChange)="updateSpeed($event)">
     </mat-input-container>
     <mat-input-container class="small">
       <input matInput id="addChemicalRadius"
@@ -91,10 +91,11 @@
              [(ngModel)]="numberWebWorkers"
              (change)="updateNumberOfWebWorkers()">
     </mat-input-container>
-    <mat-checkbox [(ngModel)]="useGpu" (change)="updateUseGpu()">Use gpu.js
+    <mat-checkbox [(ngModel)]="useGpu" (change)="updateUseGpu()">
+      Use gpu.js
     </mat-checkbox>
 
-    <div>Calculation needs: {{calculationTime$ | async}}ms</div>
+    <div *ngIf="showFps">Calculation needs: {{calculationTime$ | async}}ms</div>
   </mat-card>
 
   <mat-card class="parameters" *ngIf="calcParams">

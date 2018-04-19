@@ -81,7 +81,6 @@ export class ReactionDiffConfigService {
   }
   ];
 
-
   public calcParams$: Observable<ReactionDiffCalcParams>;
   public calcCellWeights$: Observable<CellWeights>;
   public exampleOptions = ReactionDiffConfigService.exampleWeights.map(option => option.name);

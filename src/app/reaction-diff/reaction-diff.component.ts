@@ -8,7 +8,6 @@ import {Observable} from 'rxjs/Observable';
 import {MatSelectChange} from '@angular/material';
 import {flatMap, map} from 'rxjs/operators';
 import {ReactionDiffCalculator} from './reaction-diff-calculator';
-import {HeadlineAnimationService} from '../core/headline-animation.service';
 
 @Component({
   selector: 'app-reaction-diff',
@@ -21,8 +20,8 @@ export class ReactionDiffComponent implements OnInit {
   public calcService: ReactionDiffCalculator;
   private _start = false;
   public showFps = true;
-  public width = 200;
-  public height = 200;
+  public width = 400;
+  public height = 300;
   public numberWebWorkers: number;
   public cellWeights$: Observable<CellWeights>;
   public calcParams: ReactionDiffCalcParams;
@@ -33,7 +32,7 @@ export class ReactionDiffComponent implements OnInit {
   public useGpu = true;
   calculationTime$: Observable<number>;
 
-  constructor(private calcFactory: ReactionDiffCalcServiceFactory, private configService: ReactionDiffConfigService, private headlineAnimationService: HeadlineAnimationService) {
+  constructor(private calcFactory: ReactionDiffCalcServiceFactory, private configService: ReactionDiffConfigService) {
   }
 
   public ngOnInit(): void {
@@ -63,9 +62,8 @@ export class ReactionDiffComponent implements OnInit {
           return 0;
         }
         const measuresmentsToTake = Math.min(measures.length, 50);
-        const calcTime = measures.slice(measures.length - measuresmentsToTake)
+        return measures.slice(measures.length - measuresmentsToTake)
           .reduce((acc, next) => acc + next.duration / measuresmentsToTake, 0);
-        return calcTime;
       }));
   }
 
@@ -74,12 +72,6 @@ export class ReactionDiffComponent implements OnInit {
   }
 
   set start(start: boolean) {
-    if (start && this.useGpu) {
-      this.headlineAnimationService.stopAnimation();
-    }
-    else {
-      this.headlineAnimationService.startAnimation();
-    }
     this._start = start;
   }
 
@@ -118,7 +110,6 @@ export class ReactionDiffComponent implements OnInit {
   }
 
   public updateAddChemicalRadius() {
-    console.log(this.addChemicalRadius);
     this.configService.updateAddChemicalRadius(this.addChemicalRadius);
   }
 
@@ -131,7 +122,7 @@ export class ReactionDiffComponent implements OnInit {
     this.calcService = this.calcFactory.createCalcService(this.width, this.height, this.useGpu);
   }
 
-  updateSpeed() {
-    this.configService.updateSpeed(this.speed);
+  updateSpeed($event: number) {
+    this.configService.updateSpeed($event);
   }
 }
