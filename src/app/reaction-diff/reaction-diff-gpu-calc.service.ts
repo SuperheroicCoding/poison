@@ -3,9 +3,10 @@ import {CellWeights, weightsToArray} from './cell-weights';
 import {ReactionDiffCalculator} from './reaction-diff-calculator';
 import {Observable} from 'rxjs/Observable';
 import {GpuJsService, GpuJsTexture, GraphicalKernelFunction, inp, TextureKernelFunction} from '../core/gpujs.service';
+import {HeadlineAnimationService} from '../core/headline-animation.service';
 
 export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
-  grid: ArrayLike<number> | GpuJsTexture;
+  grid: GpuJsTexture;
   numberThreads = 1;
   private lastNextCalc = 0;
   private weights: number[];
@@ -35,31 +36,34 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   }
 
   reset(): void {
-    this.init();
+    this.initGrid();
+    this.addChemical(this.width / 2, this.height / 2);
   }
 
   private init(): void {
+    this.initGrid();
     this.calcNextKernels = [];
     this.calcNextKernels.push(this.createCalcNextGpuKernel());
     this.calcNextKernels.push(this.createCalcNextGpuKernel());
     this.createImageKernel();
-    this.initGrid();
     this.addChemical(this.width / 2, this.height / 2);
-    this.calcNext();
   }
 
   addChemical(x: number, y: number): void {
     const r = this.addChemicalRadius;
     this.nextAddChemicals = [x, y, r, 1.0];
+    this.calcNext(1);
   }
 
   resize(width: number, height: number): void {
     this.width = width;
     this.height = height;
+    this.grid.delete();
+    this.initGridKernel = null;
     this.init();
   }
 
-  calcNext(): void {
+  calcNext(repeat: number = this.speed): void {
     performance.mark('calcNext-start');
     let calcParams = [
       this.calcParams.diffRateA,
@@ -69,7 +73,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
       this.calcParams.dynamicKillFeed
     ];
 
-    for (let i = 0; i < this.speed; i++) {
+    for (let i = 0; i < repeat; i++) {
       // using texture swap to prevent input texture == output texture webGl error;
       this.grid = this.calcNextKernels[this.lastNextCalc](
         this.getGridInput(),
@@ -89,11 +93,11 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   }
 
   initGrid() {
+
     if (!this.initGridKernel) {
       const random = function (seed1, seed2) {
         return this.fract(this.sin(this.dot(this.vec2(seed1, seed2), this.vec2(12.9898, 78.233))) * 43758.5453123);
       };
-
 
       this.initGridKernel = this.gpuJs.createKernel(function () {
         return 1.0 - this.thread.z % 2.0 * (1.0 - random(this.thread.x, this.thread.y) * 0.05);
@@ -117,9 +121,9 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
 
   drawImage(p: any) {
     if (!this.nextImage) {
-      this.calcNext();
+      this.calcNext(1);
     }
-    let context = (p.canvas as HTMLCanvasElement).getContext('2d');
+    const context = (p.canvas as HTMLCanvasElement).getContext('2d');
     context.drawImage(this.nextImage, 0, this.nextImage.height - this.height, this.width, this.height, 0, 0, this.width, this.height);
   }
 
@@ -184,7 +188,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
         (dA * laplaceA) -
         abb +
         (f * (1 - a));
-      return Math.min(1.0, Math.max(0.0, nextA));
+      return  nextA;
     };
 
     const calcFluidBToAdd = function (grid, x, y, radius): number {
@@ -209,21 +213,23 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
         const k = calcParams[3];
         const dynkillfeed = calcParams[4];
 
-        const a = grid[0][this.thread.y][this.thread.x];
-        let b = grid[1][this.thread.y][this.thread.x];
-        const xNormed = Math.floor(this.thread.x / this.constants.width);
-        const yNormed = Math.floor(this.thread.y / this.constants.height);
+
+        const xNormed = this.thread.x / this.constants.width;
+        const yNormed = this.thread.y / this.constants.height;
 
         const [x, y, radius, addChems] = addChemicalsParams;
 
-        b = b + (addChems * calcFluidBToAdd(grid, x, y, radius));
 
+        // we calculate k and f deepending on x, y when dynkillfeed = 1
         const kT = this.mix(k, k + (xNormed * 0.025), dynkillfeed);
         const fT = this.mix(f, (f + 0.09) + (yNormed * -0.09), dynkillfeed);
 
         const laplaceA = calcWeightedSum(grid, 0.0, weights);
         const laplaceB = calcWeightedSum(grid, 1.0, weights);
 
+        const a = grid[0][this.thread.y][this.thread.x];
+        let b = grid[1][this.thread.y][this.thread.x];
+        b = b + (addChems * calcFluidBToAdd(grid, x, y, radius));
         const abb = a * b * b;
 
         const result = (this.thread.z - 1) * -calcNextA(a, dA, laplaceA, abb, fT)

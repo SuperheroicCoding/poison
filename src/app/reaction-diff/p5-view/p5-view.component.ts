@@ -31,8 +31,7 @@ export class P5ViewComponent implements OnChanges {
   private scetch: any;
   private frameRate = 1;
   private offBuff;
-  private drawOnce = false;
-  private calcOnce = false;
+  private drawOnce = true;
 
   constructor() {
   }
@@ -60,10 +59,13 @@ export class P5ViewComponent implements OnChanges {
       if (this.run) {
         p.background(51);
         this.calcService.calcNext();
+        this.calcService.drawImage(this.offBuff);
       }
 
-      this.calcService.drawImage(this.offBuff);
-      this.drawOnce = false;
+      if (this.drawOnce) {
+        this.calcService.drawImage(this.offBuff);
+        this.drawOnce = false;
+      }
 
       p.image(this.offBuff, 0, 0);
 
@@ -73,7 +75,6 @@ export class P5ViewComponent implements OnChanges {
         p.fill('green');
         p.text('fps: ' + p.floor(this.frameRate), 10, 10);
       }
-
     };
 
     const addChemical = () => {
@@ -81,7 +82,7 @@ export class P5ViewComponent implements OnChanges {
       const y = p.floor(p.mouseY);
       if (x > -1 && x < p.width && y > -1 && y < p.height) {
         this.calcService.addChemical(x, y);
-        this.calcOnce = true;
+        this.drawOnce = true
       }
     };
 

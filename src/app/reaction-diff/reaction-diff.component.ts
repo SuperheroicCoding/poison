@@ -6,13 +6,18 @@ import {ReactionDiffConfigService} from './reaction-diff-config.service';
 import {ReactionDiffCalcParams} from './reaction-diff-calc-params';
 import {Observable} from 'rxjs/Observable';
 import {MatSelectChange} from '@angular/material';
-import {flatMap, map} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, filter, flatMap, map, share, startWith, tap} from 'rxjs/operators';
 import {ReactionDiffCalculator} from './reaction-diff-calculator';
+import {Subject} from 'rxjs/Subject';
+import {HeadlineAnimationService} from '../core/headline-animation.service';
+
+
+type Dimensions = { width: number, height: number; };
 
 @Component({
   selector: 'app-reaction-diff',
   templateUrl: './reaction-diff.component.html',
-  styleUrls: ['./reaction-diff.component.css'],
+  styleUrls: ['./reaction-diff.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ReactionDiffComponent implements OnInit {
@@ -30,9 +35,13 @@ export class ReactionDiffComponent implements OnInit {
   public addChemicalRadius: number;
   public speed = 1;
   public useGpu = true;
+  dimensions$: Observable<Dimensions>;
   calculationTime$: Observable<number>;
+  drawImageTime$: Observable<number>;
 
-  constructor(private calcFactory: ReactionDiffCalcServiceFactory, private configService: ReactionDiffConfigService) {
+  private dimensionsSubject$: Subject<Dimensions> = new Subject();
+
+  constructor(private calcFactory: ReactionDiffCalcServiceFactory, private configService: ReactionDiffConfigService, private headlineAnimation: HeadlineAnimationService) {
   }
 
   public ngOnInit(): void {
@@ -61,10 +70,41 @@ export class ReactionDiffComponent implements OnInit {
         if (measures.length === 0) {
           return 0;
         }
-        const measuresmentsToTake = Math.min(measures.length, 50);
+        const measuresmentsToTake = Math.min(measures.length, 30);
         return measures.slice(measures.length - measuresmentsToTake)
           .reduce((acc, next) => acc + next.duration / measuresmentsToTake, 0);
       }));
+
+    this.drawImageTime$ = Observable.interval(1000).pipe(
+      flatMap(ignored => Observable.of(performance.getEntriesByName('drawImage'))),
+      map((measures: PerformanceMeasure[]) => {
+        if (measures.length === 0) {
+          return 0;
+        }
+        const measuresmentsToTake = Math.min(measures.length, 30);
+        return measures.slice(measures.length - measuresmentsToTake)
+          .reduce((acc, next) => acc + next.duration / measuresmentsToTake, 0);
+      }));
+
+
+    const distinctDebouncedDimensions = this.dimensionsSubject$.pipe(
+      filter((dim, index) => dim.width > 0 && dim.height > 0),
+      tap((dim: Dimensions) => {
+        this.width = dim.width;
+        this.height = dim.height;
+      }),
+      debounceTime(500),
+      distinctUntilChanged((x, y) => x.width === y.width && y.height === x.height),
+      share()
+    );
+    distinctDebouncedDimensions.subscribe((dim) => {
+      this.start = false;
+      this.calcService.resize(dim.width, dim.height);
+    });
+
+    this.dimensions$ = distinctDebouncedDimensions.pipe(
+      startWith({width: this.width, height: this.height})
+    );
   }
 
   get start() {
@@ -77,11 +117,14 @@ export class ReactionDiffComponent implements OnInit {
 
   public toggleRunSim(): void {
     this.start = !this.start;
+    this.start ? this.headlineAnimation.stopAnimation(): this.headlineAnimation.startAnimation();
   }
 
   public reset() {
     this.start = false;
+    this.headlineAnimation.stopAnimation();
     this.calcService.reset();
+    this.headlineAnimation.startAnimation();
   }
 
   public addChemical(event: { x: number, y: number }) {
@@ -93,8 +136,10 @@ export class ReactionDiffComponent implements OnInit {
     this.configService.resetCalcCellWeights();
   }
 
-  public updateDimension() {
-    this.calcService.resize(this.width, this.height);
+  public updateDimension(width, height) {
+    this.headlineAnimation.stopAnimation();
+    this.dimensionsSubject$.next({width, height});
+    this.headlineAnimation.startAnimation();
   }
 
   public updateCalcParams(calcParams: ReactionDiffCalcParams) {
@@ -120,6 +165,9 @@ export class ReactionDiffComponent implements OnInit {
   updateUseGpu() {
     this.start = false;
     this.calcService = this.calcFactory.createCalcService(this.width, this.height, this.useGpu);
+    if (!this.useGpu) {
+      this.numberWebWorkers = this.calcService.numberThreads;
+    }
   }
 
   updateSpeed($event: number) {
