@@ -13,7 +13,6 @@
   <mat-card class="sim-card" appRaiseCard>
     <mat-card-title>Simulation</mat-card-title>
     <mat-card-subtitle>Click to add fluid</mat-card-subtitle>
-    <mat-spinner *ngIf="isLoading" color="accent"></mat-spinner>
     <app-p5-view
       *ngIf="calcService"
       [simWidth]="(dimensions$ | async).width"
