@@ -65,7 +65,10 @@ export class ReactionDiffComponent implements OnInit {
     );
 
     this.calculationTime$ = Observable.interval(1000).pipe(
-      flatMap(ignored => Observable.of(performance.getEntriesByName('calcNext'))),
+      flatMap(ignored => {
+
+        return Observable.of(performance.getEntriesByName('calcNext'));
+      }),
       map((measures: PerformanceMeasure[]) => {
         if (measures.length === 0) {
           return 0;

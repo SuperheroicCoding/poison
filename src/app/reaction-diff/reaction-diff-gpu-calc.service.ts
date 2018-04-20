@@ -63,7 +63,6 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   }
 
   calcNext(repeat: number = this.speed): void {
-    performance.mark('calcNext-start');
     const calcParams = [
       this.calcParams.diffRateA,
       this.calcParams.diffRateB,
@@ -88,9 +87,6 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
     }
     this.imageKernel(this.grid);
     this.nextImage = this.imageKernel.getCanvas();
-
-    performance.mark('calcNext-end');
-    performance.measure('calcNext', 'calcNext-start', 'calcNext-end');
   }
 
   initGrid() {
@@ -125,6 +121,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
 
   private createCalcNextGpuKernel(): TextureKernelFunction {
 
+
     function whenGt(value: number, value2: number): number {
       return Math.max(Math.sign(value - value2), 0.0);
     }
@@ -145,11 +142,23 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
       return a * b;
     }
 
+    function smoothy(lowLim: number, highLim: number, value: number): number {
+      return limit((value - lowLim) / (highLim - lowLim), 0.0, 1.0);
+    }
+
+    function limit(value, low, high) {
+      return Math.max(Math.min(value, high), low);
+    }
+
+    function mixValues(value, value2, rel) {
+      return (value * (1.0 - rel)) + (value2 * rel);
+    }
+
     function wrapAround(value, value2) {
       const greater = whenGe(value, value2);
-      const smallerZero = whenLe(value, 0.0);
+      const smallerZero = whenLt(value, 0.0);
       const inBetween = and(whenGe(value, 0.0), whenLt(value, value2));
-      return (greater * (value - value2)) + (smallerZero * (value2 - value)) + (inBetween * value);
+      return (greater * (value - value2)) + (smallerZero * (value2 + value)) + (inBetween * value);
     }
 
     function cellValue(grid, fluid, columnOffset, rowOffset): number {
@@ -179,16 +188,14 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
 
     function calcFluidBToAdd(grid, x, y, radius): number {
       // even cells are for fluid A. Odd cells are fluid B.
-      const isFluidB = this.mod(this.thread.z, 2.0);
+      const isFluidB = this.thread.z % 2.0;
       const i = Math.abs(x - this.thread.x);
       const j = Math.abs(y - (this.constants.height - this.thread.y));
       const radPos = (i * i) + (j * j);
 
-      // we only want to change values for fluid B (oddEvenMod = 1) and when radius > radPos.
-      const isInRadiusAndFluidB = isFluidB * this.step(radPos, radius * radius);
-
-      const fluidBToAdd = isInRadiusAndFluidB * (this.smoothstep(radius * radius, radPos, 0.0));
-      return this.clamp(fluidBToAdd, 0.0, 1.0);
+      // we only want to change values for fluid B (oddEvenMod = 1) and when radius² >= radPos.
+      const fluidBToAdd = isFluidB * smoothy(radius * radius, 0, radPos);
+      return limit(fluidBToAdd, 0.0, 1.0);
     }
 
     return this.gpuJs.createKernel(
@@ -204,10 +211,9 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
 
         const [x, y, radius, addChems] = addChemicalsParams;
 
-
         // we calculate k and f deepending on x, y when dynkillfeed = 1
-        const kT = this.mix(k, k + (xNormed * 0.025), dynkillfeed);
-        const fT = this.mix(f, (f + 0.09) + (yNormed * -0.09), dynkillfeed);
+        const kT = mixValues(k, k + (xNormed * 0.025), dynkillfeed);
+        const fT = mixValues(f, (f + 0.09) + (yNormed * -0.09), dynkillfeed);
 
         const laplaceA = calcWeightedSum(grid, 0.0, weights);
         const laplaceB = calcWeightedSum(grid, 1.0, weights);
@@ -219,7 +225,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
         const fluid = (this.thread.z - 1) * -calcNextA(a, dA, laplaceA, abb, fT)
           + (this.thread.z * (b + (dB * laplaceB) + abb - ((kT + fT) * b)));
 
-        return this.clamp(fluid, 0, 1);
+        return limit(fluid, 0, 1);
 
       }, {output: [this.width, this.height, 2]})
       .setFloatTextures(true)
@@ -232,6 +238,9 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
           whenLt: whenLt,
           whenGt: whenGt,
           and: and,
+          limit: limit,
+          smoothy: smoothy,
+          mixValues: mixValues,
           wrapAround: wrapAround,
           cellValue: cellValue,
           calcWeightedSum: calcWeightedSum,
@@ -242,6 +251,10 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   }
 
   private createImageKernel() {
+    function mixValues(value1, value2, rel) {
+      return (value1 * (1.0 - rel)) + (value2 * rel);
+    }
+
     this.imageKernel = this.gpuJs.createKernel(
       function (grid) {
         const aVal = grid[0][this.thread.y][this.thread.x];
@@ -264,32 +277,33 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
 
         if (aVal === 0) {
           this.color(
-            this.mix(rbg, rb, bVal),
-            this.mix(gbg, gb, bVal),
-            this.mix(bbg, bb, bVal));
+            mixValues(rbg, rb, bVal),
+            mixValues(gbg, gb, bVal),
+            mixValues(bbg, bb, bVal));
         } else if (bVal === 0) {
           this.color(
-            this.mix(rbg, ra, 0.5),
-            this.mix(gbg, ga, 0.5),
-            this.mix(bbg, ba, 0.5));
+            mixValues(rbg, ra, 0.5),
+            mixValues(gbg, ga, 0.5),
+            mixValues(bbg, ba, 0.5));
         } else if (aVal < bVal) {
           const rel = aVal / bVal;
           this.color(
-            this.mix(rb, ra, rel),
-            this.mix(gb, ga, rel),
-            this.mix(bb, ba, rel)
+            mixValues(rb, ra, rel),
+            mixValues(gb, ga, rel),
+            mixValues(bb, ba, rel)
           );
         } else {
           const rel2 = bVal / aVal;
           this.color(
-            this.mix(ra, rb, rel2),
-            this.mix(ga, gb, rel2),
-            this.mix(ba, bb, rel2)
+            mixValues(ra, rb, rel2),
+            mixValues(ga, gb, rel2),
+            mixValues(ba, bb, rel2)
           );
         }
       }
       , {output: [this.width, this.height]})
       .setFloatTextures(true)
+      .setFunctions([mixValues])
       .setGraphical(true);
   }
 

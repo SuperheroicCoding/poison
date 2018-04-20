@@ -60,16 +60,19 @@ export class P5ViewComponent implements OnChanges {
     p.draw = () => {
       if (this.run) {
         p.background(51);
+        performance.mark('calcNext-start');
         this.calcService.calcNext();
         this.calcService.drawImage(this.offBuff);
+        p.image(this.offBuff, 0, 0);
+        performance.mark('calcNext-end');
+        performance.measure('calcNext', 'calcNext-start', 'calcNext-end');
       }
 
-      if (this.drawOnce) {
+      if (this.drawOnce && !this.run) {
         this.calcService.drawImage(this.offBuff);
         this.drawOnce = false;
+        p.image(this.offBuff, 0, 0);
       }
-
-      p.image(this.offBuff, 0, 0);
 
       if (this.showFps) {
         const frameRate = p.frameRate();

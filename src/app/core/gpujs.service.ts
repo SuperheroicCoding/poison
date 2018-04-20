@@ -9,7 +9,8 @@ export class GpuJsService implements GPUJS {
   private delegateGPU;
 
   constructor() {
-    this.delegateGPU = new GpuJs();
+    const mode = 'gpu';
+    this.delegateGPU = new GpuJs({mode});
   }
 
   createKernel(kernelFunction: Function | string, settings?: BuildKernelSettings): KernelFunction<ArrayLike<number>> {
