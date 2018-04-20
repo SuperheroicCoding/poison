@@ -29,7 +29,6 @@ export class GpuJsService implements GPUJS {
     return this.delegateGPU = new GpuJs({mode: useGPU ? 'gpu' : 'cpu'}) as GPUJS;
   }
 
-
 }
 
 export interface BuildKernelSettings {

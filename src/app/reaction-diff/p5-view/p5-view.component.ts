@@ -9,7 +9,8 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import * as p5 from 'p5';
+import 'p5';
+
 import {ReactionDiffCalculator} from '../reaction-diff-calculator';
 
 @Component({
@@ -28,9 +29,9 @@ export class P5ViewComponent implements OnChanges {
   @Input() showFps = false;
   @Output() mousePressed: EventEmitter<{ x: number, y: number }> = new EventEmitter();
 
-  private scetch: any;
+  private sketch: p5;
   private frameRate = 1;
-  private offBuff;
+  private offBuff: p5.Graphics;
   private drawOnce = true;
 
   constructor() {
@@ -38,19 +39,20 @@ export class P5ViewComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.simWidth || changes.simHeight) {
-      if (this.scetch) {
-        this.scetch.resizeCanvas(this.simWidth, this.simHeight);
+      if (this.sketch) {
+        this.sketch.resizeCanvas(this.simWidth, this.simHeight);
         this.offBuff.remove();
-        this.offBuff = this.scetch.createGraphics(this.simWidth, this.simHeight);
+        this.offBuff = this.sketch.createGraphics(this.simWidth, this.simHeight);
       } else {
-        this.scetch = new p5((p) => this.initP5(p), this.drawArea.nativeElement);
+        this.sketch = new p5(p => this.initP5(p), this.drawArea.nativeElement);
       }
     }
   }
 
-  private initP5(p: any) {
+  private initP5(p: p5) {
 
     p.setup = () => {
+      p.pixelDensity(1);
       p.createCanvas(this.simWidth, this.simHeight);
       this.offBuff = p.createGraphics(this.simWidth, this.simHeight);
     };
@@ -71,7 +73,7 @@ export class P5ViewComponent implements OnChanges {
 
       if (this.showFps) {
         const frameRate = p.frameRate();
-        this.frameRate = this.frameRate * 0.8 + frameRate * 0.2;
+        this.frameRate = this.frameRate * 0.99 + frameRate * 0.01;
         p.fill('green');
         p.text('fps: ' + p.floor(this.frameRate), 10, 10);
       }

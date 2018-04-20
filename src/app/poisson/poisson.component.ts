@@ -11,8 +11,8 @@ import {PoissonCalcService} from './poisson-calc.service';
 })
 export class PoissonComponent implements OnInit {
 
-  width = 600;
-  height = 600;
+  canvasWidth = 350;
+  canvasHeight = 350;
 
   play = false;
 
@@ -24,7 +24,7 @@ export class PoissonComponent implements OnInit {
   }
 
   setup() {
-    this.poissonCalc.setup(this.width, this.height);
+    this.poissonCalc.setup(this.canvasWidth, this.canvasHeight);
   }
 
   reset(): void {

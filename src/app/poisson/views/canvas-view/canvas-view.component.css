@@ -1,8 +1,0 @@
-:host {
-  flex: 0 0 500px;
-  display: flex;
-}
-
-canvas {
-  flex: 0 0 500px;
-}

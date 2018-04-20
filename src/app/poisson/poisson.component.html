@@ -9,14 +9,14 @@
   </mat-toolbar-row>
 </mat-toolbar>
 <div class="simContent">
-  <mat-card appRaiseCard>
+  <mat-card appRaiseCard class="poissonCanvasCard">
     <mat-card-title>Simulation</mat-card-title>
     <mat-card-subtitle>Click to add balls as seed</mat-card-subtitle>
     <mat-card-subtitle>Play with the configs to change behavior</mat-card-subtitle>
     <mat-card-content>
       <app-canvas-view
-        [width]="width"
-        [height]="height"
+        [canvasWidth]="canvasWidth"
+        [canvasHeight]="canvasHeight"
         [circles]="poissonCalc.foundCircles$ | async"
         [actives]="poissonCalc.activeVectors$ | async"
         [lines]="poissonCalc.lines$ | async"

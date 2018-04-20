@@ -8,7 +8,7 @@ export class DataP5Scetch {
   public perceptron: Perceptron;
   private separationImg: any;
 
-  constructor(private p: any,
+  constructor(private p: p5,
               private width: number = 400,
               private height: number = 400,
               private brainService: BrainService,
@@ -41,7 +41,7 @@ export class DataP5Scetch {
       this.p.image(this.separationImg, 0, 0, this.width, this.height);
       this.p.strokeWeight(1);
       this.points.forEach(point => point.show(this.p));
-      this.p.stroke(0);
+      this.p.stroke(0, 0 ,0);
       this.p.line(0, 0, this.p.width, this.p.height);
 
       this.points.forEach(point => {

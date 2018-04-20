@@ -29,8 +29,8 @@ export class CanvasViewComponent implements OnInit, AfterContentInit {
 
 
   @ViewChild('canvas') canvas: ElementRef;
-  @Input() width: number;
-  @Input() height: number;
+  @Input() canvasWidth: number;
+  @Input() canvasHeight: number;
   @Input() circles: Circle[];
   @Input() actives: Vector[];
   @Input() lines: Line[];
@@ -47,6 +47,8 @@ export class CanvasViewComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit(): void {
+    this.canvas.nativeElement.width=this.canvasWidth;
+    this.canvas.nativeElement.height=this.canvasHeight;
     const context: CanvasRenderingContext2D = this.canvas.nativeElement.getContext('2d');
     this.canvasDrawService.initCtx(context);
     setTimeout(() => this.onReadyToPaint.emit(0), 1000);
@@ -58,12 +60,12 @@ export class CanvasViewComponent implements OnInit, AfterContentInit {
   }
 
   private isInsideDrawArea(circle) {
-    return circle.pos.x <= this.width && circle.pos.y <= this.height && circle.pos.x >= 0 && circle.pos.y >= 0;
+    return circle.pos.x <= this.canvasWidth && circle.pos.y <= this.canvasHeight && circle.pos.x >= 0 && circle.pos.y >= 0;
   }
 
   private draw(step: number) {
     this.canvasDrawService.setFillColor('black');
-    this.canvasDrawService.fillRect(0, 0, this.width, this.height);
+    this.canvasDrawService.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
     if (this.circles) {
       const filteredCircles = this.circles.filter(this.isInsideDrawArea.bind(this));
       if (filteredCircles.length < this.circles.length) {

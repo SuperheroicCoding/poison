@@ -1,6 +1,5 @@
 import {AfterContentInit, Component, ElementRef, Input, OnDestroy, ViewChild} from '@angular/core';
 import {Perceptron} from '../perceptron';
-import * as P5 from 'p5';
 
 @Component({
   selector: 'app-perceptron',
@@ -13,7 +12,7 @@ export class PerceptronComponent implements AfterContentInit, OnDestroy {
   @Input() canvasHeight? = 300;
   @Input() canvasWidth? = 300;
   @ViewChild('perceptronCanvas') perceptronCanvas: ElementRef;
-  private scetch: any;
+  private scetch: p5;
 
   static roundFloat(input: number) {
     return input.toFixed(5);
@@ -24,7 +23,7 @@ export class PerceptronComponent implements AfterContentInit, OnDestroy {
 
   ngAfterContentInit(): void {
 
-    this.scetch = new P5((p: any) => {
+    this.scetch = new p5((p: p5) => {
       p.setup = () => {
         p.createCanvas(this.canvasWidth, this.canvasHeight);
       };
@@ -41,14 +40,14 @@ export class PerceptronComponent implements AfterContentInit, OnDestroy {
     this.scetch.remove();
   }
 
-  drawPerceptronCircle(p: any) {
+  drawPerceptronCircle(p: p5) {
     p.push();
     p.translate(this.perceptronCircleX(), this.canvasHeight / 2);
     this.perceptron.isLearning ? p.fill(255, 200, 200) : p.fill(200, 200, 255);
 
     const circleSize = this.perceptronCircleSize();
     p.ellipse(0, 0, circleSize, circleSize);
-    p.fill(0);
+    p.fill(0, 0,0);
     p.textSize(circleSize / 2.5);
     p.textAlign(p.CENTER);
     p.text('∑', 0, circleSize / 10);
@@ -70,13 +69,13 @@ export class PerceptronComponent implements AfterContentInit, OnDestroy {
     return this.canvasWidth / 6;
   }
 
-  drawBiasInput(p: any) {
+  drawBiasInput(p: p5) {
     p.push();
     p.translate(this.perceptronCircleX(), this.canvasHeight / 12);
     this.perceptron.isLearning ? p.fill(255, 200, 200) : p.fill(200, 200, 255);
     const circleSize = this.canvasWidth / 7.5;
     p.ellipse(0, 0, circleSize, circleSize);
-    p.fill(0);
+    p.fill(0,0,0);
     p.textSize(circleSize / 3.5);
     p.textAlign(p.CENTER);
     p.text('Bias', 0, circleSize / 10);
@@ -86,7 +85,7 @@ export class PerceptronComponent implements AfterContentInit, OnDestroy {
     p.pop();
   }
 
-  drawInputs(p) {
+  drawInputs(p: p5) {
     const inputDistanceY = (this.canvasHeight) / (this.perceptron.weights.length + 1);
     this.perceptron.weights.forEach((weight, index) => {
       const y = inputDistanceY * (index + 1);

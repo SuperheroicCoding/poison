@@ -15,7 +15,6 @@ import {
 import {Perceptron} from '../perceptron';
 import {Point} from '../point';
 import {DataP5Scetch} from './data-p5-scetch';
-import * as P5 from 'p5';
 import {BrainService} from '../brain.service';
 
 interface ChangeInputs extends SimpleChanges {
@@ -40,9 +39,9 @@ export class DataViewComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   @Input() showLinearDivider = true;
   @Output() dataViewClicked: EventEmitter<{ x: number, y: number, click: 'left' | 'right' }> = new EventEmitter();
 
-  private dataScetch: any;
-  private legendScetch: any;
-  private dataP5: any;
+  private dataScetch: DataP5Scetch;
+  private legendScetch: p5;
+  private dataP5: p5;
 
   constructor(private brainService: BrainService) {
   }
@@ -71,7 +70,7 @@ export class DataViewComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   }
 
   private initDataScetch() {
-    this.dataP5 = new P5((p) => {
+    this.dataP5 = new p5(p => {
       this.dataScetch = new DataP5Scetch(p, this.canvasWidth, this.canvasHeight, this.brainService, (x, y, click) => {
         this.dataViewClicked.emit({x, y, click});
       }, this.showLinearDivider);
@@ -81,7 +80,7 @@ export class DataViewComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   }
 
   private initLegendScetch() {
-    this.legendScetch = new P5(
+    this.legendScetch = new p5(
       (p) => {
         p.setup = () => {
           p.createCanvas(100, this.canvasHeight);

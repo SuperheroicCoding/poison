@@ -6,7 +6,6 @@ interface NodeModule {
 }
 
 declare module 'gpu.js';
-declare module 'p5';
 
 declare module 'vega' {
   export * from 'vega-typings';

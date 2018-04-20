@@ -25,7 +25,7 @@ export class ReactionDiffComponent implements OnInit {
   public calcService: ReactionDiffCalculator;
   private _start = false;
   public showFps = true;
-  public width = 400;
+  public width = 340;
   public height = 300;
   public numberWebWorkers: number;
   public cellWeights$: Observable<CellWeights>;
