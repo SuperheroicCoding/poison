@@ -7,7 +7,8 @@ import {PolynominalRegretionComponent} from './polynominal-regretion/polynominal
 const routes: Routes = [{
   path: '', component: TensorflowExamplesComponent, children: [
     {path: 'polynominalregretion', component: PolynominalRegretionComponent},
-    {path: 'learnedDigits', component: LearnedDigitsComponent}
+    {path: 'learnedDigits', component: LearnedDigitsComponent},
+    {path: '**', redirectTo: 'polynominalregretion'}
   ]
 }];
 

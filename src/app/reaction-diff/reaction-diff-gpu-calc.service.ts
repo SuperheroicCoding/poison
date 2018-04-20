@@ -121,7 +121,6 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
 
   private createCalcNextGpuKernel(): TextureKernelFunction {
 
-
     function whenGt(value: number, value2: number): number {
       return Math.max(Math.sign(value - value2), 0.0);
     }
@@ -146,12 +145,12 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
       return limit((value - lowLim) / (highLim - lowLim), 0.0, 1.0);
     }
 
-    function limit(value, low, high) {
-      return Math.max(Math.min(value, high), low);
+    function limit(value, lowLim, highLim) {
+      return Math.max(Math.min(value, highLim), lowLim);
     }
 
-    function mixValues(value, value2, rel) {
-      return (value * (1.0 - rel)) + (value2 * rel);
+    function mixValues(value, value2, ratio) {
+      return (value * (1.0 - ratio)) + (value2 * ratio);
     }
 
     function wrapAround(value, value2) {
@@ -251,8 +250,8 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   }
 
   private createImageKernel() {
-    function mixValues(value1, value2, rel) {
-      return (value1 * (1.0 - rel)) + (value2 * rel);
+    function mixValues(value1, value2, ratio) {
+      return (value1 * (1.0 - ratio)) + (value2 * ratio);
     }
 
     this.imageKernel = this.gpuJs.createKernel(

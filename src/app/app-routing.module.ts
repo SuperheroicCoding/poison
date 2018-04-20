@@ -15,17 +15,17 @@ export const routes: AppRoute[] = [
   {
     path: 'shaderExamples',
     loadChildren: 'app/shader-examples/shader-examples.module#ShaderExamplesModule',
-    data: {linkText: 'WebGL Shader examples with live code editor'}
+    data: {linkText: 'WebGL Shader examples with live code editor (three.js)'}
   },
   {
     path: 'someGpuCalculations',
     loadChildren: 'app/some-gpu-calculation/some-gpu-calculation.module#SomeGpuCalculationModule',
-    data: {linkText: 'Some Gpu Accelerated Calculations'}
+    data: {linkText: 'Some Gpu Accelerated Calculations (gpu.js)'}
   },
   {
     path: 'webGl',
     loadChildren: 'app/web-gl/web-gl.module#WebGlModule',
-    data: {linkText: 'Mandelbrot plane, lights objects with three.js'}
+    data: {linkText: 'Mandelbrot plane, lights objects (three.js)'}
   },
   {
     path: 'tensorflowExamples',
@@ -35,12 +35,12 @@ export const routes: AppRoute[] = [
   {
     path: 'neuralNetwork',
     loadChildren: 'app/neural-network/neural-network.module#NeuralNetworkModule',
-    data: {linkText: 'Neural Networks'}
+    data: {linkText: 'Neural Networks (p5)'}
   },
   {
     path: 'reactionDiff',
     loadChildren: 'app/reaction-diff/reaction-diff.module#ReactionDiffModule',
-    data: {linkText: 'Reaction Diffusion Algorithm'}
+    data: {linkText: 'Reaction Diffusion Algorithm (gpu.js)'}
   },
   {
     path: 'poisson',
