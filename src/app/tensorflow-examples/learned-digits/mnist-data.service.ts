@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {tensor2d, util} from '@tensorflow/tfjs';
+import {HttpClient} from '@angular/common/http';
 
 const IMAGE_SIZE = 784;
 const NUM_CLASSES = 10;
@@ -32,7 +33,7 @@ export class MnistDataService {
   private trainLabels: Uint8Array;
   private testLabels: Uint8Array;
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.shuffledTrainIndex = 0;
     this.shuffledTestIndex = 0;
   }
@@ -78,17 +79,16 @@ export class MnistDataService {
       img.src = MNIST_IMAGES_SPRITE_PATH;
     });
 
-    const labelsRequest = fetch(MNIST_LABELS_PATH);
-    const [imgResponse, labelsResponse] =
-      await Promise.all([imgRequest, labelsRequest]);
+    const labelsResponse = await this.http.get(MNIST_LABELS_PATH, {responseType: 'arraybuffer'}).toPromise();
 
-    this.datasetLabels = new Uint8Array(await labelsResponse.arrayBuffer());
+    this.datasetLabels = new Uint8Array(await labelsResponse);
 
     // Create shuffled indices into the train/test set for when we select a
     // random dataset element for training / validation.
     this.trainIndices = util.createShuffledIndices(NUM_TRAIN_ELEMENTS);
     this.testIndices = util.createShuffledIndices(NUM_TEST_ELEMENTS);
 
+    await imgRequest;
     // Slice the the images and labels into train and test sets.
     this.trainImages =
       this.datasetImages.slice(0, IMAGE_SIZE * NUM_TRAIN_ELEMENTS);

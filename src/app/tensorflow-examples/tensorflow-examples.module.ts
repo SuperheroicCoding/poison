@@ -11,11 +11,13 @@ import {TensorflowExamplesComponent} from './tensorflow-examples.component';
 import {MnistDataService} from './learned-digits/mnist-data.service';
 import {LearnedDigitsModelService} from './learned-digits/learned-digits-model.service';
 import {UiComponent} from './learned-digits/ui/ui.component';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   imports: [
     SharedModule,
-    TensorflowExamplesRoutingModule
+    TensorflowExamplesRoutingModule,
+    HttpClientModule
   ],
   providers: [DataGeneratorService, PolynominalRegretionService, DataDrawerService, MnistDataService, LearnedDigitsModelService],
   declarations: [PolynominalRegretionComponent, DataDrawerComponent, LearnedDigitsComponent, TensorflowExamplesComponent, UiComponent]
