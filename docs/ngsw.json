@@ -11,7 +11,7 @@
         "https://superheroiccoding.github.io/AngularExamples/index.html",
         "https://superheroiccoding.github.io/AngularExamples/common.d7b4e24743c1b9097ebb.chunk.js",
         "https://superheroiccoding.github.io/AngularExamples/inline.851f09cca6a69de5e055.bundle.js",
-        "https://superheroiccoding.github.io/AngularExamples/main.d10764afd3efe5c134d3.bundle.js",
+        "https://superheroiccoding.github.io/AngularExamples/main.b04bdbaa39eec80e26e8.bundle.js",
         "https://superheroiccoding.github.io/AngularExamples/neural-network.module.a260fae98e7e4e4e4d9e.chunk.js",
         "https://superheroiccoding.github.io/AngularExamples/poisson.module.cf220cd730882459db79.chunk.js",
         "https://superheroiccoding.github.io/AngularExamples/polyfills.b63683e04ea15e033ec6.bundle.js",
@@ -51,7 +51,7 @@
     "https://superheroiccoding.github.io/AngularExamples/assets/wood.jpeg": "4730b3f4d0df41b2189219db036e164721ea0ec4",
     "https://superheroiccoding.github.io/AngularExamples/inline.851f09cca6a69de5e055.bundle.js": "f45b03014658a6f5f0389f3149f36a0c4bf5dae0",
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/angular-cli.svg": "cb3e92c7bd3dcae87dc103e4f3d128ce15b84cd6",
-    "https://superheroiccoding.github.io/AngularExamples/main.d10764afd3efe5c134d3.bundle.js": "2da46abd92b4c650534c113a45a25b21f4904d47",
+    "https://superheroiccoding.github.io/AngularExamples/main.b04bdbaa39eec80e26e8.bundle.js": "062a2cfa70c08c061b33a11a9bd1373617ca5f28",
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/angular-material.svg": "77d8b188ec7234e3a67604bb708329c503c1f201",
     "https://superheroiccoding.github.io/AngularExamples/neural-network.module.a260fae98e7e4e4e4d9e.chunk.js": "0c48ede5ebfb8e88bee0d73780aaa50525d1edf2",
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/angular.svg": "d1c29fa152f60e0e7e9c60cdbe57f755f7d46344",
@@ -72,6 +72,6 @@
     "https://superheroiccoding.github.io/AngularExamples/tensorflow-examples.module.6bf0a7eca4731a8293b8.chunk.js": "8a02faa16ffe37753764fa2e903ba893e9e3c85a",
     "https://superheroiccoding.github.io/AngularExamples/web-gl.module.8499d5d4b6510ea8c406.chunk.js": "c5e977c422d5a8853950fcff599a8ea37f0d231d",
     "https://superheroiccoding.github.io/AngularExamples/favicon.ico": "84161b857f5c547e3699ddfbffc6d8d737542e01",
-    "https://superheroiccoding.github.io/AngularExamples/index.html": "809e78298670116c90341cf4fc66c3d97f98fd1e"
+    "https://superheroiccoding.github.io/AngularExamples/index.html": "72adad679dfb124c278e5ad8ea5ed1f3cdb840f8"
   }
 }
