@@ -10,17 +10,17 @@
         "https://superheroiccoding.github.io/AngularExamples/favicon.ico",
         "https://superheroiccoding.github.io/AngularExamples/index.html",
         "https://superheroiccoding.github.io/AngularExamples/common.d7b4e24743c1b9097ebb.chunk.js",
-        "https://superheroiccoding.github.io/AngularExamples/inline.94a64292e09948010f94.bundle.js",
+        "https://superheroiccoding.github.io/AngularExamples/inline.ad3352ee608dd107e9be.bundle.js",
         "https://superheroiccoding.github.io/AngularExamples/main.b04bdbaa39eec80e26e8.bundle.js",
         "https://superheroiccoding.github.io/AngularExamples/neural-network.module.a260fae98e7e4e4e4d9e.chunk.js",
         "https://superheroiccoding.github.io/AngularExamples/poisson.module.cf220cd730882459db79.chunk.js",
         "https://superheroiccoding.github.io/AngularExamples/polyfills.b63683e04ea15e033ec6.bundle.js",
-        "https://superheroiccoding.github.io/AngularExamples/reaction-diff.module.219ad3eab2fb8bbc36ad.chunk.js",
+        "https://superheroiccoding.github.io/AngularExamples/reaction-diff.module.5acc586ab1599af0e4fe.chunk.js",
         "https://superheroiccoding.github.io/AngularExamples/scripts.8eff66a548623b2cfb99.bundle.js",
         "https://superheroiccoding.github.io/AngularExamples/shader-examples.module.d0c708f88698080f98c4.chunk.js",
         "https://superheroiccoding.github.io/AngularExamples/some-gpu-calculation.module.77f4c9a7da89aebadd8f.chunk.js",
         "https://superheroiccoding.github.io/AngularExamples/styles.a4568f74e9e0df3149ab.bundle.css",
-        "https://superheroiccoding.github.io/AngularExamples/tensorflow-examples.module.6bf0a7eca4731a8293b8.chunk.js",
+        "https://superheroiccoding.github.io/AngularExamples/tensorflow-examples.module.500b4059e09a96ebffad.chunk.js",
         "https://superheroiccoding.github.io/AngularExamples/web-gl.module.8499d5d4b6510ea8c406.chunk.js"
       ],
       "patterns": []
@@ -49,7 +49,7 @@
   "hashTable": {
     "https://superheroiccoding.github.io/AngularExamples/common.d7b4e24743c1b9097ebb.chunk.js": "dc80fe64674205c4618824effa9569db3bdbf830",
     "https://superheroiccoding.github.io/AngularExamples/assets/wood.jpeg": "4730b3f4d0df41b2189219db036e164721ea0ec4",
-    "https://superheroiccoding.github.io/AngularExamples/inline.94a64292e09948010f94.bundle.js": "2fe92fa0c49bc0bd8577e4e139ef028f37bd423a",
+    "https://superheroiccoding.github.io/AngularExamples/inline.ad3352ee608dd107e9be.bundle.js": "cb8ce887a66b4b8ddbec1ef455ec05cfecd5901c",
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/angular-cli.svg": "cb3e92c7bd3dcae87dc103e4f3d128ce15b84cd6",
     "https://superheroiccoding.github.io/AngularExamples/main.b04bdbaa39eec80e26e8.bundle.js": "062a2cfa70c08c061b33a11a9bd1373617ca5f28",
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/angular-material.svg": "77d8b188ec7234e3a67604bb708329c503c1f201",
@@ -59,7 +59,7 @@
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/gpu-js.png": "1327a2df54f4f7885891e8f91ea668a6f3ba37f9",
     "https://superheroiccoding.github.io/AngularExamples/polyfills.b63683e04ea15e033ec6.bundle.js": "fafd2a758688e3205ecb9cc4f4726aaa26ab217b",
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/p5.svg": "8a9c417a48686956b46f6be428bb5781684052a0",
-    "https://superheroiccoding.github.io/AngularExamples/reaction-diff.module.219ad3eab2fb8bbc36ad.chunk.js": "f29891eae60958f1591d02558694fe992586e840",
+    "https://superheroiccoding.github.io/AngularExamples/reaction-diff.module.5acc586ab1599af0e4fe.chunk.js": "44f654db64c6e2aefc6135661ea86b5e2232d645",
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/tensorflow-js.png": "efa8b0c8a3534e10370d94acb8e214539f3a5628",
     "https://superheroiccoding.github.io/AngularExamples/scripts.8eff66a548623b2cfb99.bundle.js": "7c5bf05f5d805e87b507551f4bfe8ce9bf09df43",
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/three-js.png": "dc3c0b5f29b472a4962b31a7c5e12981f1315f48",
@@ -69,9 +69,9 @@
     "https://superheroiccoding.github.io/AngularExamples/assets/mnist/mnist_images.png": "0f001230be44050cf245d25dfb4039107861d826",
     "https://superheroiccoding.github.io/AngularExamples/styles.a4568f74e9e0df3149ab.bundle.css": "e1fdfece14fe0f54e4ccc8d243f629201d43a04d",
     "https://superheroiccoding.github.io/AngularExamples/assets/mnist/mnist_labels_uint8": "e8b25f8fdc852e98c014d6153524d9e0cab4b675",
-    "https://superheroiccoding.github.io/AngularExamples/tensorflow-examples.module.6bf0a7eca4731a8293b8.chunk.js": "8a02faa16ffe37753764fa2e903ba893e9e3c85a",
+    "https://superheroiccoding.github.io/AngularExamples/tensorflow-examples.module.500b4059e09a96ebffad.chunk.js": "ed2cb65636475b979f536f1fa618be62e195b6ea",
     "https://superheroiccoding.github.io/AngularExamples/web-gl.module.8499d5d4b6510ea8c406.chunk.js": "c5e977c422d5a8853950fcff599a8ea37f0d231d",
     "https://superheroiccoding.github.io/AngularExamples/favicon.ico": "84161b857f5c547e3699ddfbffc6d8d737542e01",
-    "https://superheroiccoding.github.io/AngularExamples/index.html": "00cab3dab560bac597af6c537ff81723a4e45406"
+    "https://superheroiccoding.github.io/AngularExamples/index.html": "0d2453bfb8a9369ef9cd7658ee203aa87f1d18c4"
   }
 }

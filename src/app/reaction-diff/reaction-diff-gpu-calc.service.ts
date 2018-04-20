@@ -260,26 +260,6 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
 
   private createImageKernel() {
 
-    function notVal(a: number) {
-      return Math.abs(a - 1.0);
-    }
-
-    function and(a: number, b: number): number {
-      return Math.max(Math.min(a * b, 1.0),0.0);
-    }
-
-    function whenEq(value, value2) {
-      return 1.0 - Math.abs(Math.sign(value - value2));
-    }
-
-    function whenLt(value: number, value2: number): number {
-      return Math.max(Math.sign(value2 - value), 0.0);
-    }
-
-    function whenGe(value: number, value2: number): number {
-      return 1.0 - Math.max(Math.sign(value2 - value), 0.0);
-    }
-
     function mixValues(value1, value2, ratio) {
       return (value1 * (1.0 - ratio)) + (value2 * ratio);
     }
@@ -332,7 +312,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
       }
       , {output: [this.width, this.height]})
       .setFloatTextures(true)
-      .setFunctions([mixValues, whenEq, whenLt, whenGe, notVal, and])
+      .setFunctions([mixValues])
       .setGraphical(true);
   }
 

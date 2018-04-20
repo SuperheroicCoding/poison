@@ -12,7 +12,7 @@ export class LearnedDigitsComponent implements OnInit {
   isLoading: boolean;
   hasBeenTrained = false;
   errorLoadingData = false;
-  private drawingPrediction: number;
+  drawingPrediction: number;
 
   constructor(private data: MnistDataService, private deepnet: LearnedDigitsModelService,
               public headlineAnimation: HeadlineAnimationService) {
