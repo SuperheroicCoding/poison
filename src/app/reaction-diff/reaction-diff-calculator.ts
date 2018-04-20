@@ -12,4 +12,6 @@ export interface ReactionDiffCalculator {
   calcNext(): void;
 
   drawImage(p: any): void;
+
+  cleanup(): void;
 }

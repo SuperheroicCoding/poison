@@ -215,5 +215,10 @@ export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
     img.updatePixels();
     graphics.image(img,0,0);
   }
+
+  cleanup(): void {
+    this.canCalculate = false;
+    this.grid = null;
+  }
 }
 

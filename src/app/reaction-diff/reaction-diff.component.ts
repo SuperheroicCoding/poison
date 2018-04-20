@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {ReactionDiffCalcServiceFactory} from './reaction-diff-calculation-service.factory';
 
 import {CellWeights} from './cell-weights';
@@ -20,7 +20,7 @@ type Dimensions = { width: number, height: number; };
   styleUrls: ['./reaction-diff.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ReactionDiffComponent implements OnInit {
+export class ReactionDiffComponent implements OnInit, OnDestroy {
 
   public calcService: ReactionDiffCalculator;
   private _start = false;
@@ -175,5 +175,9 @@ export class ReactionDiffComponent implements OnInit {
 
   updateSpeed($event: number) {
     this.configService.updateSpeed($event);
+  }
+
+  ngOnDestroy(): void {
+    this.calcService.cleanup();
   }
 }

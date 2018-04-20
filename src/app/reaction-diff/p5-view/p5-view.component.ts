@@ -4,7 +4,7 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  OnChanges,
+  OnChanges, OnDestroy,
   Output,
   SimpleChanges,
   ViewChild
@@ -19,7 +19,7 @@ import {ReactionDiffCalculator} from '../reaction-diff-calculator';
   styleUrls: ['./p5-view.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class P5ViewComponent implements OnChanges {
+export class P5ViewComponent implements OnChanges, OnDestroy {
 
   @ViewChild('drawArea') drawArea: ElementRef;
   @Input() simWidth: number;
@@ -95,6 +95,11 @@ export class P5ViewComponent implements OnChanges {
     p.mouseDragged = addChemical;
     p.touchMoved = addChemical;
     p.touchStarted = addChemical;
+  }
+
+  ngOnDestroy(): void {
+    this.offBuff.remove();
+    this.sketch.remove();
   }
 }
 
