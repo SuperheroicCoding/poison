@@ -3,10 +3,11 @@ import {Injectable} from '@angular/core';
 import {MatSnackBar} from '@angular/material';
 import {SwUpdate} from '@angular/service-worker';
 import {environment} from '../../environments/environment';
+import {Router} from '@angular/router';
 
 @Injectable()
 export class ServiceWorkerUpdateService {
-  constructor(private swUpdate: SwUpdate, private snackbar: MatSnackBar) {
+  constructor(private swUpdate: SwUpdate, private snackbar: MatSnackBar,private router: Router) {
   }
 
   showSnackOnUpdateAvailable() {
@@ -25,6 +26,8 @@ export class ServiceWorkerUpdateService {
   }
 
   activateUpdate() {
-    return this.swUpdate.activateUpdate().then(() => document.location.reload());
+    return this.swUpdate.activateUpdate()
+      .then(() => this.router.navigate(['/home']))
+      .then(() => document.location.reload());
   }
 }

@@ -10,8 +10,8 @@
         "https://superheroiccoding.github.io/AngularExamples/favicon.ico",
         "https://superheroiccoding.github.io/AngularExamples/index.html",
         "https://superheroiccoding.github.io/AngularExamples/common.d7b4e24743c1b9097ebb.chunk.js",
-        "https://superheroiccoding.github.io/AngularExamples/inline.fa398ab217bda64a9110.bundle.js",
-        "https://superheroiccoding.github.io/AngularExamples/main.1216d77d364a48bb3802.bundle.js",
+        "https://superheroiccoding.github.io/AngularExamples/inline.e3898d9dc4a9c5259683.bundle.js",
+        "https://superheroiccoding.github.io/AngularExamples/main.43cc839225c7f5509f2f.bundle.js",
         "https://superheroiccoding.github.io/AngularExamples/neural-network.module.a1927bc7b7cd3295c30a.chunk.js",
         "https://superheroiccoding.github.io/AngularExamples/poisson.module.96a27722b34283b3583b.chunk.js",
         "https://superheroiccoding.github.io/AngularExamples/polyfills.b63683e04ea15e033ec6.bundle.js",
@@ -20,7 +20,7 @@
         "https://superheroiccoding.github.io/AngularExamples/shader-examples.module.1eff07184377eec54574.chunk.js",
         "https://superheroiccoding.github.io/AngularExamples/some-gpu-calculation.module.9e05bbca56b6a66911c6.chunk.js",
         "https://superheroiccoding.github.io/AngularExamples/styles.a4568f74e9e0df3149ab.bundle.css",
-        "https://superheroiccoding.github.io/AngularExamples/tensorflow-examples.module.931528f501d9525adb35.chunk.js",
+        "https://superheroiccoding.github.io/AngularExamples/tensorflow-examples.module.d7f964ec522eecee79d2.chunk.js",
         "https://superheroiccoding.github.io/AngularExamples/web-gl.module.b6efd0a6af06b336e9e1.chunk.js"
       ],
       "patterns": []
@@ -49,9 +49,9 @@
   "hashTable": {
     "https://superheroiccoding.github.io/AngularExamples/common.d7b4e24743c1b9097ebb.chunk.js": "dc80fe64674205c4618824effa9569db3bdbf830",
     "https://superheroiccoding.github.io/AngularExamples/assets/wood.jpeg": "4730b3f4d0df41b2189219db036e164721ea0ec4",
-    "https://superheroiccoding.github.io/AngularExamples/inline.fa398ab217bda64a9110.bundle.js": "55c8700ac0733add68bb5cae2e02bb512a0f346a",
+    "https://superheroiccoding.github.io/AngularExamples/inline.e3898d9dc4a9c5259683.bundle.js": "89bfde2c95f9cabc9e2097b1b1c49b64dae9978c",
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/angular-cli.svg": "cb3e92c7bd3dcae87dc103e4f3d128ce15b84cd6",
-    "https://superheroiccoding.github.io/AngularExamples/main.1216d77d364a48bb3802.bundle.js": "de7dcde4350729de157d09047f0cffc8ce1fd66e",
+    "https://superheroiccoding.github.io/AngularExamples/main.43cc839225c7f5509f2f.bundle.js": "83f70cd838b52f7d752818567a713d21669ac171",
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/angular-material.svg": "77d8b188ec7234e3a67604bb708329c503c1f201",
     "https://superheroiccoding.github.io/AngularExamples/neural-network.module.a1927bc7b7cd3295c30a.chunk.js": "f3685291ec704ece91a485721dbcc7ccec7528ec",
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/angular.svg": "d1c29fa152f60e0e7e9c60cdbe57f755f7d46344",
@@ -69,9 +69,9 @@
     "https://superheroiccoding.github.io/AngularExamples/assets/mnist/mnist_images.png": "0f001230be44050cf245d25dfb4039107861d826",
     "https://superheroiccoding.github.io/AngularExamples/styles.a4568f74e9e0df3149ab.bundle.css": "e1fdfece14fe0f54e4ccc8d243f629201d43a04d",
     "https://superheroiccoding.github.io/AngularExamples/assets/mnist/mnist_labels_uint8": "e8b25f8fdc852e98c014d6153524d9e0cab4b675",
-    "https://superheroiccoding.github.io/AngularExamples/tensorflow-examples.module.931528f501d9525adb35.chunk.js": "218df2cb4aec4501f05c86d642708adb60e1dc1e",
+    "https://superheroiccoding.github.io/AngularExamples/tensorflow-examples.module.d7f964ec522eecee79d2.chunk.js": "2cab1cd5094494570c709e8fe5575691c3818dc4",
     "https://superheroiccoding.github.io/AngularExamples/web-gl.module.b6efd0a6af06b336e9e1.chunk.js": "6b8f02ee19fa83895fcb46d156e21ec811c18784",
     "https://superheroiccoding.github.io/AngularExamples/favicon.ico": "84161b857f5c547e3699ddfbffc6d8d737542e01",
-    "https://superheroiccoding.github.io/AngularExamples/index.html": "8ec4cc3e8bfd00a5f30441e49e27ae331e85c517"
+    "https://superheroiccoding.github.io/AngularExamples/index.html": "ac533a51c3e00565d7aab43c2dc2308444619528"
   }
 }
