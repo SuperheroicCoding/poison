@@ -8,9 +8,9 @@
     <div>{{'Last loss: ' + lossLabel}}</div>
   </div>
 
-  <div *ngIf="batch">Predicted images</div>
+  <div *ngIf="batch" class="mat-subheading-1">Predicted images</div>
   <div class="images" #images>
   </div>
-  <div *ngIf="batch">{{'Result: ' + totalCorrect + ' of ' + totalPredictions + ' recognized correctly.'}}</div>
+  <div *ngIf="batch" class="mat-subheading-2">{{'Result: ' + totalCorrect + ' of ' + totalPredictions + ' recognized correctly.'}}</div>
 </div>
 

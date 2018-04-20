@@ -12,6 +12,7 @@ import {MnistDataService} from './learned-digits/mnist-data.service';
 import {LearnedDigitsModelService} from './learned-digits/learned-digits-model.service';
 import {UiComponent} from './learned-digits/ui/ui.component';
 import {HttpClientModule} from '@angular/common/http';
+import { DrawDigitComponent } from './learned-digits/draw-digit/draw-digit.component';
 
 @NgModule({
   imports: [
@@ -20,7 +21,7 @@ import {HttpClientModule} from '@angular/common/http';
     HttpClientModule
   ],
   providers: [DataGeneratorService, PolynominalRegretionService, DataDrawerService, MnistDataService, LearnedDigitsModelService],
-  declarations: [PolynominalRegretionComponent, DataDrawerComponent, LearnedDigitsComponent, TensorflowExamplesComponent, UiComponent]
+  declarations: [PolynominalRegretionComponent, DataDrawerComponent, LearnedDigitsComponent, TensorflowExamplesComponent, UiComponent, DrawDigitComponent]
 })
 export class TensorflowExamplesModule {
 }

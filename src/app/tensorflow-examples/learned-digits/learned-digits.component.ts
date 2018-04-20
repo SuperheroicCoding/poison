@@ -12,9 +12,11 @@ export class LearnedDigitsComponent implements OnInit {
   isLoading: boolean;
   hasBeenTrained = false;
   errorLoadingData = false;
+  private drawingPrediction: number;
 
   constructor(private data: MnistDataService, private deepnet: LearnedDigitsModelService,
               public headlineAnimation: HeadlineAnimationService) {
+    this.headlineAnimation.stopAnimation();
   }
 
   ngOnInit() {
@@ -32,15 +34,12 @@ export class LearnedDigitsComponent implements OnInit {
   }
 
   async train() {
-    await this.headlineAnimation.runWithoutAnimations(async () => {
-        await this.deepnet.train();
-      }
-    );
+    await this.deepnet.train();
     this.hasBeenTrained = true;
   }
 
   predict() {
-    this.headlineAnimation.runWithoutAnimations(() => this.deepnet.predict());
+    this.deepnet.predict();
   }
 
   get isTraining() {
@@ -48,11 +47,11 @@ export class LearnedDigitsComponent implements OnInit {
   }
 
   get accuracyValues() {
-    return this.deepnet.accuracyValues;
+    return this.deepnet.accuracyValues || [{'batch': 0, 'accuracy': 0.0, 'set': 'train'}];
   }
 
   get lossValues() {
-    return this.deepnet.lossValues;
+    return this.deepnet.lossValues || [{'batch': 0, 'loss': 1.0, 'set': 'train'}];
   }
 
   get predictions() {
@@ -67,4 +66,7 @@ export class LearnedDigitsComponent implements OnInit {
     return this.deepnet.labels;
   }
 
+  testDigit($event: Float32Array) {
+    this.drawingPrediction = this.deepnet.predictMyDrawing($event);
+  }
 }

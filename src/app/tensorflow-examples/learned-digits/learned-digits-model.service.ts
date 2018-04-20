@@ -1,5 +1,16 @@
 import {Injectable} from '@angular/core';
-import {layers, nextFrame, Sequential, sequential, SGDOptimizer, Tensor, Tensor2D, tidy, train} from '@tensorflow/tfjs';
+import {
+  layers,
+  nextFrame,
+  Sequential,
+  sequential,
+  SGDOptimizer,
+  Tensor,
+  tensor2d,
+  Tensor2D,
+  tidy,
+  train
+} from '@tensorflow/tfjs';
 import {MnistDataService} from './mnist-data.service';
 
 
@@ -14,7 +25,7 @@ const TRAIN_BATCHES = 100;
 // Ideally, we'd compute accuracy over the whole test set, but for performance
 // reasons we'll use a subset.
 const TEST_BATCH_SIZE = 1000;
-const TEST_ITERATION_FREQUENCY = 5;
+const TEST_ITERATION_FREQUENCY = 10;
 
 @Injectable()
 export class LearnedDigitsModelService {
@@ -104,7 +115,7 @@ export class LearnedDigitsModelService {
         });
 
       const loss = history.history.loss[0];
-      this.lossValues =  [...this.lossValues, {'batch': i, 'loss': loss, 'set': 'train'}];
+      this.lossValues = [...this.lossValues, {'batch': i, 'loss': loss, 'set': 'train'}];
 
       const accuracy = history.history.acc[0];
       if (testBatch != null) {
@@ -121,6 +132,17 @@ export class LearnedDigitsModelService {
       await nextFrame();
     }
     this.isTraining = false;
+  }
+
+  predictMyDrawing(imageData?: Float32Array): number {
+    this.testBatch = {xs: this.mnistData.nextCustomTestBatch(imageData, 1), labels: tensor2d([0,-1])};
+      tidy(() => {
+        const output: any = this.model.predict(this.testBatch.xs.reshape([-1, 28, 28, 1]) as any);
+        const axis = 1;
+        this.labels = Array.from(this.testBatch.labels.argMax(axis).dataSync());
+        this.predictions = Array.from(output.argMax(axis).dataSync());
+      });
+      return this.predictions[0];
   }
 
   predict() {

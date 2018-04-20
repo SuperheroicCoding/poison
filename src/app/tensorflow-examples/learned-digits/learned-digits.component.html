@@ -1,6 +1,35 @@
-<mat-card appRaiseCard>
+<mat-card appRaiseCard class="learnImagesCard">
   <mat-card-title>
-    Learn handwritten digits!
+    Recognize handwritten digits!
+  </mat-card-title>
+  <mat-card-content>
+    <app-draw-digit #drawer (change)="testDigit($event)"></app-draw-digit>
+    <div class="mat-subheading-1">{{'Prediction: '+drawingPrediction}}</div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button
+      mat-raised-button
+      color="accent"
+      (click)="drawer.reset()">
+      Clear
+    </button>
+    <button color="accent"
+            [disabled]="isLoading || isTraining || errorLoadingData"
+            mat-raised-button
+            (click)="train()">
+      Train
+    </button>
+    <button color="accent"
+            [disabled]="isLoading || errorLoadingData"
+            mat-raised-button
+            (click)="predict()">
+      Predict
+    </button>
+  </mat-card-actions>
+</mat-card>
+<mat-card appRaiseCard class="training-progress">
+  <mat-card-title>
+    Training progress and result
   </mat-card-title>
   <mat-card-subtitle>
     Using the mnist digist.
@@ -22,19 +51,4 @@
             [accuracyValues]="accuracyValues">
     </app-ui>
   </mat-card-content>
-  <mat-card-actions>
-    <button color="accent"
-            [disabled]="isLoading || isTraining || errorLoadingData"
-            mat-raised-button
-            (click)="train()">
-      Train
-    </button>
-    <button color="accent"
-            [disabled]="isLoading || errorLoadingData"
-            mat-raised-button
-            (click)="predict()">
-      Predict
-    </button>
-
-  </mat-card-actions>
 </mat-card>
