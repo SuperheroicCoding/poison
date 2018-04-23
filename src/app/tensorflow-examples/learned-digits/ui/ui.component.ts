@@ -40,7 +40,7 @@ export class UiComponent implements OnChanges {
     }
   }
 
-  showTestResults(batch, predictions, labels) {
+  showTestResults(batch, predictions, labels?) {
     const testExamples = batch.xs.shape[0];
     this.totalPredictions = testExamples;
     this.totalCorrect = 0;

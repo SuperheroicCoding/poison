@@ -11,7 +11,7 @@ export class DrawDigitComponent implements OnInit {
   private sketch: p5;
   private readonly size = 28 * 10;
 
-  constructor(@ViewChild('drawCanvas') drawCanvas: ElementRef, private zone: NgZone) {
+  constructor(@ViewChild('drawCanvas') drawCanvas: ElementRef) {
 
     this.sketch = new p5((p: p5) => {
       let shapedStarted = false;
@@ -25,26 +25,38 @@ export class DrawDigitComponent implements OnInit {
         p.strokeJoin(p.MITER);
         p.strokeWeight(12);
         p.noLoop();
+        p.redraw();
+      };
+
+      const mouseInRange = () => {
+        const x = p.mouseX;
+        const y = p.mouseY;
+        return x >= 0 && x < this.size && y < this.size && y >= 0;
       };
 
       p.mousePressed = () => {
-        if (!shapedStarted) {
-          p.noFill();
-          p.beginShape();
-          shapedStarted = true;
+        if (mouseInRange()) {
+          if (!shapedStarted) {
+            p.noFill();
+            p.beginShape();
+            shapedStarted = true;
+          }
         }
       };
+
       p.mouseReleased = () => {
         if (shapedStarted) {
           p.endShape();
           shapedStarted = false;
+          // scale the image down to 28 * 28;
           p.copy(0, 0, this.size, this.size, 0, 0, 28, 28);
+          // read pixels into array and overwrite area with black
           p.loadPixels();
           const nextImage = new Float32Array(28 * 28);
           for (let col = 0; col < 28; col++) {
             for (let row = 0; row < 28; row++) {
               const index = (col * 4) + ((row * this.size) * 4);
-              nextImage[col * row] = p.pixels[index] / 255;
+              nextImage[col + row * 28] = p.pixels[index] / 255;
               p.pixels[index] = 0;
               p.pixels[index + 1] = 0;
               p.pixels[index + 2] = 0;
@@ -56,15 +68,16 @@ export class DrawDigitComponent implements OnInit {
       };
 
       p.mouseDragged = () => {
-        const x = p.mouseX;
-        const y = p.mouseY;
-        if (x >= 0 && x < this.size && y < this.size && y >= 0) {
+        if (mouseInRange()) {
           if (shapedStarted) {
-            p.curveVertex(x, y);
+            p.curveVertex(p.mouseX, p.mouseY);
           }
         }
       };
+
     }, drawCanvas.nativeElement);
+
+
   }
 
   reset() {

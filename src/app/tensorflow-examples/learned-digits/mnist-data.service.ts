@@ -25,13 +25,16 @@ export class MnistDataService {
   private shuffledTrainIndex: number;
   private shuffledTestIndex: number;
   private datasetImages: Float32Array;
+
   private datasetLabels: Uint8Array;
+  private datasetCustomImages: Float32Array;
   private testIndices: Uint32Array;
   private trainIndices: Uint32Array;
   private trainImages: Float32Array;
   private testImages: Float32Array;
   private trainLabels: Uint8Array;
   private testLabels: Uint8Array;
+  customImages = 0;
 
   constructor(private http: HttpClient) {
     this.shuffledTrainIndex = 0;
@@ -110,19 +113,26 @@ export class MnistDataService {
 
   nextTestBatch(batchSize) {
     return this.nextBatch(batchSize, [this.testImages, this.testLabels], () => {
+
       this.shuffledTestIndex =
         (this.shuffledTestIndex + 1) % this.testIndices.length;
       return this.testIndices[this.shuffledTestIndex];
     });
   }
 
-  nextCustomTestBatch(imageData: Float32Array, batchSize: number){
-    const batchImagesArray = new Float32Array(batchSize * IMAGE_SIZE);
-    return tensor2d(batchImagesArray, [batchSize, IMAGE_SIZE]);
+  nextCustomTestBatch(imageData: Float32Array) {
+    const batchImagesArray = new Float32Array(IMAGE_SIZE * (this.customImages + 1));
+    batchImagesArray.set(imageData);
+    if (this.customImages > 0) {
+      batchImagesArray.set(this.datasetCustomImages, IMAGE_SIZE);
     }
+    this.datasetCustomImages = batchImagesArray;
+    this.customImages++;
+    return tensor2d(batchImagesArray, [this.customImages, IMAGE_SIZE]);
+  }
 
 
-  nextBatch(batchSize, data:[Float32Array, Uint8Array], index) {
+  nextBatch(batchSize, data: [Float32Array, Uint8Array], index) {
     const batchImagesArray = new Float32Array(batchSize * IMAGE_SIZE);
     const batchLabelsArray = new Uint8Array(batchSize * NUM_CLASSES);
 

@@ -35,9 +35,11 @@ export class LearnedDigitsModelService {
   lossValues: { 'batch': number, 'loss': number | Tensor, 'set': string }[];
   accuracyValues: { 'batch': number, 'accuracy': number | Tensor, 'set': string }[];
   isTraining = false;
-  predictions: any;
+  predictions: number[];
   labels: number[];
   testBatch: { xs: Tensor2D; labels: Tensor2D };
+  testCustomBatch: Tensor2D;
+  customPredictions: number[];
 
   constructor(private mnistData: MnistDataService) {
     this.model = sequential();
@@ -134,15 +136,14 @@ export class LearnedDigitsModelService {
     this.isTraining = false;
   }
 
-  predictMyDrawing(imageData?: Float32Array): number {
-    this.testBatch = {xs: this.mnistData.nextCustomTestBatch(imageData, 1), labels: tensor2d([0,-1])};
+  predictDrawing(imageData?: Float32Array) {
+    this.testCustomBatch = this.mnistData.nextCustomTestBatch(imageData);
+    this.labels = [-1];
       tidy(() => {
-        const output: any = this.model.predict(this.testBatch.xs.reshape([-1, 28, 28, 1]) as any);
+        const output: any = this.model.predict(this.testCustomBatch.reshape([-1, 28, 28, 1]) as any);
         const axis = 1;
-        this.labels = Array.from(this.testBatch.labels.argMax(axis).dataSync());
-        this.predictions = Array.from(output.argMax(axis).dataSync());
+        this.customPredictions = Array.from(output.argMax(axis).dataSync());
       });
-      return this.predictions[0];
   }
 
   predict() {

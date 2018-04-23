@@ -4,7 +4,16 @@
   </mat-card-title>
   <mat-card-content>
     <app-draw-digit #drawer (change)="testDigit($event)"></app-draw-digit>
-    <div class="mat-subheading-1">{{'Prediction: '+drawingPrediction}}</div>
+    <div class="mat-subheading-1">{{drawingPredictions ?
+      'Prediction: '+drawingPredictions[0] :
+      'Draw to predict image!'}}
+    </div>
+    <div class="drawing-result">
+      <app-ui [batch]="drawingBatch"
+              [predictions]="drawingPredictions"
+              [labels]="drawingLabels">
+      </app-ui>
+    </div>
   </mat-card-content>
   <mat-card-actions>
     <button
@@ -12,18 +21,6 @@
       color="accent"
       (click)="drawer.reset()">
       Clear
-    </button>
-    <button color="accent"
-            [disabled]="isLoading || isTraining || errorLoadingData"
-            mat-raised-button
-            (click)="train()">
-      Train
-    </button>
-    <button color="accent"
-            [disabled]="isLoading || errorLoadingData"
-            mat-raised-button
-            (click)="predict()">
-      Predict
     </button>
   </mat-card-actions>
 </mat-card>
@@ -43,12 +40,27 @@
       </div>
     </div>
     <div *ngIf="errorLoadingData" class="mat-error">There was an error loading the data. Try again later.</div>
-    <app-ui *ngIf="!isLoading && !errorLoadingData"
-            [batch]="batch"
-            [labels]="labels"
-            [predictions]="predictions"
-            [lossValues]="lossValues"
-            [accuracyValues]="accuracyValues">
+    <app-ui
+      *ngIf="!isLoading && !errorLoadingData"
+      [batch]="batch"
+      [labels]="labels"
+      [predictions]="predictions"
+      [lossValues]="lossValues"
+      [accuracyValues]="accuracyValues">
     </app-ui>
   </mat-card-content>
+  <mat-card-actions>
+    <button color="accent"
+            [disabled]="isLoading || isTraining || errorLoadingData"
+            mat-raised-button
+            (click)="train()">
+      Train
+    </button>
+    <button color="accent"
+            [disabled]="isLoading || errorLoadingData"
+            mat-raised-button
+            (click)="predict()">
+      Predict
+    </button>
+  </mat-card-actions>
 </mat-card>
