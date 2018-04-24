@@ -12,7 +12,7 @@ const NUM_TEST_ELEMENTS = NUM_DATASET_ELEMENTS - NUM_TRAIN_ELEMENTS;
 const MNIST_IMAGES_SPRITE_PATH =
   'assets/mnist/mnist_images.png';
 const MNIST_LABELS_PATH =
-  'assets/mnist/mnist_labels_uint8';
+  'assets/mnist/mnist_labels_uint8.data';
 
 /**
  * A class that fetches the sprited MNIST dataset and returns shuffled batches.
