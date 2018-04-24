@@ -11,6 +11,6 @@
   <div *ngIf="batch" class="mat-subheading-1">Predicted images</div>
   <div class="images" #images>
   </div>
-  <div *ngIf="batch" class="mat-subheading-2">{{'Result: ' + totalCorrect + ' of ' + totalPredictions + ' recognized correctly.'}}</div>
+  <div *ngIf="batch && totalCorrect" class="mat-subheading-2">{{'Result: ' + totalCorrect + ' of ' + totalPredictions + ' recognized correctly.'}}</div>
 </div>
 

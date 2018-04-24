@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, NgZone, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 
 @Component({
   selector: 'app-draw-digit',
@@ -11,21 +11,20 @@ export class DrawDigitComponent implements OnInit {
   private sketch: p5;
   private readonly size = 28 * 10;
 
+  private path: Path[] = [];
+
   constructor(@ViewChild('drawCanvas') drawCanvas: ElementRef) {
 
     this.sketch = new p5((p: p5) => {
       let shapedStarted = false;
       p.setup = () => {
-
-        p.createCanvas(this.size, this.size);
         p.pixelDensity(1);
+        p.createCanvas(this.size, this.size);
         p.background(0);
         p.stroke(255, 255, 255, 230);
         p.strokeCap(p.ROUND);
         p.strokeJoin(p.MITER);
         p.strokeWeight(12);
-        p.noLoop();
-        p.redraw();
       };
 
       const mouseInRange = () => {
@@ -37,17 +36,32 @@ export class DrawDigitComponent implements OnInit {
       p.mousePressed = () => {
         if (mouseInRange()) {
           if (!shapedStarted) {
-            p.noFill();
-            p.beginShape();
             shapedStarted = true;
+            this.path.push(new Start(p.mouseX, p.mouseY));
           }
         }
       };
 
+      p.draw = () => {
+        p.background(0);
+        p.noFill();
+        p.beginShape();
+        this.path.forEach(pathElem => {
+          if (pathElem.isStart()) {
+            p.beginShape();
+          }
+          p.curveVertex(pathElem.x, pathElem.y);
+          if (pathElem.isEnd()) {
+            p.endShape();
+          }
+        });
+        p.endShape()
+      };
+
       p.mouseReleased = () => {
         if (shapedStarted) {
-          p.endShape();
           shapedStarted = false;
+          this.path.push(new End(p.mouseX, p.mouseY));
           // scale the image down to 28 * 28;
           p.copy(0, 0, this.size, this.size, 0, 0, 28, 28);
           // read pixels into array and overwrite area with black
@@ -70,22 +84,47 @@ export class DrawDigitComponent implements OnInit {
       p.mouseDragged = () => {
         if (mouseInRange()) {
           if (shapedStarted) {
-            p.curveVertex(p.mouseX, p.mouseY);
+            this.path.push(new Path(p.mouseX, p.mouseY));
           }
         }
+        return false;
       };
 
     }, drawCanvas.nativeElement);
 
-
   }
 
   reset() {
-    this.sketch.background(0);
+    this.path = [];
   }
 
   ngOnInit() {
   }
 
+}
 
+class Path {
+
+  constructor(public x: number, public  y: number) {
+  }
+
+  isEnd() {
+    return false;
+  }
+
+  isStart() {
+    return false;
+  }
+}
+
+class End extends Path {
+  isEnd() {
+    return true;
+  }
+}
+
+class Start extends Path {
+  isStart() {
+    return true;
+  }
 }

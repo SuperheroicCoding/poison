@@ -21,7 +21,7 @@ export class LearnedDigitsComponent implements OnInit {
 
   drawingPredictions: number[];
   drawingBatch: { xs: Tensor2D; ys: number[] };
-  drawingLabels: number[];
+  drawingLabels: number[] = [];
 
   constructor(private data: MnistDataService, private deepnet: LearnedDigitsModelService,
               public headlineAnimation: HeadlineAnimationService) {
@@ -65,7 +65,7 @@ export class LearnedDigitsComponent implements OnInit {
     this.drawingPredictions = this.deepnet.customPredictions;
 
     const xs = this.deepnet.testCustomBatch;
-    this.drawingLabels = this.drawingPredictions;
+    this.drawingLabels.push(-1);
     this.drawingBatch = {xs: xs, ys: this.drawingPredictions};
   }
 }

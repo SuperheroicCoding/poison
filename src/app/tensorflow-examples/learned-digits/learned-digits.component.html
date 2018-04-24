@@ -8,12 +8,6 @@
       'Prediction: '+drawingPredictions[0] :
       'Draw to predict image!'}}
     </div>
-    <div class="drawing-result">
-      <app-ui [batch]="drawingBatch"
-              [predictions]="drawingPredictions"
-              [labels]="drawingLabels">
-      </app-ui>
-    </div>
   </mat-card-content>
   <mat-card-actions>
     <button
@@ -23,6 +17,12 @@
       Clear
     </button>
   </mat-card-actions>
+  <div class="drawing-result">
+    <app-ui [batch]="drawingBatch"
+            [predictions]="drawingPredictions"
+            [labels]="drawingLabels">
+    </app-ui>
+  </div>
 </mat-card>
 <mat-card appRaiseCard class="training-progress">
   <mat-card-title>

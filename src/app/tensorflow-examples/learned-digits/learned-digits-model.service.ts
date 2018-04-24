@@ -138,7 +138,6 @@ export class LearnedDigitsModelService {
 
   predictDrawing(imageData?: Float32Array) {
     this.testCustomBatch = this.mnistData.nextCustomTestBatch(imageData);
-    this.labels = [-1];
       tidy(() => {
         const output: any = this.model.predict(this.testCustomBatch.reshape([-1, 28, 28, 1]) as any);
         const axis = 1;
