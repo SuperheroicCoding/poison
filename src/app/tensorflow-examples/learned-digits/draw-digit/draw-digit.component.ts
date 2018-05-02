@@ -86,8 +86,8 @@ export class DrawDigitComponent implements OnInit {
           if (shapedStarted) {
             this.path.push(new Path(p.mouseX, p.mouseY));
           }
+          return false;
         }
-        return false;
       };
 
     }, drawCanvas.nativeElement);
