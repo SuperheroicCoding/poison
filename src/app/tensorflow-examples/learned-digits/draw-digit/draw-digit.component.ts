@@ -1,11 +1,11 @@
-import {Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
 
 @Component({
   selector: 'app-draw-digit',
   templateUrl: './draw-digit.component.html',
   styleUrls: ['./draw-digit.component.less']
 })
-export class DrawDigitComponent implements OnInit {
+export class DrawDigitComponent {
 
   @Output() change = new EventEmitter<Float32Array>();
   private sketch: p5;
@@ -13,8 +13,15 @@ export class DrawDigitComponent implements OnInit {
 
   private path: Path[] = [];
 
-  constructor(@ViewChild('drawCanvas') drawCanvas: ElementRef) {
+  constructor(@ViewChild('drawCanvas') private drawCanvas: ElementRef) {
+    setTimeout(this.initScetch(), 200);
+  }
 
+  reset() {
+    this.path = [];
+  }
+
+  private initScetch() {
     this.sketch = new p5((p: p5) => {
       let shapedStarted = false;
       p.setup = () => {
@@ -90,17 +97,8 @@ export class DrawDigitComponent implements OnInit {
         }
       };
 
-    }, drawCanvas.nativeElement);
-
+    }, this.drawCanvas.nativeElement);
   }
-
-  reset() {
-    this.path = [];
-  }
-
-  ngOnInit() {
-  }
-
 }
 
 class Path {

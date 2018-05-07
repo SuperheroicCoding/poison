@@ -87,8 +87,11 @@ export class P5ViewComponent implements OnChanges, OnDestroy {
       const y = p.floor(p.mouseY);
       if (x > -1 && x < p.width && y > -1 && y < p.height) {
         this.calcService.addChemical(x, y);
-        this.drawOnce = true
+        this.drawOnce = true;
+        // don't bubble up event.
+        return false;
       }
+      return true;
     };
 
     p.mouseClicked = addChemical;
