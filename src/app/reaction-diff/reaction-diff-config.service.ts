@@ -1,8 +1,6 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Subject} from 'rxjs/Subject';
+import {BehaviorSubject, Subject, Observable} from 'rxjs';
 import {CellWeights} from './cell-weights';
-import {Observable} from 'rxjs/Observable';
 import {ReactionDiffCalcParams} from './reaction-diff-calc-params';
 import {map, tap} from 'rxjs/operators';
 

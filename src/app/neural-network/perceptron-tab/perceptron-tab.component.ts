@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {BrainService} from '../shared/brain.service';
 import {Point} from '../shared/point';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-perceptron-tab',

@@ -1,9 +1,7 @@
 import {Injectable} from '@angular/core';
 import {TrainDataService} from './train-data.service';
-import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
 import {distinctUntilChanged, filter, repeat, skipUntil, startWith, takeUntil} from 'rxjs/operators';
-import {Subject} from 'rxjs/Subject';
-import {Observable} from 'rxjs/Observable';
+import {Subject, Observable, interval} from 'rxjs';
 import {Point} from './point';
 import {Perceptron} from './perceptron';
 import {TrainData} from './train-data';
@@ -23,7 +21,7 @@ export class BrainService {
   private startAutoLearning$ = this.autoLearningSubject.pipe(filter(autoLearningEnabled => autoLearningEnabled));
   private stopAutoLearning$ = this.autoLearningSubject.pipe(filter(autoLearningEnabled => !autoLearningEnabled));
 
-  private autoLearner$ = IntervalObservable.create(50).pipe(
+  private autoLearner$ = interval(50).pipe(
     distinctUntilChanged(),
     skipUntil(this.startAutoLearning$),
     takeUntil(this.stopAutoLearning$),

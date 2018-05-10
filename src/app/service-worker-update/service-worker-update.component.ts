@@ -1,12 +1,11 @@
 import {Component, NgZone} from '@angular/core';
-import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
 import {SwUpdate} from '@angular/service-worker';
 import {delay, finalize, flatMap, map, tap} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 import {UpdateAvailableEvent} from '@angular/service-worker/src/low_level';
 import {ServiceWorkerLogUpdateService} from '../core/service-worker-log-update.service';
 import {ServiceWorkerUpdateService} from '../core/service-worker-update.service';
-import {FromObservable} from 'rxjs/observable/FromObservable';
+import {interval, from} from 'rxjs';
 
 
 @Component({
@@ -28,10 +27,10 @@ export class ServiceWorkerUpdateComponent {
     console.log('Service Worker enabled?', this.swUpdates.isEnabled);
 
     zone.runOutsideAngular(() => {
-      IntervalObservable.create(environment.serviceWorkerCheckInterval).pipe(
+      interval(environment.serviceWorkerCheckInterval).pipe(
         tap(intervalTime => this.isLoading = true),
         tap(() => console.log('service worker is checking for new update.')),
-        flatMap(intervalTime => this.zone.run(() => FromObservable.create(this.swUpdates.checkForUpdate()))),
+        flatMap(intervalTime => this.zone.run(() => from(this.swUpdates.checkForUpdate()))),
         delay(200), // to make the spinner visible
         finalize(() => this.isLoading = false)
       )

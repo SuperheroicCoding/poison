@@ -1,11 +1,9 @@
 import {AfterContentInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {ShaderDef, shaders} from './shaders';
 import {MatPaginator, PageEvent} from '@angular/material';
-import {Subject} from 'rxjs/Subject';
+import {Subject, Observable, BehaviorSubject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, filter, map, mergeMapTo, share, tap} from 'rxjs/operators';
-import {Observable} from 'rxjs/Observable';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {animate, keyframes, transition, trigger} from '@angular/animations';
 import {fadeInLeft, fadeInRight, fadeOutLeft, fadeOutRight} from './leftInOut.animation';
 

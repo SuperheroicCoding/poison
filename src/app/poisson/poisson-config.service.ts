@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/map';
+import {BehaviorSubject} from 'rxjs';
+
 
 
 const minRadius = 5;

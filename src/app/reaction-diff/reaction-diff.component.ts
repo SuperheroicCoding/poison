@@ -4,11 +4,10 @@ import {ReactionDiffCalcServiceFactory} from './reaction-diff-calculation-servic
 import {CellWeights} from './cell-weights';
 import {ReactionDiffConfigService} from './reaction-diff-config.service';
 import {ReactionDiffCalcParams} from './reaction-diff-calc-params';
-import {Observable} from 'rxjs/Observable';
+import {interval, Observable, of, Subject} from 'rxjs';
 import {MatSelectChange} from '@angular/material';
 import {debounceTime, distinctUntilChanged, filter, flatMap, map, share, startWith, tap} from 'rxjs/operators';
 import {ReactionDiffCalculator} from './reaction-diff-calculator';
-import {Subject} from 'rxjs/Subject';
 import {HeadlineAnimationService} from '../core/headline-animation.service';
 
 
@@ -64,10 +63,10 @@ export class ReactionDiffComponent implements OnInit, OnDestroy {
       this.speed = speed
     );
 
-    this.calculationTime$ = Observable.interval(1000).pipe(
+    this.calculationTime$ = interval(1000).pipe(
       flatMap(ignored => {
 
-        return Observable.of(performance.getEntriesByName('calcNext'));
+        return of(performance.getEntriesByName('calcNext'));
       }),
       map((measures: PerformanceMeasure[]) => {
         if (measures.length === 0) {
@@ -78,8 +77,8 @@ export class ReactionDiffComponent implements OnInit, OnDestroy {
           .reduce((acc, next) => acc + next.duration / measuresmentsToTake, 0);
       }));
 
-    this.drawImageTime$ = Observable.interval(1000).pipe(
-      flatMap(ignored => Observable.of(performance.getEntriesByName('drawImage'))),
+    this.drawImageTime$ = interval(1000).pipe(
+      flatMap(ignored => of(performance.getEntriesByName('drawImage'))),
       map((measures: PerformanceMeasure[]) => {
         if (measures.length === 0) {
           return 0;
@@ -120,7 +119,7 @@ export class ReactionDiffComponent implements OnInit, OnDestroy {
 
   public toggleRunSim(): void {
     this.start = !this.start;
-    this.start ? this.headlineAnimation.stopAnimation(): this.headlineAnimation.startAnimation();
+    this.start ? this.headlineAnimation.stopAnimation() : this.headlineAnimation.startAnimation();
   }
 
   public reset() {

@@ -1,6 +1,4 @@
-import {Operator} from 'rxjs/Operator';
-import {Subscriber} from 'rxjs/Subscriber';
-import {Observable} from 'rxjs/Observable';
+import {Observable, Operator, Subscriber} from 'rxjs';
 
 
 export class WorkerPostParams<T> {
@@ -10,7 +8,20 @@ export class WorkerPostParams<T> {
 
 type WorkerParams<T> = WorkerPostParams<T> | T;
 
+export const mapWorker = <T, R>(workerFunction: (input: T) => WorkerParams<R>) =>
+  (source: Observable<WorkerParams<T>>) =>
+    new Observable<R>((subscriber) => {
 
+      if (!(workerFunction instanceof Function)) {
+        throw new TypeError('argument is not a function!');
+      }
+      const worker: Worker = createWorker(workerFunction);
+      source.subscribe(
+        new MapWorkerSubscriber(subscriber, worker)
+      );
+    });
+
+/*
 export function mapWorker<T, R>(this: Observable<WorkerParams<T>>,
                                 workerFunction: (input: T) => WorkerParams<R>,
                                 thisArg?: any): Observable<R> {
@@ -21,23 +32,22 @@ export function mapWorker<T, R>(this: Observable<WorkerParams<T>>,
   const worker: Worker = createWorker(workerFunction);
   return this.lift(new MapWorkerOperator(worker, thisArg));
 }
+*/
 
 export class MapWorkerOperator<T, R> implements Operator<T, R> {
   constructor(private worker: Worker, private thisArg: any) {
   }
 
   call(subscriber: Subscriber<R>, source: any): any {
-    return source.subscribe(new MapWorkerSubscriber(subscriber, this.worker, this.thisArg));
+    return
   }
 }
 
 
 class MapWorkerSubscriber<T extends WorkerPostParams<T>, R> extends Subscriber<T> {
-  private thisArg: any;
 
-  constructor(destination: Subscriber<R>, private worker: Worker, thisArg: any) {
+  constructor(destination: Subscriber<R>, private worker: Worker) {
     super(destination);
-    this.thisArg = thisArg || this;
 
     this.worker.onmessage = (event: MessageEvent) => this.destination.next(event.data as R);
     this.worker.onerror = (error) => this.destination.error(error);

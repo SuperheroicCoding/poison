@@ -3,7 +3,7 @@
   <mat-card-subtitle>The weights of the neighbouring cells used for calculation</mat-card-subtitle>
   <form class="weightInput">
     <div class="topWeights">
-      <mat-input-container>
+      <mat-form-field>
         <input matInput placeholder="topLeft" type="number"
                step="0.005"
                name="topLeft"
@@ -11,8 +11,8 @@
                max="1.000"
                (change)="onWeightChanged()"
                [(ngModel)]="weights.topLeft">
-      </mat-input-container>
-      <mat-input-container>
+      </mat-form-field>
+      <mat-form-field>
         <input matInput placeholder="topCenter" type="number"
                step="0.005"
                name="topCenter"
@@ -20,8 +20,8 @@
                max="1.000"
                (change)="onWeightChanged()"
                [(ngModel)]="weights.topCenter">
-      </mat-input-container>
-      <mat-input-container>
+      </mat-form-field>
+      <mat-form-field>
         <input matInput placeholder="topRight" type="number"
                step="0.005"
                name="topRight"
@@ -29,10 +29,10 @@
                max="1.000"
                (change)="onWeightChanged()"
                [(ngModel)]="weights.topRight">
-      </mat-input-container>
+      </mat-form-field>
     </div>
     <div class="centerWeights">
-      <mat-input-container>
+      <mat-form-field>
         <input matInput placeholder="left" type="number"
                step="0.005"
                name="left"
@@ -40,8 +40,8 @@
                max="1.000"
                (change)="onWeightChanged()"
                [(ngModel)]="weights.left">
-      </mat-input-container>
-      <mat-input-container>
+      </mat-form-field>
+      <mat-form-field>
         <input matInput placeholder="center" type="number"
                step="0.005"
                name="center"
@@ -49,8 +49,8 @@
                max="1.000"
                (change)="onWeightChanged()"
                [(ngModel)]="weights.center">
-      </mat-input-container>
-      <mat-input-container>
+      </mat-form-field>
+      <mat-form-field>
         <input matInput placeholder="right" type="number"
                step="0.005"
                name="right"
@@ -58,10 +58,10 @@
                max="1.000"
                (change)="onWeightChanged()"
                [(ngModel)]="weights.right">
-      </mat-input-container>
+      </mat-form-field>
     </div>
     <div class="bottomWeights">
-      <mat-input-container>
+      <mat-form-field>
         <input matInput placeholder="bottomLeft" type="number"
                step="0.005"
                name="bottomLeft"
@@ -69,8 +69,8 @@
                max="1.000"
                (change)="onWeightChanged()"
                [(ngModel)]="weights.bottomLeft">
-      </mat-input-container>
-      <mat-input-container>
+      </mat-form-field>
+      <mat-form-field>
         <input matInput placeholder="bottomCenter" type="number"
                step="0.005"
                name="bottomCenter"
@@ -78,8 +78,8 @@
                max="1.000"
                (change)="onWeightChanged()"
                [(ngModel)]="weights.bottomCenter">
-      </mat-input-container>
-      <mat-input-container>
+      </mat-form-field>
+      <mat-form-field>
         <input matInput placeholder="bottomRight" type="number"
                step="0.005"
                name="bottomRight"
@@ -87,7 +87,7 @@
                max="1.000"
                (change)="onWeightChanged()"
                [(ngModel)]="weights.bottomRight">
-      </mat-input-container>
+      </mat-form-field>
     </div>
     <div class="sumCheck">
       <mat-icon *ngIf="sumOfWeights" color="warn">cancel</mat-icon>

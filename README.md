@@ -10,7 +10,7 @@ I always try to keep a good code structure as defined in the Angular style guide
 Also I love rxjs and use it as much as I can.   
 CSS wise I try to get my hands on grid layout.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version ^1.7.4.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version ^6.0.x.
 
 A running version (not always up to date) can be found on github pages: https://superheroiccoding.github.io/AngularExamples/
 

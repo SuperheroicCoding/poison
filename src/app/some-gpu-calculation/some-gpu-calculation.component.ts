@@ -2,13 +2,7 @@ import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angul
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 import {combineLatest, map, mergeMap, scan, startWith, timeInterval} from 'rxjs/operators';
-import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
-import {animationFrame} from 'rxjs/scheduler/animationFrame';
-import {Observable} from 'rxjs/Observable';
-import {interval} from 'rxjs/observable/interval';
-import {of} from 'rxjs/observable/of';
-import {TimeInterval} from 'rxjs/Rx';
-import {Subscription} from 'rxjs/Subscription';
+import {animationFrameScheduler, interval, Observable, of, Subscription, TimeInterval} from 'rxjs';
 import {GpuJsService, GraphicalKernelFunction} from '../core/gpujs.service';
 
 @Component({
@@ -61,7 +55,7 @@ export class SomeGpuCalculationComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    const gpuColorizerOptions$ = IntervalObservable.create(Math.floor(1000 / 120), animationFrame).pipe(
+    const gpuColorizerOptions$ = interval(Math.floor(1000 / 120), animationFrameScheduler).pipe(
       timeInterval<number>(),
       scan<TimeInterval<number>, number>((acc, value) => acc + value.interval, 0),
       combineLatest(

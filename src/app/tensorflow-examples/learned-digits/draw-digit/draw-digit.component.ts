@@ -1,11 +1,11 @@
-import {Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
 
 @Component({
   selector: 'app-draw-digit',
   templateUrl: './draw-digit.component.html',
   styleUrls: ['./draw-digit.component.less']
 })
-export class DrawDigitComponent {
+export class DrawDigitComponent implements AfterViewChecked {
 
   @Output() change = new EventEmitter<Float32Array>();
   private sketch: p5;
@@ -14,7 +14,6 @@ export class DrawDigitComponent {
   private path: Path[] = [];
 
   constructor(@ViewChild('drawCanvas') private drawCanvas: ElementRef) {
-    setTimeout(this.initScetch(), 200);
   }
 
   reset() {
@@ -22,6 +21,9 @@ export class DrawDigitComponent {
   }
 
   private initScetch() {
+    if(this.sketch){
+      return;
+    }
     this.sketch = new p5((p: p5) => {
       let shapedStarted = false;
       p.setup = () => {
@@ -98,6 +100,10 @@ export class DrawDigitComponent {
       };
 
     }, this.drawCanvas.nativeElement);
+  }
+
+  ngAfterViewChecked(): void {
+    this.initScetch()
   }
 }
 

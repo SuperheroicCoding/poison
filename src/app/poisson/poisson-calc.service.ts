@@ -1,17 +1,12 @@
 import {Injectable} from '@angular/core';
 import {PoissonConfigService} from './poisson-config.service';
 import {Circle} from './shared/circle';
-import {Subject} from 'rxjs/Subject';
-import {Observable} from 'rxjs/Observable';
+import {Subject, Observable, Subscription, of, defer, range} from 'rxjs';
 import {Vector} from './shared/vector';
 import {RandomService} from '../core/random.service';
-import {Subscription} from 'rxjs/Subscription';
 import {Line} from './shared/line';
 import {ShapeFactoryService} from './shared/shape-factory.service';
 import {map, scan, switchMap, takeUntil, takeWhile, tap, toArray} from 'rxjs/operators';
-import {DeferObservable} from 'rxjs/observable/DeferObservable';
-import {of} from 'rxjs/observable/of';
-import {defer} from 'rxjs/observable/defer';
 
 @Injectable()
 export class PoissonCalcService {
@@ -107,13 +102,13 @@ export class PoissonCalcService {
 
   private initCalculation() {
     const iterationsPerFrame$: Observable<number> =
-      defer(() => Observable.range(0, this.iterationsPerFrame)).pipe(
+      defer(() => range(0, this.iterationsPerFrame)).pipe(
         takeWhile(ignored => this.active.length > 0),
         tap(undefined, undefined, () => this.calculationCompletedSubject.next())
       );
 
     const randomActiveIndex$: Observable<number> =
-      DeferObservable.create(() => of(Math.floor(this.random.randomTo(this.active.length))));
+      defer(() => of(Math.floor(this.random.randomTo(this.active.length))));
 
     const randomActive$: Observable<{ active: Vector, randomActiveIndex: number }> =
       randomActiveIndex$.pipe(

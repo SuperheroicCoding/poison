@@ -8,7 +8,7 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import {merge, Observable} from 'rxjs';
 
 import {
   AmbientLight,
@@ -74,7 +74,7 @@ export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
 
   ngOnInit(): void {
     this.activateLook$ =
-      Observable.merge(
+      merge(
         this.mousedown$.pipe(
           map((event) => {
             event.stopPropagation();

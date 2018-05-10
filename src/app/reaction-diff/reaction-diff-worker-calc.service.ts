@@ -1,12 +1,10 @@
 import {CellWeights} from './cell-weights';
-import {Observable} from 'rxjs/Observable';
+import {Observable, range, Subject, Subscription} from 'rxjs';
 import {addChemicals, calcNextDiffStep} from './worker-calculation';
 import {ReactionDiffCalcParams} from './reaction-diff-calc-params';
-import {WorkerPostParams} from '../rx/operator/map-worker';
+import {mapWorker, WorkerPostParams} from '../rx/operator/map-worker';
 import {CalcNextParam} from './calc-next-param';
-import {Subject} from 'rxjs/Subject';
 import {Cell} from './cell';
-import {Subscription} from 'rxjs/Subscription';
 import {AddChemicalsParams} from './add-chemicals-param';
 import {filter} from 'rxjs/operators';
 import {ReactionDiffCalculator} from './reaction-diff-calculator';
@@ -63,15 +61,15 @@ export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
 
   private initCalcWorkers$() {
     this.workerSubjects$ = [];
-    Observable.range(0, this.numberThreads)
+    range(0, this.numberThreads)
       .subscribe((index) => this.workerSubjects$[index] = new Subject<WorkerPostParams<CalcNextParam>>());
 
     this.workers$ = this.workerSubjects$
       .map(subject =>
         subject.pipe(
-          filter(value => (this.calcRunning < this.numberThreads) && this.canCalculate)
+          filter(value => (this.calcRunning < this.numberThreads) && this.canCalculate),
+          mapWorker(calcNextDiffStep)
         )
-          .mapWorker(calcNextDiffStep)
       );
 
     this.workerSubscriptions = this.workers$.map((worker) => worker.subscribe(
@@ -182,8 +180,9 @@ export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
 
   private initAddChemicals$() {
     this.addChemicalsSubject$ = new Subject<WorkerPostParams<AddChemicalsParams>>();
-    this.addChemicalsSubject$
-      .mapWorker(addChemicals)
+    this.addChemicalsSubject$.pipe(
+      mapWorker(addChemicals)
+    )
       .subscribe((gridBuffer: ArrayBufferLike) => {
         this.grid = new Float32Array(gridBuffer);
         this.canCalculate = true;
@@ -213,7 +212,7 @@ export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
       img.pixels[pix + 3] = 255;
     }
     img.updatePixels();
-    graphics.image(img,0,0);
+    graphics.image(img, 0, 0);
   }
 
   cleanup(): void {

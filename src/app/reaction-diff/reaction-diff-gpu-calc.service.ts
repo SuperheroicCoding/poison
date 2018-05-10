@@ -1,7 +1,7 @@
 import {ReactionDiffCalcParams} from './reaction-diff-calc-params';
 import {CellWeights, weightsToArray} from './cell-weights';
 import {ReactionDiffCalculator} from './reaction-diff-calculator';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {GpuJsService, GpuJsTexture, GraphicalKernelFunction, TextureKernelFunction} from '../core/gpujs.service';
 
 export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {

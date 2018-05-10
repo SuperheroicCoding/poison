@@ -2,7 +2,6 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {AppRoute} from '../../app-routing.module';
 import {ROUTER_LINKS} from '../../app-routes.token';
 import {Router} from '@angular/router';
-import {shader} from '../../title-shader';
 
 @Component({
   selector: 'app-about',
