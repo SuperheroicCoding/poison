@@ -1,6 +1,6 @@
 import {Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 import {DataDrawerService} from './data-drawer.service';
-import {Tensor} from '@tensorflow/tfjs';
+import * as tf from '@tensorflow/tfjs';
 
 @Component({
   selector: 'app-data-drawer',
@@ -14,9 +14,9 @@ export class DataDrawerComponent implements OnChanges {
 
   @Input() caption: string;
   @Input() coeffCaption: string;
-  @Input() data: { xs: Tensor, ys: Tensor };
+  @Input() data: { xs: tf.Tensor, ys: tf.Tensor };
   @Input() coeff: { a: number, b: number, c: number, d: number };
-  @Input() predictions?: Tensor;
+  @Input() predictions?: tf.Tensor;
 
   constructor(private dataDrawer: DataDrawerService) {
   }

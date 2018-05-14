@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {nextFrame, Rank, Scalar, scalar, SGDOptimizer, Tensor, tidy, train, Variable, variable} from '@tensorflow/tfjs';
 import {DataGeneratorService} from './data-generator.service';
+import * as tf from '@tensorflow/tfjs';
 
 /**
  * We want to learn the coefficients that give correct solutions to the
@@ -19,19 +19,19 @@ import {DataGeneratorService} from './data-generator.service';
 @Injectable()
 export class PolynominalRegretionService {
 
-  private a: Variable<Rank.R0>;
-  private b: Variable<Rank.R0>;
-  private c: Variable<Rank.R0>;
-  private d: Variable<Rank.R0>;
+  private a: tf.Variable<tf.Rank.R0>;
+  private b: tf.Variable<tf.Rank.R0>;
+  private c: tf.Variable<tf.Rank.R0>;
+  private d: tf.Variable<tf.Rank.R0>;
   private numIterations: number;
-  private optimizer: SGDOptimizer;
+  private optimizer: tf.SGDOptimizer;
 
   private _trueCoefficients: { a: number; b: number; c: number; d: number };
   private _trainingData: any;
 
-  predictionsBefore: Tensor;
-  predictionsAfter: Tensor;
-  currentLoss: Scalar;
+  predictionsBefore: tf.Tensor;
+  predictionsAfter: tf.Tensor;
+  currentLoss: tf.Scalar;
 
   constructor(private dataService: DataGeneratorService) {
     this.setPolynominal();
@@ -63,22 +63,18 @@ export class PolynominalRegretionService {
     return this._trainingData;
   }
 
-  addTrainingPoint(x, y) {
-    this.dataService.addDataPoint(x, y, this._trainingData);
-  }
-
   setPolynominal(a: number = Math.random(), b: number = Math.random(), c: number = Math.random(), d: number = Math.random()) {
-    this.a = variable(scalar(a));
-    this.b = variable(scalar(b));
-    this.c = variable(scalar(c));
-    this.d = variable(scalar(d));
+    this.a = tf.variable(tf.scalar(a, 'float32'));
+    this.b = tf.variable(tf.scalar(b, 'float32'));
+    this.c = tf.variable(tf.scalar(c, 'float32'));
+    this.d = tf.variable(tf.scalar(d, 'float32'));
   }
 
   // Step 2. Create an optimizer, we will use this later. You can play
   // with some of these values to see how the model perfoms.
   createOptimizer(numIterations = 75, learningRate = 0.5) {
     this.numIterations = numIterations;
-    this.optimizer = train.sgd(learningRate);
+    this.optimizer = tf.train.sgd(learningRate);
   }
 
   /*
@@ -92,17 +88,17 @@ export class PolynominalRegretionService {
  */
   private predict(x) {
     // y = a * x ^ 3 + b * x ^ 2 + c * x + d
-    return tidy(() => {
-      return this.a.mul(x.pow(scalar(3, 'int32')))
+    return tf.tidy(() => {
+      return this.a.mul(x.pow(tf.scalar(3, 'int32')))
         .add(this.b.mul(x.square()))
         .add(this.c.mul(x))
-        .add(this.d as Tensor);
+        .add(this.d as tf.Tensor);
     }) as any;
   }
 
-  loss(prediction: Tensor, labels: Tensor): Tensor<Rank.R0> {
+  loss(prediction: tf.Tensor, labels: tf.Tensor): tf.Tensor<tf.Rank.R0> {
     // Having a good error function is key for training a machine learning model
-    return prediction.sub(labels).square().mean() as Tensor<Rank.R0>;
+    return prediction.sub(labels).square().mean() as tf.Tensor<tf.Rank.R0>;
   }
 
   /*
@@ -125,11 +121,11 @@ export class PolynominalRegretionService {
       this.optimizer.minimize(() => {
         // Feed the examples into the model
         const prediction = this.predict(xs);
-        return this.loss(prediction, ys);
+        return this.loss(prediction, ys) as tf.Scalar;
       });
 
       // Use tf.nextFrame to not block the browser.
-      await nextFrame();
+      await tf.nextFrame();
     }
   }
 

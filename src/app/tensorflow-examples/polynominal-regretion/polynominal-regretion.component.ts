@@ -16,8 +16,8 @@ export class PolynominalRegretionComponent implements OnInit {
   constructor(public polyService: PolynominalRegretionService, public headlineAnimation: HeadlineAnimationService) {
   }
 
-  async ngOnInit() {
-    this.randomCoefficients = this.polyService.currentCoefficients;
+  ngOnInit() {
+    this.randomCoefficients =  this.polyService.currentCoefficients;
   }
 
   async learn() {

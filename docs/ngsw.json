@@ -15,7 +15,7 @@
     {
       "name": "assets",
       "installMode": "lazy",
-      "updateMode": "prefetch",
+      "updateMode": "lazy",
       "urls": [
         "https://superheroiccoding.github.io/AngularExamples/assets/logos/angular-cli.svg",
         "https://superheroiccoding.github.io/AngularExamples/assets/logos/angular-material.svg",
@@ -38,7 +38,7 @@
   "hashTable": {
     "https://superheroiccoding.github.io/AngularExamples/favicon.ico": "84161b857f5c547e3699ddfbffc6d8d737542e01",
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/angular-cli.svg": "cb3e92c7bd3dcae87dc103e4f3d128ce15b84cd6",
-    "https://superheroiccoding.github.io/AngularExamples/index.html": "ee99fcd8638f4f0046b974e71fa99565ef287059",
+    "https://superheroiccoding.github.io/AngularExamples/index.html": "e9cee34d5ba67240ac882864b94addd8ac68ddd9",
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/angular-material.svg": "77d8b188ec7234e3a67604bb708329c503c1f201",
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/angular.svg": "d1c29fa152f60e0e7e9c60cdbe57f755f7d46344",
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/gpu-js.png": "1327a2df54f4f7885891e8f91ea668a6f3ba37f9",

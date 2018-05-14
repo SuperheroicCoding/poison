@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {randomNormal, randomUniform, Rank, scalar, Tensor, tidy} from '@tensorflow/tfjs';
+import * as tf from '@tensorflow/tfjs';
 
 @Injectable()
 export class DataGeneratorService {
@@ -7,25 +7,25 @@ export class DataGeneratorService {
   constructor() {
   }
 
-  generateData(numPoints: number, coeff: { a: number, b: number, c: number, d: number }, sigma = 0.04): { xs: Tensor<Rank.R1>, ys: Tensor<Rank.R1> } {
-    return tidy(
+  generateData(numPoints: number, coeff: { a: number, b: number, c: number, d: number }, sigma = 0.09): { xs: tf.Tensor<tf.Rank.R1>, ys: tf.Tensor<tf.Rank.R1> } {
+    return tf.tidy(
       () => {
-        const [a, b, c, d]: Tensor<Rank.R0>[] = [
-          scalar(coeff.a), scalar(coeff.b), scalar(coeff.c),
-          scalar(coeff.d)
+        const [a, b, c, d]: tf.Tensor<tf.Rank.R0>[] = [
+          tf.scalar(coeff.a), tf.scalar(coeff.b), tf.scalar(coeff.c),
+          tf.scalar(coeff.d)
         ];
 
-        const xs = randomUniform([numPoints], -1, 1);
+        const xs = tf.randomUniform([numPoints], -1, 1);
 
         // Generate polynomial data
-        const three = scalar(3, 'int32');
-        const ys = a.mul(xs.pow(three as Tensor))
+        const three = tf.scalar(3, 'int32');
+        const ys = a.mul(xs.pow(three as tf.Tensor))
           .add(b.mul(xs.square()))
-          .add(c.mul(xs as Tensor))
-          .add(d as Tensor)
+          .add(c.mul(xs as tf.Tensor))
+          .add(d as tf.Tensor)
           // Add random noise to the generated data
           // to make the problem a bit more interesting
-          .add(randomNormal([numPoints], 0, sigma) as Tensor);
+          .add(tf.randomNormal([numPoints], 0, sigma) as tf.Tensor);
 
         // Normalize the y values to the range 0 to 1.
         const ymin = ys.min();
@@ -38,10 +38,6 @@ export class DataGeneratorService {
         } as any;
       }
     );
-  }
-
-  addDataPoint(xs: number, ys: number, currentData: { xs: Tensor<Rank.R1>, ys: Tensor<Rank.R1> }): { xs: Tensor<Rank.R1>, ys: Tensor<Rank.R1> } {
-    return currentData;
   }
 }
 
