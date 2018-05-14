@@ -16,6 +16,9 @@ export class CanvasDrawService {
     return this;
   }
 
+  destroy(){
+  }
+
   setFillColor(fillColor: string) {
     this.ctx.fillStyle = fillColor;
     return this;

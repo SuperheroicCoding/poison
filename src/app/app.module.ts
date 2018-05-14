@@ -34,7 +34,7 @@ import {ServiceWorkerUpdateComponent} from './service-worker-update/service-work
   ],
   providers: [
     {
-      provide: ROUTER_LINKS, useValue: routes.filter((route) => route.data ? route.data.linkText : false)
+      provide: ROUTER_LINKS, useValue: routes.filter(route => route.data ? route.data.linkText : false)
     }],
   bootstrap: [AppComponent]
 })

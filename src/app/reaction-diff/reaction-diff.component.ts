@@ -9,9 +9,13 @@ import {MatSelectChange} from '@angular/material';
 import {debounceTime, distinctUntilChanged, filter, flatMap, map, share, startWith, tap} from 'rxjs/operators';
 import {ReactionDiffCalculator} from './reaction-diff-calculator';
 import {HeadlineAnimationService} from '../core/headline-animation.service';
+import {ActivatedRoute} from '@angular/router';
+import {ReactionDiffKernelModules} from './reaction-diff-window';
 
 
 type Dimensions = { width: number, height: number; };
+
+type RouteData = Observable<{ kernels: ReactionDiffKernelModules }>;
 
 @Component({
   selector: 'app-reaction-diff',
@@ -39,14 +43,23 @@ export class ReactionDiffComponent implements OnInit, OnDestroy {
   drawImageTime$: Observable<number>;
 
   private dimensionsSubject$: Subject<Dimensions> = new Subject();
+  private kernels: ReactionDiffKernelModules;
+  private routeData: RouteData;
 
-  constructor(private calcFactory: ReactionDiffCalcServiceFactory, private configService: ReactionDiffConfigService, private headlineAnimation: HeadlineAnimationService) {
+  constructor(private calcFactory: ReactionDiffCalcServiceFactory,
+              private configService: ReactionDiffConfigService,
+              private headlineAnimation: HeadlineAnimationService,
+              route: ActivatedRoute) {
+    this.routeData = route.data as RouteData;
   }
 
-  public ngOnInit(): void {
+  public ngOnInit() {
     this.examples = this.configService.exampleOptions;
 
-    this.calcService = this.calcFactory.createCalcService(this.width, this.height, this.useGpu);
+    this.routeData.subscribe(data => {
+      this.kernels = data.kernels;
+      this.calcService = this.calcFactory.createCalcService(this.width, this.height, this.useGpu, this.kernels);
+    });
     this.numberWebWorkers = this.calcService.numberThreads;
     this.cellWeights$ = this.configService.calcCellWeights$;
     this.configService.selectedExample$.subscribe((example) =>
@@ -166,7 +179,7 @@ export class ReactionDiffComponent implements OnInit, OnDestroy {
 
   updateUseGpu() {
     this.start = false;
-    this.calcService = this.calcFactory.createCalcService(this.width, this.height, this.useGpu);
+    this.calcService = this.calcFactory.createCalcService(this.width, this.height, this.useGpu, this.kernels);
     if (!this.useGpu) {
       this.numberWebWorkers = this.calcService.numberThreads;
     }

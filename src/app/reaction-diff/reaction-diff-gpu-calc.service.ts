@@ -3,8 +3,10 @@ import {CellWeights, weightsToArray} from './cell-weights';
 import {ReactionDiffCalculator} from './reaction-diff-calculator';
 import {Observable} from 'rxjs';
 import {GpuJsService, GpuJsTexture, GraphicalKernelFunction, TextureKernelFunction} from '../core/gpujs.service';
+import {ReactionDiffKernelModules} from './reaction-diff-window';
 
 export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
+
   grid: GpuJsTexture;
   numberThreads = 1;
   private lastNextCalc = 0;
@@ -17,6 +19,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   private nextAddChemicals: (number | number | number | number)[] = [0, 0, 0, 0];
   private nextImage: HTMLCanvasElement;
   private initGridKernel: TextureKernelFunction;
+  private initialized = false;
 
   constructor(private width: number,
               private height: number,
@@ -24,7 +27,8 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
               calcCellWeights$: Observable<CellWeights>,
               addChemicalRadius$: Observable<number>,
               speed$: Observable<number>,
-              private  gpuJs: GpuJsService) {
+              private gpuJs: GpuJsService,
+              private kernels: ReactionDiffKernelModules) {
     calcParams$.subscribe((calcParams) => {
       this.setCalcParams(calcParams);
     });
@@ -39,13 +43,20 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
     this.addChemical(this.width / 2, this.height / 2);
   }
 
-  private init(): void {
+  private init() {
     this.initGrid();
+
+    const first = this.createCalcNextGpuKernel();
+    const second = this.createCalcNextGpuKernel();
+
     this.calcNextKernels = {
-      first: this.createCalcNextGpuKernel(), second: this.createCalcNextGpuKernel()
+      first,
+      second
     };
-    this.createImageKernel();
+
+    this.imageKernel = this.createImageKernel();
     this.addChemical(this.width / 2, this.height / 2);
+    this.initialized = true;
   }
 
   addChemical(x: number, y: number): void {
@@ -55,6 +66,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   }
 
   resize(width: number, height: number): void {
+    this.initialized = false;
     this.width = width;
     this.height = height;
     this.grid.delete();
@@ -112,6 +124,9 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   }
 
   drawImage(p: any) {
+    if (!this.initialized) {
+      return;
+    }
     if (!this.nextImage) {
       this.calcNext(1);
     }
@@ -120,6 +135,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   }
 
   cleanup() {
+    this.initialized = false;
     this.calcNextKernels = null;
     this.initGridKernel = null;
     this.imageKernel = null;
@@ -129,192 +145,24 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   }
 
   private createCalcNextGpuKernel(): TextureKernelFunction {
-
-    function whenGt(value: number, value2: number): number {
-      return Math.max(Math.sign(value - value2), 0.0);
-    }
-
-    function whenLt(value: number, value2: number): number {
-      return Math.max(Math.sign(value2 - value), 0.0);
-    }
-
-    function whenGe(value: number, value2: number): number {
-      return 1.0 - Math.max(Math.sign(value2 - value), 0.0);
-    }
-
-    function whenLe(value: number, value2: number): number {
-      return 1.0 - Math.max(Math.sign(value - value2), 0.0);
-    }
-
-    function and(a: number, b: number): number {
-      return a * b;
-    }
-
-    function smoothy(lowLim: number, highLim: number, value: number): number {
-      return limit((value - lowLim) / (highLim - lowLim), 0.0, 1.0);
-    }
-
-    function limit(value, lowLim, highLim) {
-      return Math.max(Math.min(value, highLim), lowLim);
-    }
-
-    function mixValues(value, value2, ratio) {
-      return (value * (1.0 - ratio)) + (value2 * ratio);
-    }
-
-    function wrapAround(value, value2) {
-      const greater = whenGe(value, value2);
-      const smallerZero = whenLt(value, 0.0);
-      const inBetween = and(whenGe(value, 0.0), whenLt(value, value2));
-      return (greater * (value - value2)) + (smallerZero * (value2 + value)) + (inBetween * value);
-    }
-
-    function cellValue(grid, fluid, columnOffset, rowOffset): number {
-      const yIndex = wrapAround(this.thread.y + rowOffset, this.constants.height);
-      const xIndex = wrapAround(this.thread.x + columnOffset, this.constants.width);
-      return grid[fluid][yIndex][xIndex];
-    }
-
-    function calcWeightedSum(grid, fluid, weights: number[]) {
-      return cellValue(grid, fluid, -1.0, 1.0) * weights[0] +
-        cellValue(grid, fluid, 0.0, 1.0) * weights[1] +
-        cellValue(grid, fluid, 1, 1.0) * weights[2] +
-        cellValue(grid, fluid, -1.0, 0.0) * weights[3] +
-        cellValue(grid, fluid, 0.0, 0.0) * weights[4] +
-        cellValue(grid, fluid, 1, 0.0) * weights[5] +
-        cellValue(grid, fluid, -1.0, -1) * weights[6] +
-        cellValue(grid, fluid, 0.0, -1) * weights[7] +
-        cellValue(grid, fluid, 1, -1) * weights[8];
-    }
-
-    function calcNextA(a, dA, laplaceA, abb, f) {
-      return a +
-        (dA * laplaceA) -
-        abb +
-        (f * (1 - a));
-    }
-
-    function calcFluidBToAdd(grid, x, y, radius): number {
-      // even cells are for fluid A. Odd cells are fluid B.
-      const isFluidB = this.thread.z % 2.0;
-      const i = Math.abs(x - this.thread.x);
-      const j = Math.abs(y - (this.constants.height - this.thread.y));
-      const radPos = (i * i) + (j * j);
-
-      // we only want to change values for fluid B (oddEvenMod = 1) and when radius² >= radPos.
-      const fluidBToAdd = isFluidB * smoothy(radius * radius, 0, radPos);
-      return limit(fluidBToAdd, 0.0, 1.0);
-    }
-
-    return this.gpuJs.createKernel(
-      function calcNextKernel(grid, weights: number[], calcParams: number[], addChemicalsParams: [number, number, number, number]) {
-        const dA = calcParams[0];
-        const dB = calcParams[1];
-        const f = calcParams[2];
-        const k = calcParams[3];
-        const dynkillfeed = calcParams[4];
-
-        const xNormed = this.thread.x / this.constants.width;
-        const yNormed = this.thread.y / this.constants.height;
-
-        const [x, y, radius, addChems] = addChemicalsParams;
-
-        // we calculate k and f deepending on x, y when dynkillfeed = 1
-        const kT = mixValues(k, k + (xNormed * 0.025), dynkillfeed);
-        const fT = mixValues(f, (f + 0.09) + (yNormed * -0.09), dynkillfeed);
-
-        const laplaceA = calcWeightedSum(grid, 0.0, weights);
-        const laplaceB = calcWeightedSum(grid, 1.0, weights);
-
-        const a = grid[0][this.thread.y][this.thread.x];
-        const b = grid[1][this.thread.y][this.thread.x] + (addChems * calcFluidBToAdd(grid, x, y, radius));
-        const abb = a * b * b;
-
-        const fluid = (this.thread.z - 1) * -calcNextA(a, dA, laplaceA, abb, fT)
-          + (this.thread.z * (b + (dB * laplaceB) + abb - ((kT + fT) * b)));
-
-        return limit(fluid, 0, 1);
-
-      }, {output: [this.width, this.height, 2]})
+    const calcNextModule = this.kernels.calcNextKernelModule;
+    return this.gpuJs.createKernel(calcNextModule.calcNextKernel,
+      {output: [this.width, this.height, 2]})
       .setFloatTextures(true)
       .setFloatOutput(true)
       .setOutputToTexture(true)
       .setConstants({width: this.width, height: this.height})
-      .setFunctions({
-          whenLe: whenLe,
-          whenGe: whenGe,
-          whenLt: whenLt,
-          whenGt: whenGt,
-          and: and,
-          limit: limit,
-          smoothy: smoothy,
-          mixValues: mixValues,
-          wrapAround: wrapAround,
-          cellValue: cellValue,
-          calcWeightedSum: calcWeightedSum,
-          calcNextA: calcNextA,
-          calcFluidBToAdd: calcFluidBToAdd
-        }
-      );
+      .setFunctions(calcNextModule.usedFunctions);
   }
 
   private createImageKernel() {
-
-    function mixValues(value1, value2, ratio) {
-      return (value1 * (1.0 - ratio)) + (value2 * ratio);
-    }
-
-    this.imageKernel = this.gpuJs.createKernel(
-      function (grid) {
-        const aVal = grid[0][this.thread.y][this.thread.x];
-        const bVal = grid[1][this.thread.y][this.thread.x];
-
-        // background color
-        const rbg = 0.1;
-        const gbg = 0.25;
-        const bbg = 0.1;
-
-        // a color
-        const ra = aVal;
-        const ga = aVal;
-        const ba = 0.8;
-
-        // b color
-        const rb = 0;
-        const gb = 0;
-        const bb = bVal * 0.4;
-
-        if (aVal === 0) {
-          this.color(
-            mixValues(rbg, rb, bVal),
-            mixValues(gbg, gb, bVal),
-            mixValues(bbg, bb, bVal));
-        } else if (bVal === 0) {
-          this.color(
-            mixValues(rbg, ra, 0.5),
-            mixValues(gbg, ga, 0.5),
-            mixValues(bbg, ba, 0.5));
-        } else if (aVal < bVal) {
-          const rel = aVal / bVal;
-          this.color(
-            mixValues(rb, ra, rel),
-            mixValues(gb, ga, rel),
-            mixValues(bb, ba, rel)
-          );
-        } else {
-          const rel2 = bVal / aVal;
-          this.color(
-            mixValues(ra, rb, rel2),
-            mixValues(ga, gb, rel2),
-            mixValues(ba, bb, rel2)
-          );
-        }
-      }
-      , {output: [this.width, this.height]})
+    const kernelModule = this.kernels.imageKernelModule;
+    return this.gpuJs.createKernel(kernelModule.imageKernel, {output: [this.width, this.height]})
       .setFloatTextures(true)
-      .setFunctions([mixValues])
+      .setFunctions(kernelModule.usedFunctions)
       .setGraphical(true);
   }
+
 
   updateNumberThreads(numberWebWorkers: number): void {
     // nothing to do here.

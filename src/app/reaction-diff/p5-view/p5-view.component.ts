@@ -9,7 +9,6 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import 'p5';
 
 import {ReactionDiffCalculator} from '../reaction-diff-calculator';
 

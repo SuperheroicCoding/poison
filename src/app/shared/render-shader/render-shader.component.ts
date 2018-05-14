@@ -24,6 +24,7 @@ import {
 import {defaultVertexShader} from './default-vertex-shader';
 import * as Stats from 'stats.js';
 
+declare var Detector: {webgl: boolean};
 
 @Component({
   selector: 'app-render-shader',

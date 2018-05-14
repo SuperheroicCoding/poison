@@ -27,6 +27,8 @@
         "https://superheroiccoding.github.io/AngularExamples/assets/logos/typescript.svg",
         "https://superheroiccoding.github.io/AngularExamples/assets/mnist/mnist_images.png",
         "https://superheroiccoding.github.io/AngularExamples/assets/mnist/mnist_labels_uint8.data",
+        "https://superheroiccoding.github.io/AngularExamples/assets/reaction-diff/calc-next-kernel.js",
+        "https://superheroiccoding.github.io/AngularExamples/assets/reaction-diff/image-kernel.js",
         "https://superheroiccoding.github.io/AngularExamples/assets/wood.jpeg"
       ],
       "patterns": []
@@ -36,7 +38,7 @@
   "hashTable": {
     "https://superheroiccoding.github.io/AngularExamples/favicon.ico": "84161b857f5c547e3699ddfbffc6d8d737542e01",
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/angular-cli.svg": "cb3e92c7bd3dcae87dc103e4f3d128ce15b84cd6",
-    "https://superheroiccoding.github.io/AngularExamples/index.html": "2e46a0a4b65af8fcdb5e81428ad4bf87bfdca174",
+    "https://superheroiccoding.github.io/AngularExamples/index.html": "ee99fcd8638f4f0046b974e71fa99565ef287059",
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/angular-material.svg": "77d8b188ec7234e3a67604bb708329c503c1f201",
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/angular.svg": "d1c29fa152f60e0e7e9c60cdbe57f755f7d46344",
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/gpu-js.png": "1327a2df54f4f7885891e8f91ea668a6f3ba37f9",
@@ -46,6 +48,8 @@
     "https://superheroiccoding.github.io/AngularExamples/assets/logos/typescript.svg": "4ff0ab7bac5d0478e03a5d1591cd1e4345cd01d9",
     "https://superheroiccoding.github.io/AngularExamples/assets/mnist/mnist_images.png": "0f001230be44050cf245d25dfb4039107861d826",
     "https://superheroiccoding.github.io/AngularExamples/assets/mnist/mnist_labels_uint8.data": "e8b25f8fdc852e98c014d6153524d9e0cab4b675",
+    "https://superheroiccoding.github.io/AngularExamples/assets/reaction-diff/calc-next-kernel.js": "f7bb39ec164a0487aff866321c684630736d6f5e",
+    "https://superheroiccoding.github.io/AngularExamples/assets/reaction-diff/image-kernel.js": "40eccd2f7fa2d1ea41119801ae00c3ed229514c3",
     "https://superheroiccoding.github.io/AngularExamples/assets/wood.jpeg": "4730b3f4d0df41b2189219db036e164721ea0ec4"
   },
   "navigationUrls": [

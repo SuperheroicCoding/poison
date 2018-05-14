@@ -21,7 +21,7 @@ export class DrawDigitComponent implements AfterViewChecked {
   }
 
   private initScetch() {
-    if(this.sketch){
+    if (this.sketch) {
       return;
     }
     this.sketch = new p5((p: p5) => {

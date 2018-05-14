@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {Vector} from './shared/vector';
 import {PoissonCalcService} from './poisson-calc.service';
 
@@ -9,7 +9,7 @@ import {PoissonCalcService} from './poisson-calc.service';
   styleUrls: ['./poisson.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PoissonComponent implements OnInit {
+export class PoissonComponent implements OnInit, OnDestroy {
 
   canvasWidth = 350;
   canvasHeight = 350;
@@ -43,5 +43,9 @@ export class PoissonComponent implements OnInit {
 
   setPlay(play: boolean) {
     this.play = play;
+  }
+
+  ngOnDestroy(): void {
+
   }
 }

@@ -77,7 +77,6 @@ export class PoissonCalcService {
     this.activesSubject = new Subject<Vector[]>();
     this.activeVectors$ = this.activesSubject.asObservable();
 
-
     this.calculationCompletedSubject = new Subject<void>();
 
     if (this.linesSubject) {
@@ -236,4 +235,6 @@ export class PoissonCalcService {
     this.active.splice(index, 1);
     this.activesSubject.next(this.active);
   }
+
+
 }

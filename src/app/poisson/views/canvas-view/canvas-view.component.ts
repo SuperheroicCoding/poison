@@ -5,13 +5,14 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild
 } from '@angular/core';
 import {Circle} from '../../shared/circle';
 import {CanvasDrawService} from './canvas-draw.service';
-import {interval, Observable, animationFrameScheduler} from 'rxjs';
+import {animationFrameScheduler, interval, Observable, Subscription} from 'rxjs';
 import {Vector} from '../../shared/vector';
 import {Line} from '../../shared/line';
 import {skipUntil} from 'rxjs/operators';
@@ -23,7 +24,7 @@ import {skipUntil} from 'rxjs/operators';
   styleUrls: ['./canvas-view.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CanvasViewComponent implements OnInit, AfterContentInit {
+export class CanvasViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
 
   @ViewChild('canvas') canvas: ElementRef;
@@ -36,6 +37,7 @@ export class CanvasViewComponent implements OnInit, AfterContentInit {
   @Output() onReadyToPaint = new EventEmitter<number>();
 
   private draw$: Observable<number>;
+  private subscriptions: Subscription;
 
   constructor(private canvasDrawService: CanvasDrawService) {
   }
@@ -45,12 +47,12 @@ export class CanvasViewComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit(): void {
-    this.canvas.nativeElement.width=this.canvasWidth;
-    this.canvas.nativeElement.height=this.canvasHeight;
+    this.canvas.nativeElement.width = this.canvasWidth;
+    this.canvas.nativeElement.height = this.canvasHeight;
     const context: CanvasRenderingContext2D = this.canvas.nativeElement.getContext('2d');
     this.canvasDrawService.initCtx(context);
     setTimeout(() => this.onReadyToPaint.emit(0), 1000);
-    this.draw$.subscribe(this.draw.bind(this));
+    this.subscriptions = this.draw$.subscribe(this.draw.bind(this));
   }
 
   public onClick($event: MouseEvent) {
@@ -82,5 +84,9 @@ export class CanvasViewComponent implements OnInit, AfterContentInit {
       this.lines.forEach((line) => this.canvasDrawService.drawLineObj(line));
     }
     this.onReadyToPaint.emit(step);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }
