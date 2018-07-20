@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import * as tf from '@tensorflow/tfjs';
 import renderChart from 'vega-embed';
-import embed from 'vega-embed';
 
 
 @Injectable()

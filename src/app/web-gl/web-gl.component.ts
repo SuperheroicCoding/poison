@@ -18,7 +18,7 @@ import {
   FogExp2,
   Material,
   Mesh,
-  MeshBasicMaterial,
+  MeshBasicMaterial, MeshMaterial,
   MeshPhongMaterial,
   PerspectiveCamera,
   PlaneGeometry,
@@ -221,7 +221,7 @@ export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
     return new Mesh(new PlaneGeometry(100, 100, 1, 1), this.createMandelbrotMaterial());
   }
 
-  private createMandelbrotMaterial(): Material {
+  private createMandelbrotMaterial(): MeshMaterial {
     const uniforms = UniformsUtils
       .merge([
         UniformsLib['lights'],

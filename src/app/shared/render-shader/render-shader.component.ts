@@ -24,7 +24,7 @@ import {
 import {defaultVertexShader} from './default-vertex-shader';
 import * as Stats from 'stats.js';
 
-declare var Detector: {webgl: boolean};
+declare var Detector: { webgl: boolean };
 
 @Component({
   selector: 'app-render-shader',
@@ -40,9 +40,6 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() canvasWidth: number;
   @Input() canvasHeight: number;
 
-  @ViewChild('webGlCanvas') shaderCanvas: ElementRef;
-  @ViewChild('canvasContainer') canvasContainer: ElementRef;
-  @ViewChild('stats') statsElem: ElementRef;
 
   private renderer: Renderer;
 
@@ -56,9 +53,11 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
   private stats: Stats;
 
 
-  constructor(private ngZone: NgZone) {
+  constructor(private ngZone: NgZone,
+              @ViewChild('webGlCanvas') private shaderCanvas: ElementRef,
+              @ViewChild('canvasContainer') private canvasContainer: ElementRef,
+              @ViewChild('stats') private statsElem: ElementRef) {
   }
-
 
   ngOnInit() {
     const renderParams = {
