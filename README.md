@@ -12,7 +12,7 @@ CSS wise I try to get my hands on grid layout.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version ^6.0.x.
 
-A running version (not always up to date) can be found on github pages: https://superheroiccoding.github.io/AngularExamples/
+A running version (not always up to date) can be found on github pages: https://angularexamples.superheroiccoding.de/
 
 ## Development server
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
