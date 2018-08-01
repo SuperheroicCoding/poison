@@ -12,7 +12,7 @@ export class NeuralNetworkComponent implements OnInit {
   ngOnInit(): void {
     this._navLinks = [
       {path: 'perceptron', label: 'Perceptron', hidden: false},
-      {path: 'multiPerceptron', label: 'Multi layer net', hidden: !environment.production}
+      {path: 'multiPerceptron', label: 'Multi layer net', hidden: environment.production}
     ];
   }
 
