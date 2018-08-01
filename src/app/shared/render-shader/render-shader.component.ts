@@ -1,11 +1,11 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   Input,
   NgZone,
   OnChanges,
   OnDestroy,
-  OnInit,
   SimpleChanges,
   ViewChild
 } from '@angular/core';
@@ -21,17 +21,16 @@ import {
   Vector2,
   WebGLRenderer
 } from 'three';
+import * as Detector from 'three/examples/js/Detector';
 import {defaultVertexShader} from './default-vertex-shader';
 import * as Stats from 'stats.js';
-
-declare var Detector: { webgl: boolean };
 
 @Component({
   selector: 'app-render-shader',
   templateUrl: './render-shader.component.html',
   styleUrls: ['./render-shader.component.less']
 })
-export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
+export class RenderShaderComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   @Input() shaderCode: string;
   @Input() vertexShader?: string;
@@ -51,18 +50,17 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
   private scene: Scene;
   private uniforms: any;
   private stats: Stats;
+  @ViewChild('canvasContainer') private canvasContainer: ElementRef<HTMLDivElement>;
+  @ViewChild('webGLCanvas') private webGLCanvas: ElementRef<HTMLCanvasElement>;
+  @ViewChild('stats') private statsElem: ElementRef;
 
-
-  constructor(private ngZone: NgZone,
-              @ViewChild('webGlCanvas') private shaderCanvas: ElementRef,
-              @ViewChild('canvasContainer') private canvasContainer: ElementRef,
-              @ViewChild('stats') private statsElem: ElementRef) {
+  constructor(private ngZone: NgZone) {
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     const renderParams = {
       antialias: true,
-      canvas: this.shaderCanvas.nativeElement,
+      canvas: this.webGLCanvas.nativeElement,
     };
     this.renderer = Detector.webgl ? new WebGLRenderer(renderParams) : new CanvasRenderer(renderParams);
 
@@ -89,8 +87,8 @@ export class RenderShaderComponent implements OnInit, OnChanges, OnDestroy {
 
     this.mesh = new Mesh(this.geometry, this.material);
 
-    this.shaderCanvas.nativeElement.onmousemove = (e) => this.onMouseMove(e);
-    this.shaderCanvas.nativeElement.ontouchmove = (e) => this.onTouchMove(e);
+    this.webGLCanvas.nativeElement.onmousemove = (e) => this.onMouseMove(e);
+    this.webGLCanvas.nativeElement.ontouchmove = (e) => this.onTouchMove(e);
     this.scene.add(this.mesh);
     this.animate(1.0);
   }

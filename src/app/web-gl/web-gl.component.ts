@@ -1,24 +1,15 @@
-import {
-  AfterContentInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  NgZone,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {merge, Observable} from 'rxjs';
 
 import {
   AmbientLight,
+  BasicShadowMap,
   BoxGeometry,
   Clock,
   Color,
   FogExp2,
-  Material,
   Mesh,
-  MeshBasicMaterial, MeshMaterial,
+  MeshBasicMaterial,
   MeshPhongMaterial,
   PerspectiveCamera,
   PlaneGeometry,
@@ -31,21 +22,18 @@ import {
   UniformsUtils,
   WebGLRenderer
 } from 'three';
+import { OrbitControls } from 'three-orbitcontrols-ts';
 import {MandelbrotFragment, MandelbrotVertex} from './mandelbrot-shader';
 import {map} from 'rxjs/operators';
 
-
-const PIHALF = Math.PI / 2;
-
-// a little hack to make our manually loaded three plugins available.
-declare const THREE: any;
+const TAU = Math.PI / 2;
 
 @Component({
   selector: 'app-web-gl',
   templateUrl: './web-gl.component.html',
   styleUrls: ['./web-gl.component.less']
 })
-export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
+export class WebGlComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   @ViewChild('webGlCanvas') webGlCanvas: ElementRef;
@@ -92,7 +80,7 @@ export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
     this.renderer.dispose();
   }
 
-  ngAfterContentInit(): void {
+  ngAfterViewInit(): void {
     this.clock = new Clock();
     this.scene = new Scene();
     this.scene.fog = new FogExp2(0xcccccc, 0.002);
@@ -106,10 +94,10 @@ export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
     this.camera.position.x = 10;
     this.renderer = new WebGLRenderer({canvas, antialias: true});
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.BasicShadowMap;
+    this.renderer.shadowMap.type = BasicShadowMap;
     this.renderer.setSize(this.width, this.height);
 
-    this.controls = new THREE.OrbitControls(this.camera, canvas);
+    this.controls = new OrbitControls(this.camera, canvas);
 
     const light = new AmbientLight(0xffffff);
     this.scene.add(light);
@@ -143,8 +131,8 @@ export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
     this.scene.add(this.cube);
 
     this.plane = this.createMandlebrotPlane();
-    this.plane.rotation.x = -PIHALF;
-    this.plane.rotation.z =  -0.85 * Math.PI;
+    this.plane.rotation.x = -TAU;
+    this.plane.rotation.z = -0.85 * Math.PI;
     this.plane.translateX(7.5);
     this.plane.translateY(0.5);
 
@@ -198,30 +186,11 @@ export class WebGlComponent implements OnInit, AfterContentInit, OnDestroy {
     });
   }
 
-  private createCheckerBoard(segments: number = 20): Mesh {
-    const geometry = new PlaneGeometry(100, 100, segments, segments);
-
-    const materialEven = new MeshPhongMaterial({color: 0xccccfc, specular: 0x009900, shininess: 15, flatShading: true});
-    const materialOdd = new MeshPhongMaterial({color: 0x444464, specular: 0x009900, shininess: 10, flatShading: true});
-    const materials = [materialEven, materialOdd];
-
-    for (let x = 0; x < segments; x++) {
-      for (let y = 0; y < segments; y++) {
-        const i = x * segments + y;
-        const j = 2 * i;
-        geometry.faces[j].materialIndex = geometry.faces[j + 1].materialIndex = (x + y) % 2;
-      }
-    }
-
-    const checkerBoard = new Mesh(geometry, materials as any);
-    return checkerBoard;
-  }
-
   private createMandlebrotPlane(): Mesh {
     return new Mesh(new PlaneGeometry(100, 100, 1, 1), this.createMandelbrotMaterial());
   }
 
-  private createMandelbrotMaterial(): MeshMaterial {
+  private createMandelbrotMaterial(): ShaderMaterial {
     const uniforms = UniformsUtils
       .merge([
         UniformsLib['lights'],

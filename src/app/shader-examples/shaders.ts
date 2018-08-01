@@ -3,7 +3,6 @@ export interface ShaderDef {
   description: string;
 }
 
-// noinspection TsLint
 export const shaders: ShaderDef[] = [{
   code: `
     #ifdef GL_ES

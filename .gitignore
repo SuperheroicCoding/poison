@@ -2,6 +2,7 @@
 
 # compiled output
 /dist
+/distS3
 /tmp
 /out-tsc
 
@@ -42,4 +43,4 @@ yarn-error.log
 # System Files
 .DS_Store
 Thumbs.db
-/distS3/
+/
