@@ -95,8 +95,8 @@
              [(ngModel)]="numberWebWorkers"
              (change)="updateNumberOfWebWorkers()">
     </mat-form-field>
-    <mat-checkbox [(ngModel)]="useGpu" (change)="updateUseGpu()">
-      Use gpu.js
+    <mat-checkbox [(ngModel)]="useGpu" (change)="updateUseGpu()" disabled="disabled">
+      Use gpu.js (currently not working)
     </mat-checkbox>
 
     <div *ngIf="showFps">Calculation needs: {{calculationTime$ | async}}ms</div>

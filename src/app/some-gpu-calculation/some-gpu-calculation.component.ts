@@ -1,8 +1,8 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
-import {combineLatest, map, mergeMap, scan, startWith, timeInterval} from 'rxjs/operators';
-import {animationFrameScheduler, interval, Observable, of, Subscription, TimeInterval} from 'rxjs';
+import {animationFrameScheduler, combineLatest, interval, Observable, of, Subscription, TimeInterval} from 'rxjs';
+import {map, mergeMap, scan, startWith, switchMap, timeInterval} from 'rxjs/operators';
 import {GpuJsService, GraphicalKernelFunction} from '../core/gpujs.service';
 
 @Component({
@@ -58,13 +58,14 @@ export class SomeGpuCalculationComponent implements AfterViewInit, OnDestroy {
     const gpuColorizerOptions$ = interval(Math.floor(1000 / 120), animationFrameScheduler).pipe(
       timeInterval<number>(),
       scan<TimeInterval<number>, number>((acc, value) => acc + value.interval, 0),
-      combineLatest(
+      switchMap((frameTime) => combineLatest(
+        of(frameTime),
         this.additionForm.get('r').valueChanges.pipe(startWith(255)),
         this.additionForm.get('g').valueChanges.pipe(startWith(255)),
         this.additionForm.get('b').valueChanges.pipe(startWith(255)),
         this.additionForm.get('sinDivider').valueChanges.pipe(startWith(100)),
         this.additionForm.get('speed').valueChanges.pipe(startWith(20), map((speed) => speed / 100))
-      )
+      ))
     );
     this.subscription = gpuColorizerOptions$.subscribe(([frameTime, r, g, b, sinDivider, speed]) =>
       this.createCanvasWithGPU(frameTime, r, g, b, sinDivider, speed));
