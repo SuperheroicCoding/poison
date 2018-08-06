@@ -13,11 +13,6 @@ const myConfig = new AWS.Config({
 
 var s3 = new AWS.S3();
 
-// console.log(s3.getObject({Bucket: 'superheroiccoding.de', Key: '*'}));
-//const listObject = s3.listObjects({Bucket: 'superheroiccoding.de'});
-
-// listObject.send((err, data) => console.log(err, data));
-
 const bucket = 'superheroiccoding.de';
 const prefix = 'angularExamples/';
 
