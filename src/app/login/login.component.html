@@ -1,0 +1,14 @@
+<div class="logged-in" *ngIf="afAuth.user |async as user; else showLogin">
+  <div class="mat-caption caption">Welcome {{ user.displayName }}!</div>
+  <button mat-mini-fab color="accent" (click)="logout()">
+    <mat-icon>logout</mat-icon>
+  </button>
+</div>
+<ng-template #showLogin>
+  <div class="logged-in">
+    <div class="mat-caption caption">Please login.</div>
+    <button mat-mini-fab color="warn" (click)="login()">
+      <mat-icon>security</mat-icon>
+    </button>
+  </div>
+</ng-template>

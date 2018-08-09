@@ -14,6 +14,8 @@ import {ROUTER_LINKS} from './app-routes.token';
 import {ServiceWorkerModule} from '@angular/service-worker';
 import {environment} from '../environments/environment';
 import {ServiceWorkerUpdateComponent} from './service-worker-update/service-worker-update.component';
+import {LoginModule} from './login/login.module';
+import {AngularFireModule} from 'angularfire2';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import {ServiceWorkerUpdateComponent} from './service-worker-update/service-work
     ServiceWorkerUpdateComponent,
   ],
   imports: [
+    AngularFireModule.initializeApp(environment.firebase),
     CoreModule.forRoot(),
+    LoginModule,
     BrowserModule,
     appRoutes,
     BrowserAnimationsModule,
