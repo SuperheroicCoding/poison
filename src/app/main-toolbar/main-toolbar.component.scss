@@ -1,0 +1,35 @@
+@import "../../variables";
+
+:host {
+  position: relative;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.sidenav-icon {
+}
+
+.sidenav-icon,
+app-login {
+  pointer-events: all;
+}
+
+.page-title {
+  background-color: rgba(30, 30, 30, 0.0);
+  pointer-events: none;
+  height: 100%;
+  padding: 0.5rem;
+}
+
+.shader-background {
+  height: 100%;
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  pointer-events: all;
+}

@@ -1,16 +1,21 @@
-<div class="logged-in" *ngIf="afAuth.user | async as user; else showLogin">
-  <mat-chip-list class="mat-elevation-z2">
-    <mat-chip [color]="'accent'" matTooltip="Welcome {{ user.displayName }}"><img [src]="user.photoURL"></mat-chip>
-  </mat-chip-list>
-  <button mat-mini-fab color="accent" (click)="logout()" matTooltip="Logout">
-    <mat-icon>logout</mat-icon>
-  </button>
-</div>
-<ng-template #showLogin>
-  <div class="logged-in">
-    <div class="mat-caption caption">Please login.</div>
-    <button mat-mini-fab color="warn" (click)="login()">
-      <mat-icon>security</mat-icon>
+<div class="logged-in">
+  <ng-container
+    *ngIf="afAuth.user | async; then showLoggedIn; else showLogin">
+  </ng-container>
+  <ng-template #showLoggedIn>
+    <mat-chip-list class="mat-elevation-z2">
+      <mat-chip [color]="'accent'" matTooltip="Welcome {{ user.displayName }}"><img [src]="user.photoURL"></mat-chip>
+    </mat-chip-list>
+    <button mat-mini-fab color="accent" (click)="logout()" matTooltip="Logout">
+      <mat-icon>logout</mat-icon>
     </button>
-  </div>
-</ng-template>
+  </ng-template>
+  <ng-template #showLogin>
+    <div class="logged-in">
+      <div class="mat-caption caption">Please login.</div>
+      <button mat-mini-fab color="warn" (click)="login()">
+        <mat-icon>security</mat-icon>
+      </button>
+    </div>
+  </ng-template>
+</div>

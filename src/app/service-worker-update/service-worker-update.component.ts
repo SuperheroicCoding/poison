@@ -11,7 +11,7 @@ import {interval, from} from 'rxjs';
 @Component({
   selector: 'app-service-worker-update',
   templateUrl: './service-worker-update.component.html',
-  styleUrls: ['./service-worker-update.component.less']
+  styleUrls: ['./service-worker-update.component.scss']
 })
 export class ServiceWorkerUpdateComponent {
   private _isLoading = false;
