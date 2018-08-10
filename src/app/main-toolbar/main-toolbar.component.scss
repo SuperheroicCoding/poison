@@ -8,12 +8,14 @@
   flex: 1 1 auto;
 }
 
-.sidenav-icon {
+.sidenav-icon,
+app-login,
+app-service-worker-update {
+  pointer-events: all;
 }
 
-.sidenav-icon,
-app-login {
-  pointer-events: all;
+app-service-worker-update {
+  margin-right: 0.5rem;
 }
 
 .page-title {

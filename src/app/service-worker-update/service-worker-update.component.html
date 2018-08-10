@@ -1,5 +1,5 @@
 <span class="mat-caption" *ngIf="isLoading">Checking for new version</span>
-<mat-spinner *ngIf="isLoading" [diameter]="40">
+<mat-spinner *ngIf="isLoading" [diameter]="24">
 </mat-spinner>
 <button color="warn" mat-raised-button *ngIf="updatesAvailable" (click)="activateUpdate()">Get new version!</button>
 
