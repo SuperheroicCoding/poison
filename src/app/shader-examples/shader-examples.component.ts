@@ -1,15 +1,12 @@
 import {AfterContentInit, Component, ElementRef, ViewChild} from '@angular/core';
-import {ShaderDef, shaders} from './shaders';
+import {ShaderDef} from './shaders-def';
 import {MatPaginator, PageEvent} from '@angular/material';
-import {Subject, Observable, BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, filter, map, mergeMapTo, share, tap} from 'rxjs/operators';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {animate, keyframes, transition, trigger} from '@angular/animations';
 import {fadeInLeft, fadeInRight, fadeOutLeft, fadeOutRight} from './leftInOut.animation';
-
-interface ShaderModel extends ShaderDef {
-  fullSize: boolean;
-}
+import {ShaderCodeService} from './shader-code.service';
 
 @Component({
   selector: 'app-shader-examples',
@@ -26,28 +23,38 @@ interface ShaderModel extends ShaderDef {
   ]
 })
 export class ShaderExamplesComponent implements AfterContentInit {
-  shaders: ShaderModel[] = shaders.map((shader: ShaderDef) => Object.assign({fullSize: false}, shader)).reverse();
+  shaders: ShaderDef[];
   showFps = false;
   showCodeEditor = false;
-  shadersPaged$: Observable<ShaderModel[]>;
+  shadersPaged$: Observable<ShaderDef[]>;
   currentPage$: Observable<PageEvent>;
-  currentPageSubject: Subject<PageEvent> = new BehaviorSubject({
-    length: this.shaders.length,
-    pageIndex: 0,
-    pageSize: 2
-  });
+  currentPageSubject: Subject<PageEvent> = new Subject();
   @ViewChild('shaderRenderer') shaderRenderer: ElementRef;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   isSmallScreen = false;
-  pageEvent: PageEvent = {pageSize: 2, pageIndex: 0, length: this.shaders.length};
+  pageEvent: PageEvent;
   animationState: string;
   private animationEnded$: BehaviorSubject<boolean>;
+  private shaders$: Observable<ShaderDef[]>;
 
-  constructor(private breakpointObserver: BreakpointObserver) {
+  constructor(private breakpointObserver: BreakpointObserver, private shaderCode: ShaderCodeService) {
+    this.shaders$ = this.shaderCode.shaders$;
   }
 
   ngAfterContentInit() {
+    this.shaders$.pipe(
+      filter(shaders => shaders && shaders.length > 0)
+    ).subscribe(shaders => {
+      this.shaders = shaders;
+      this.pageEvent = {
+        length: this.shaders.length,
+        pageIndex: 0,
+        pageSize: 2
+      };
+      this.currentPageSubject.next(this.pageEvent);
+    });
+
     this.currentPage$ = this.currentPageSubject.asObservable().pipe(
       distinctUntilChanged((p1, p2) => p1.pageIndex === p2.pageIndex && p1.pageSize === p2.pageSize),
       tap(pageEvent => this.pageEvent = pageEvent),
@@ -62,10 +69,10 @@ export class ShaderExamplesComponent implements AfterContentInit {
         debounceTime<PageEvent>(400),
         mergeMapTo(this.animationEnded$),
         filter(animationEnded => animationEnded),
-        map((ignored => {
+        map(ignored => {
           const event = this.pageEvent;
           return this.shaders.slice(event.pageSize * event.pageIndex, event.pageSize * event.pageIndex + event.pageSize);
-        })),
+        }),
         share()
       );
 
@@ -80,12 +87,6 @@ export class ShaderExamplesComponent implements AfterContentInit {
         this.isSmallScreen = result.matches;
       }
     );
-
-    if (!this.pageEvent) {
-      const currentPage = {length: this.shaders.length, pageIndex: 0, pageSize: 2};
-      this.changeCurrentShaderPage(currentPage);
-    }
-
 
   }
 

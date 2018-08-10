@@ -17,6 +17,8 @@ import {ServiceWorkerUpdateComponent} from './service-worker-update/service-work
 import {LoginModule} from './login/login.module';
 import {AngularFireModule} from 'angularfire2';
 import { MainToolbarComponent } from './main-toolbar/main-toolbar.component';
+import {AngularFirestoreModule} from 'angularfire2/firestore';
+import {AngularFireAuthModule} from 'angularfire2/auth';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { MainToolbarComponent } from './main-toolbar/main-toolbar.component';
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
     CoreModule.forRoot(),
     LoginModule,
     BrowserModule,

@@ -1,9 +1,4 @@
-export interface ShaderDef {
-  code: string;
-  description: string;
-}
-
-export const shaders: ShaderDef[] = [{
+const defaultShadersV1 = [{
   code: `
     #ifdef GL_ES
     precision highp float;
@@ -478,3 +473,4 @@ void main() {
     `
   }
 ];
+module.exports = {defaultShaders: defaultShadersV1};
