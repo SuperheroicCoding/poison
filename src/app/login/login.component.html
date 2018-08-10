@@ -1,6 +1,6 @@
 <div class="logged-in" *ngIf="afAuth.user | async as user; else showLogin">
-  <mat-chip-list>
-    <mat-chip color="primary">Welcome {{ user.displayName }}<img [src]="user.photoURL"></mat-chip>
+  <mat-chip-list class="mat-elevation-z2">
+    <mat-chip [color]="'accent'" matTooltip="Welcome {{ user.displayName }}"><img [src]="user.photoURL"></mat-chip>
   </mat-chip-list>
   <button mat-mini-fab color="accent" (click)="logout()" matTooltip="Logout">
     <mat-icon>logout</mat-icon>

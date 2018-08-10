@@ -10,26 +10,7 @@
     </mat-nav-list>
   </mat-sidenav>
   <section class="pageGrid">
-    <div class="shader-background" #shaderContainer>
-      <app-render-shader
-        [shaderCode]="shaderCode"
-        [canvasWidth]="shaderContainer.clientWidth"
-        [canvasHeight]="shaderContainer.clientHeight"
-        [runAnimation]="runAnimation | async"
-      >
-      </app-render-shader>
-    </div>
-    <mat-toolbar role="header" class="pageTitle">
-      <mat-toolbar-row>
-        <button class="sidenav-icon" mat-icon-button (click)="sidenav.open()">
-          <mat-icon>menu</mat-icon>
-        </button>
-        <div >SuperheroicCoding Angular Demos</div>
-        <span class="toolbar-spacer"></span>
-        <app-login></app-login>
-        <app-service-worker-update></app-service-worker-update>
-      </mat-toolbar-row>
-    </mat-toolbar>
+    <app-main-toolbar (clickSideNav)="sidenav.open($event)"></app-main-toolbar>
     <div class="pageContent">
       <router-outlet></router-outlet>
     </div>

@@ -16,6 +16,7 @@ import {environment} from '../environments/environment';
 import {ServiceWorkerUpdateComponent} from './service-worker-update/service-worker-update.component';
 import {LoginModule} from './login/login.module';
 import {AngularFireModule} from 'angularfire2';
+import { MainToolbarComponent } from './main-toolbar/main-toolbar.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import {AngularFireModule} from 'angularfire2';
     NavItemComponent,
     AboutComponent,
     ServiceWorkerUpdateComponent,
+    MainToolbarComponent,
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebase),

@@ -26,6 +26,7 @@ import {SafeHtmlPipe} from './safe-html.pipe';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {CodeEditorComponent} from './code-editor/code-editor.component';
 import {RenderShaderComponent} from './render-shader/render-shader.component';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
   imports: [CommonModule, AceEditorModule],
@@ -52,7 +53,8 @@ import {RenderShaderComponent} from './render-shader/render-shader.component';
     SafeHtmlPipe,
     AceEditorModule,
     CodeEditorComponent,
-    RenderShaderComponent
+    RenderShaderComponent,
+    FlexLayoutModule
   ],
   declarations: [RaiseCardDirective, SafeHtmlPipe, CodeEditorComponent, RenderShaderComponent]
 })
