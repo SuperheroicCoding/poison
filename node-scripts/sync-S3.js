@@ -146,7 +146,7 @@ function getCacheControlFor(fileName) {
 }
 
 function invalidateIndex() {
-  const callerReference = '' + Math.random() * 1000 + Math.random() * 100 + Math.random() * 10 + Math.random();
+  const callerReference = '' + Math.random();
   new AWS.CloudFront().createInvalidation({
     DistributionId: 'EW5AZB46F9YF1', InvalidationBatch: {
       Paths: {Quantity: 2, Items: ['/index.html', '/ngsw.json']},
