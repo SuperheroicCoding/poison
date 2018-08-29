@@ -1,6 +1,6 @@
 <div class="logged-in">
   <ng-container
-    *ngIf="afAuth.user | async; then showLoggedIn; else showLogin">
+    *ngIf="authenticationService.user | async; then showLoggedIn; else showLogin">
   </ng-container>
   <ng-template #showLoggedIn>
     <mat-chip-list class="mat-elevation-z2">

@@ -6,9 +6,16 @@ import {ServiceWorkerUpdateService} from './service-worker-update.service';
 import {MatSnackBarModule} from '@angular/material';
 import {HeadlineAnimationService} from './headline-animation.service';
 import {GpuJsService} from './gpujs.service';
+import {AngularFireModule} from 'angularfire2';
+import {environment} from '../../environments/environment';
+import {AngularFirestoreModule} from 'angularfire2/firestore';
+import {AngularFireAuthModule} from 'angularfire2/auth';
 
 @NgModule({
-  imports: [MatSnackBarModule]
+  imports: [MatSnackBarModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    AngularFireAuthModule]
 })
 export class CoreModule {
   static forRoot(): ModuleWithProviders {
@@ -20,8 +27,9 @@ export class CoreModule {
         ServiceWorkerLogUpdateService,
         ServiceWorkerUpdateService,
         HeadlineAnimationService,
-        GpuJsService
-      ],
+        GpuJsService,
+
+      ]
     };
   }
 

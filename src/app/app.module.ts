@@ -31,9 +31,6 @@ import {AngularFireAuthModule} from 'angularfire2/auth';
     MainToolbarComponent,
   ],
   imports: [
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
-    AngularFireAuthModule,
     CoreModule.forRoot(),
     LoginModule,
     BrowserModule,

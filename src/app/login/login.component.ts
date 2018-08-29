@@ -1,31 +1,45 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AngularFireAuth} from 'angularfire2/auth';
-import {auth, User} from 'firebase';
 import {Subscription} from 'rxjs';
+import {AuthenticationService} from '../core/authentication.service';
+import {MatSnackBar} from '@angular/material';
+import {AuthUser} from '../core/auth-user';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  user: User;
+  user: AuthUser;
 
   private subscription: Subscription;
 
-  constructor(public afAuth: AngularFireAuth) {
+  constructor(public authenticationService: AuthenticationService, private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
-    this.subscription = this.afAuth.user.subscribe(user => this.user = user);
+    this.subscription = this.authenticationService.user.subscribe(user => this.user = user);
   }
 
   login() {
-    this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
+    this.authenticationService.signIn().catch(error => {
+      console.log('Error sign in: ', error);
+      const matSnackBarRef = this.snackBar.open('Upps, there was an error while signing in. Try again later.',
+        'Retry now!', {
+          duration: 6000, horizontalPosition: 'right', verticalPosition: 'top'
+        });
+      matSnackBarRef.onAction().subscribe(() => this.login());
+    });
   }
 
   logout() {
-    this.afAuth.auth.signOut();
+    this.authenticationService.signOut()
+      .catch(error => {
+        console.log('Error sign out: ', error);
+        this.snackBar.open('Error signing out', null, {
+          duration: 6000, horizontalPosition: 'right', verticalPosition: 'top'
+        });
+      });
   }
 
   ngOnDestroy() {

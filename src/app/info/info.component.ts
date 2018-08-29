@@ -17,6 +17,7 @@ export class InfoComponent implements OnInit {
     new Technology('three.js', 'https://threejs.org/', 'assets/logos/three-js.png'),
     new Technology('gpu.js', 'http://gpu.rocks/', 'assets/logos/gpu-js.png'),
     new Technology('tensorflow.js', 'https://js.tensorflow.org', 'assets/logos/tensorflow-js.png'),
+    new Technology('firebase', 'https://firebase.google.com/', 'assets/logos/firebase.png'),
   ];
 
   constructor() {
