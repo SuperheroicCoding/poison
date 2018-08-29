@@ -23,15 +23,15 @@ import {ShaderCodeService} from './shader-code.service';
   ]
 })
 export class ShaderExamplesComponent implements AfterContentInit {
+  @ViewChild('shaderRenderer') shaderRenderer: ElementRef;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
   shaders: ShaderDef[];
   showFps = false;
   showCodeEditor = false;
   shadersPaged$: Observable<ShaderDef[]>;
   currentPage$: Observable<PageEvent>;
   currentPageSubject: Subject<PageEvent> = new Subject();
-  @ViewChild('shaderRenderer') shaderRenderer: ElementRef;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-
   isSmallScreen = false;
   pageEvent: PageEvent;
   animationState: string;

@@ -12,12 +12,12 @@ type ShaderExamplesCollectionType = { shaderExamples: DefaultShaderDoc };
 })
 export class ShaderCodeService {
   shaders$: Observable<ShaderDef[]>;
-  private shaderExamplesCol: AngularFirestoreCollection<ShaderExamplesCollectionType>;
+  private angularExamplesCol: AngularFirestoreCollection<ShaderExamplesCollectionType>;
 
   constructor(afs: AngularFirestore) {
-
-    this.shaderExamplesCol = afs.collection<ShaderExamplesCollectionType>('angularExamples');
-    this.shaders$ = this.shaderExamplesCol.doc<DefaultShaderDoc>('shaderExamples').valueChanges().pipe(
+    this.angularExamplesCol = afs.collection<ShaderExamplesCollectionType>('angularExamples');
+    const shaderExamplesDoc = this.angularExamplesCol.doc<DefaultShaderDoc>('shaderExamples').valueChanges();
+    this.shaders$ = shaderExamplesDoc.pipe(
       filter(data => data != undefined),
       map(data => data.defaultShaders),
       shareReplay(1)
