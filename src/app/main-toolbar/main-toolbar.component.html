@@ -5,13 +5,9 @@
     </button>
     <div fxShow fxHide.lt-sm>SuperheroicCoding&nbsp;</div>
     <div>Angular Demos</div>
-    <span fxShow fxHide.lt-sm class="toolbar-spacer"></span>
+    <span class="toolbar-spacer"></span>
     <app-service-worker-update fxShow fxHide.lt-sm></app-service-worker-update>
-    <app-login fxShow fxHide.lt-sm></app-login>
-  </mat-toolbar-row>
-  <mat-toolbar-row fxLayout="row" fxLayoutAlign="end center" fxShow fxHide.gt-xs>
-    <app-service-worker-update></app-service-worker-update>
-    <app-login></app-login>
+    <app-login fxShow></app-login>
   </mat-toolbar-row>
   <div class="shader-background" #shaderContainer>
     <app-render-shader
