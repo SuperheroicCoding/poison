@@ -76,40 +76,52 @@ function getAllFilesFor(currentDirPath) {
 function uploadFolderToBucket(folder, bucket, prefix) {
 
   const allFiles = getAllFilesFor(folder);
-  const promises = allFiles.map((filePath) => {
-    // read file contents
-    return new Promise((resolveInner, rejectInner) => {
-      fs.readFile(filePath, (error, fileContent) => {
-        // if unable to read file contents, throw exception
-        if (error) {
-          console.log('error reading file', filePath);
-          return rejectInner(error);
-        }
+  return uploadFilesInBatches(allFiles, folder, bucket, prefix, 0)
+}
 
-        const fileName = filePath.replace(/\\/g, '/').replace(folder, prefix);
-        const cacheControl = getCacheControlFor(fileName);
-        const contentType = getContentTypeFor(fileName);
-
-        s3.upload({
-          ACL: 'public-read',
-          Bucket: bucket,
-          Key: fileName,
-          Body: fileContent,
-          ContentType: contentType,
-          CacheControl: cacheControl
-        }, (err, data) => {
-          if (err) {
-            console.error(`Error uploading '${fileName}'!`, err.stack);
-            return rejectInner(err);
+function uploadFilesInBatches(allFiles, folder, bucket, prefix, startIndex) {
+  let batch = allFiles.slice(startIndex, startIndex + 5);
+  if (batch.length > 0) {
+    const promises = batch.map((filePath) => {
+      // read file contents
+      return new Promise((resolveInner, rejectInner) => {
+        fs.readFile(filePath, (error, fileContent) => {
+          // if unable to read file contents, throw exception
+          if (error) {
+            console.log('error reading file', filePath);
+            return rejectInner(error);
           }
-          console.log(`Successfully uploaded '${fileName}' with content-type: ${contentType} and cache-control: ${cacheControl}!`);
-          resolveInner(data);
+
+          const fileName = filePath.replace(/\\/g, '/').replace(folder, prefix);
+          const cacheControl = getCacheControlFor(fileName);
+          const contentType = getContentTypeFor(fileName);
+
+          s3.upload({
+            ACL: 'public-read',
+            Bucket: bucket,
+            Key: fileName,
+            Body: fileContent,
+            ContentType: contentType,
+            CacheControl: cacheControl
+          }, (err, data) => {
+            if (err) {
+              console.error(`Error uploading '${fileName}'!`, err.stack);
+              return rejectInner(err);
+            }
+            console.log(`Successfully uploaded '${fileName}' with content-type: ${contentType} and cache-control: ${cacheControl}!`);
+            resolveInner(data);
+          });
         });
       });
     });
-  });
-
-  return Promise.all(promises);
+    return Promise.all(promises)
+      .then(data => {
+        console.log('success upload batch of 5 files');
+        return uploadFilesInBatches(allFiles, folder, bucket, prefix, startIndex + 5);
+      });
+  }
+  console.log('success uploaded all batches');
+  return 'finish';
 }
 
 /**
