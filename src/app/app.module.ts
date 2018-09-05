@@ -15,10 +15,8 @@ import {ServiceWorkerModule} from '@angular/service-worker';
 import {environment} from '../environments/environment';
 import {ServiceWorkerUpdateComponent} from './service-worker-update/service-worker-update.component';
 import {LoginModule} from './login/login.module';
-import {AngularFireModule} from 'angularfire2';
-import { MainToolbarComponent } from './main-toolbar/main-toolbar.component';
-import {AngularFirestoreModule} from 'angularfire2/firestore';
-import {AngularFireAuthModule} from 'angularfire2/auth';
+import {MainToolbarComponent} from './main-toolbar/main-toolbar.component';
+import {AkitaNgDevtools} from '@datorama/akita-ngdevtools';
 
 @NgModule({
   declarations: [
@@ -31,6 +29,7 @@ import {AngularFireAuthModule} from 'angularfire2/auth';
     MainToolbarComponent,
   ],
   imports: [
+    environment.production ? [] : AkitaNgDevtools.forRoot(),
     CoreModule.forRoot(),
     LoginModule,
     BrowserModule,

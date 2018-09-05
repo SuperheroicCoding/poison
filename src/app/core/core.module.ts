@@ -10,6 +10,7 @@ import {AngularFireModule} from 'angularfire2';
 import {environment} from '../../environments/environment';
 import {AngularFirestoreModule} from 'angularfire2/firestore';
 import {AngularFireAuthModule} from 'angularfire2/auth';
+import {IsAuthenticatedGuard} from './guards/is-authenticated-guard.service';
 
 @NgModule({
   imports: [MatSnackBarModule,
@@ -28,8 +29,7 @@ export class CoreModule {
         ServiceWorkerUpdateService,
         HeadlineAnimationService,
         GpuJsService,
-
-      ]
+        IsAuthenticatedGuard]
     };
   }
 

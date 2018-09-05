@@ -1,0 +1,86 @@
+:host {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-area: main;
+  align-self: stretch;
+  height: 100%;
+}
+
+.navigation-button {
+  z-index: 100;
+  position: absolute;
+  bottom: calc((100%) / 2 - 30px);
+  opacity: 80%;
+  &.right {
+    right: 1rem;
+  }
+  &.left {
+    left: 1rem;
+  }
+}
+
+.code-editor {
+  flex: 1 1 100%;
+  align-self: stretch;
+}
+
+.shaders-container {
+  align-self: stretch;
+  &-spinner {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.shaders-grid-list {
+  display: grid;
+  align-self: stretch;
+  max-width: content-box;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-rows: auto;
+  grid-gap: 1rem;
+}
+
+.shader-tile, .editor-tile {
+  height: calc(100vh - 285px);
+}
+
+.editor-tile {
+  overflow: auto;
+}
+
+.shader-renderer {
+  width: 100%;
+  height: calc(100vh - 285px);
+}
+
+.canvas-card {
+  min-width: calc(50% - 48px);
+  width: 100%;
+}
+
+.code-card {
+  min-width: calc(50% - 48px);
+  width: 100%;
+  margin-right: 10px;
+}
+
+.code-editor {
+  overflow: auto;
+}
+
+.paginator-container {
+  margin: 20px;
+}
+
+.shader-code {
+  display: none;
+  overflow-y: auto;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+

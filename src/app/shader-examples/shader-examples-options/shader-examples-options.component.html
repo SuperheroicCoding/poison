@@ -1,0 +1,10 @@
+<mat-checkbox class="checkbox"
+              [ngModel]="showCodeEditor | async"
+              (change)="toggleShowCodeEditor()"
+>Show live code editor
+</mat-checkbox>
+<mat-checkbox class="checkbox"
+              [ngModel]="showFps | async"
+              (change)="toggleShowFPS()">
+  Show FPS
+</mat-checkbox>

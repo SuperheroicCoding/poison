@@ -4,8 +4,8 @@ import {ShaderExamplesComponent} from './shader-examples.component';
 import {ShaderExamplesRoutingModule} from './shader-examples-routing.module';
 import {SharedModule} from '../shared/shared.module';
 import {MatPaginatorModule} from '@angular/material';
-import {ShaderCodeService} from './shader-code.service';
 import {AngularFireStorageModule} from 'angularfire2/storage';
+import { ShaderExamplesOptionsComponent } from './shader-examples-options/shader-examples-options.component';
 
 @NgModule({
   imports: [
@@ -14,8 +14,7 @@ import {AngularFireStorageModule} from 'angularfire2/storage';
     MatPaginatorModule,
     AngularFireStorageModule
   ],
-  declarations: [ShaderExamplesComponent],
-  providers: [ShaderCodeService]
+  declarations: [ShaderExamplesComponent, ShaderExamplesOptionsComponent],
 })
 export class ShaderExamplesModule {
 }
