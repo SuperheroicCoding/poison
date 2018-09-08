@@ -15,11 +15,14 @@ var s3 = new AWS.S3();
 
 const bucket = 'superheroiccoding.de';
 const prefix = 'angularExamples/';
+const args = process.argv.slice(2);
+const excludeAssets = args.some((elem) => elem.indexOf('excludeAssets') > -1);
 
 deleteFromBucket(bucket, prefix)
   .then(() => uploadFolderToBucket('distS3/', bucket, prefix))
   .then(() => invalidateIndex());
 
+console.log('excludeAssets', excludeAssets, args);
 function deleteFromBucket(bucket, prefix) {
   return new Promise((resolve, reject) => {
 
@@ -28,9 +31,11 @@ function deleteFromBucket(bucket, prefix) {
           console.error('There was an error listing ' + prefix + ' objects', err.message);
           return reject(err);
         }
-        const objects = data.Contents.map(function (object) {
-          return {Key: object.Key};
-        });
+        const objects = data.Contents
+          .filter((object) => excludeAssets ? object.Key.indexOf('assets' > -1) : true)
+          .map(function (object) {
+            return {Key: object.Key};
+          });
 
         if (objects.length === 0) {
           console.log('No objects found under ' + prefix);

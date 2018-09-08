@@ -27,7 +27,7 @@ export class ShaderExamplesService {
       .pipe(
         debounceTime(500),
         distinctUntilChanged((x1, x2) =>
-          x1.shader.id === x2.shader.id || x1.code === x2.code
+          x1.shader.id === x2.shader.id && x1.code === x2.code
         ),
         tap(() => this.shaderExamplesUIStore.update({savingShader: true})),
         switchMap(({shader, code}) => this.shaderCodeService.update(shader, code)),
