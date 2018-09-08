@@ -13,15 +13,15 @@ export class ShaderCodeService {
   }
 
   get() {
-    this.shaderCodeDataService.streamShaders().subscribe((entities: ShaderCode[]) => {
-      this.shaderCodeStore.set(entities);
-    });
+    if (this.shaderCodeStore.isPristine) {
+      this.shaderCodeDataService.streamShaders().subscribe((entities: ShaderCode[]) => {
+        this.shaderCodeStore.set(entities);
+      });
+    }
   }
 
-  add() {
-    // this.shaderCodeDataService.post().subscribe((entity: ServerResponse) => {
-    // this.shaderCodeStore.add(entity);
-    // });
+  async update(shader: ShaderCode, code: string) {
+      this.shaderCodeStore.update(shader.id, {code});
+      return this.shaderCodeDataService.updateShader(shader, code);
   }
-
 }

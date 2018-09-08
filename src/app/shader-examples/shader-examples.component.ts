@@ -3,7 +3,7 @@ import {MatPaginator, PageEvent} from '@angular/material';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {animate, keyframes, transition, trigger} from '@angular/animations';
 import {fadeInLeft, fadeInRight, fadeOutLeft, fadeOutRight} from './leftInOut.animation';
-import {ShaderCodeQuery, ShaderExamplesService, ShaderExamplesUIQuery} from './state';
+import {ShaderCode, ShaderCodeQuery, ShaderExamplesService, ShaderExamplesUIQuery} from './state';
 
 @Component({
   selector: 'app-shader-examples',
@@ -72,4 +72,7 @@ export class ShaderExamplesComponent implements AfterContentInit {
     this.shaderExamplesService.updateAnimationState('');
   }
 
+  updateShaderCode(shader: ShaderCode, code: string) {
+    this.shaderExamplesService.updateShaderCode(shader, code);
+  }
 }

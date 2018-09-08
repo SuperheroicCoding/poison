@@ -33,9 +33,9 @@ import * as Stats from 'stats.js';
 export class RenderShaderComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   @Input() shaderCode: string;
-  @Input() vertexShader?: string;
-  @Input() runAnimation? = true;
-  @Input() showFps? = false;
+  @Input() vertexShader: string;
+  @Input() runAnimation = true;
+  @Input() showFps = false;
   @Input() canvasWidth: number;
   @Input() canvasHeight: number;
 

@@ -4,7 +4,13 @@
     <a target="_blank" href="https://thebookofshaders.com">The Book of Shader</a>
   </mat-card-title>
   <mat-card-content>
-    <app-shader-examples-options></app-shader-examples-options>
+    <div fxLayout fxLayoutAlign="space-between" >
+      <app-shader-examples-options></app-shader-examples-options>
+      <div fxLayout fxLayoutGap="0.5rem" *ngIf="state.savingShader | async">
+        <mat-spinner color="accent" diameter="24"></mat-spinner>
+        <span>Auto saving</span>
+      </div>
+    </div>
   </mat-card-content>
 </mat-card>
 <ng-container *ngIf="!(isLoadingShaders | async); then shadersContainer; else spinner">
@@ -28,7 +34,8 @@
                *ngIf="state.showCodeEditor | async">
             <app-code-editor
               class="code-editor"
-              [(code)]="shader.code"
+              [code]="shader.code"
+              (codeChange)="updateShaderCode(shader,$event)"
               mode="glsl">
             </app-code-editor>
           </div>

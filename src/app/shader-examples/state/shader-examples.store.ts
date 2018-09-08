@@ -10,6 +10,7 @@ export abstract class ShaderExampleState {
   isSmallScreen: boolean;
   pagedShaders: ShaderCode[];
   animationState: '' | 'fadeOutRight' | 'fadeOutLeft';
+  savingShader: boolean;
 }
 
 export function createInitialShaderExampleState(): ShaderExampleState {
@@ -23,7 +24,8 @@ export function createInitialShaderExampleState(): ShaderExampleState {
       pageSize: 2
     },
     pagedShaders: [],
-    animationState: ''
+    animationState: '',
+    savingShader: false
   };
 }
 

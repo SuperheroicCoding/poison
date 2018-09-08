@@ -11,6 +11,7 @@
     "e2e": "ng e2e",
     "ghPages": "ng build --prod --output-path docs --named-chunks --base-href https://superheroiccoding.github.io/AngularExamples/",
     "buildS3": "ng build --prod --output-path distS3 --base-href https://angularexamples.superheroiccoding.de",
+    "updateFirebase": "node node-scripts/init-firebase",
     "deploy": "npm version patch && npm run buildS3 && node node-scripts/sync-S3"
   },
   "private": true,
@@ -62,6 +63,7 @@
     "@types/three": "0.92.18",
     "akita-schematics": "^1.0.0-rc.3",
     "aws-sdk": "^2.308.0",
+    "axios": "^0.18.0",
     "codelyzer": "4.4.4",
     "firebase-admin": "^6.0.0",
     "jasmine-core": "~3.2.1",
