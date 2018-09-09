@@ -13,11 +13,9 @@ export class ShaderCodeService {
   }
 
   get() {
-    if (this.shaderCodeStore.isPristine) {
       this.shaderCodeDataService.streamShaders().subscribe((entities: ShaderCode[]) => {
         this.shaderCodeStore.set(entities);
       });
-    }
   }
 
   async update(shader: ShaderCode, code: string) {

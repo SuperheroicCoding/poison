@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {combineLatest, Observable} from 'rxjs';
 import {AngularFirestore, AngularFirestoreCollection} from 'angularfire2/firestore';
-import {map, shareReplay, startWith, take, tap} from 'rxjs/operators';
+import {map, shareReplay, take, tap} from 'rxjs/operators';
 import {ShaderCode} from './shader-code.model';
 import {AuthenticationService} from '../../core/authentication.service';
 
@@ -31,7 +31,9 @@ export class ShaderCodeDataService {
   streamShaders(): Observable<ShaderCode[]> {
     if (this.shaders == null) {
       const defaultShaders = this.defaultShadersCol.valueChanges();
-      const userShaders = this.userShadersCol.valueChanges().pipe(startWith([]));
+      const userShaders = this.userShadersCol.stateChanges(['added']).pipe(
+        map(documentChanges => documentChanges.map(change => change.payload.doc.data()))
+      );
 
       const mapDefaultAndUserShaders = map(([defaults, users]: [ShaderCode[], ShaderCode[]]) =>
         defaults.map(defaultShader => {
@@ -51,21 +53,22 @@ export class ShaderCodeDataService {
       `angularExamples/shaderExamples/${this.authentication.uid}`,
       ref => ref.where('id', '==', shader.id)
     );
-      console.log('update shader');
-      const batch = this.afs.firestore.batch();
-      const newShader = {...shader, ...{code: newCode}};
+    console.log('update shader');
+    const batch = this.afs.firestore.batch();
+    const newShader = {...shader, ...{code: newCode}};
 
-      const deleteOldShadersAndUpdateInBatch = shaderByIdQuery.get({}).pipe(
-        take(1),
-        tap(ref => ref.docs.forEach(doc => batch.delete(doc.ref))),
-        tap(ignored => {
-          const newUid = this.afs.createId();
-          const firestoreDocument = this.afs.collection<ShaderCode>(
-            `angularExamples/shaderExamples/${this.authentication.uid}`).doc<ShaderCode>(newUid);
-          batch.set(firestoreDocument.ref, newShader);
-        }),
-      );
+    const deleteOldShadersAndUpdateInBatch = shaderByIdQuery.get({}).pipe(
+      take(1),
+      tap(ref => ref.docs.forEach(doc => doc.ref.delete())),
+      tap(ignored => {
+        const newUid = this.afs.createId();
+        const firestoreDocument = this.afs.doc(
+          `angularExamples/shaderExamples/${this.authentication.uid}/${newUid}`
+        );
+        firestoreDocument.ref.set(newShader);
+      }),
+    );
 
-      return deleteOldShadersAndUpdateInBatch.toPromise();
+    return deleteOldShadersAndUpdateInBatch.toPromise();
   }
 }

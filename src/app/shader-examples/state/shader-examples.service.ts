@@ -90,7 +90,6 @@ export class ShaderExamplesService {
   }
 
   updateShaderCode(shader: ShaderCode, code: string) {
-
     this.updateShaderSubject.next({shader, code});
   }
 
