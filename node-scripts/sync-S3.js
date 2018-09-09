@@ -22,7 +22,8 @@ deleteFromBucket(bucket, prefix)
   .then(() => uploadFolderToBucket('distS3/', bucket, prefix))
   .then(() => invalidateIndex());
 
-console.log('excludeAssets', excludeAssets, args);
+console.log('excludeAssets:', excludeAssets);
+
 function deleteFromBucket(bucket, prefix) {
   return new Promise((resolve, reject) => {
 
@@ -32,7 +33,7 @@ function deleteFromBucket(bucket, prefix) {
           return reject(err);
         }
         const objects = data.Contents
-          .filter((object) => excludeAssets ? object.Key.indexOf('assets' > -1) : true)
+          .filter((object) => excludeAssets ? object.Key.indexOf('assets')  < 0 : true)
           .map(function (object) {
             return {Key: object.Key};
           });
@@ -80,14 +81,17 @@ function getAllFilesFor(currentDirPath) {
 
 function uploadFolderToBucket(folder, bucket, prefix) {
 
-  const allFiles = getAllFilesFor(folder);
+  const allFiles = getAllFilesFor(folder)
+    .filter((file) => excludeAssets ? file.indexOf('assets')  < 0 : true);
   return uploadFilesInBatches(allFiles, folder, bucket, prefix, 0)
 }
 
 function uploadFilesInBatches(allFiles, folder, bucket, prefix, startIndex) {
   let batch = allFiles.slice(startIndex, startIndex + 5);
   if (batch.length > 0) {
-    const promises = batch.map((filePath) => {
+    const promises = batch.
+
+    map((filePath) => {
       // read file contents
       return new Promise((resolveInner, rejectInner) => {
         fs.readFile(filePath, (error, fileContent) => {
