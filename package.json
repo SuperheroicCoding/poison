@@ -10,7 +10,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "ghPages": "ng build --prod --output-path docs --named-chunks --base-href https://superheroiccoding.github.io/AngularExamples/",
-    "buildS3": "ng build --prod --output-path distS3 --base-href https://angularexamples.superheroiccoding.de",
+    "buildS3": "ng build --prod --output-path distS3 --base-href https://angularexamples.superheroiccoding.de/",
     "updateFirebase": "node node-scripts/init-firebase",
     "deploy": "npm version patch && npm run buildS3 && node node-scripts/sync-S3 excludeAssets"
   },
