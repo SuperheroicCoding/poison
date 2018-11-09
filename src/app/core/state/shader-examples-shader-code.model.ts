@@ -1,4 +1,4 @@
-export type ShaderExamplesShaderCode = {
+export interface ShaderExamplesShaderCode {
 
 }
 

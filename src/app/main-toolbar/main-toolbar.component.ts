@@ -24,7 +24,7 @@ export class MainToolbarComponent implements OnInit {
     )
       .subscribe(() => {
         return headlineAnimations.startAnimation();
-      })
+      });
   }
 
   ngOnInit() {

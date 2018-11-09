@@ -9,8 +9,8 @@ import {Perceptron} from '../perceptron';
 export class PerceptronComponent implements AfterContentInit, OnDestroy {
 
   @Input() perceptron: Perceptron;
-  @Input() canvasHeight? = 300;
-  @Input() canvasWidth? = 300;
+  @Input() canvasHeight ? = 300;
+  @Input() canvasWidth ? = 300;
   @ViewChild('perceptronCanvas') perceptronCanvas: ElementRef;
   private scetch: p5;
 
@@ -47,7 +47,7 @@ export class PerceptronComponent implements AfterContentInit, OnDestroy {
 
     const circleSize = this.perceptronCircleSize();
     p.ellipse(0, 0, circleSize, circleSize);
-    p.fill(0, 0,0);
+    p.fill(0, 0, 0);
     p.textSize(circleSize / 2.5);
     p.textAlign(p.CENTER);
     p.text('∑', 0, circleSize / 10);
@@ -75,7 +75,7 @@ export class PerceptronComponent implements AfterContentInit, OnDestroy {
     this.perceptron.isLearning ? p.fill(255, 200, 200) : p.fill(200, 200, 255);
     const circleSize = this.canvasWidth / 7.5;
     p.ellipse(0, 0, circleSize, circleSize);
-    p.fill(0,0,0);
+    p.fill(0, 0, 0);
     p.textSize(circleSize / 3.5);
     p.textAlign(p.CENTER);
     p.text('Bias', 0, circleSize / 10);

@@ -1,5 +1,5 @@
 // noinspection TsLint
-export const shader: string = `#ifdef GL_ES
+export const shader = `#ifdef GL_ES
 precision highp float;
 #endif
 
@@ -62,7 +62,7 @@ void main() {
     vec2 r = vec2(0.);
     r.x = fbm( st + 1.0*q + vec2(1.7,9.2)+ 0.15*time );
     r.y = fbm( st + 1.0*q + vec2(8.3,2.8)+ 0.126*time);
-    
+
     r = r * (vec2(1.) - mouse);
 
     float f = fbm(st+r);
@@ -78,12 +78,12 @@ void main() {
     color = mix(color,
                 vec3(0.666667,1,1),
                 clamp(length(r.x),0.0,1.0));
-    
-    
-    float corner = smoothstep(0.0, 0.03 , dim.x) * smoothstep(1., 0.90 , dim.x) * 
+
+
+    float corner = smoothstep(0.0, 0.03 , dim.x) * smoothstep(1., 0.90 , dim.x) *
     smoothstep(0.0, 0.1 , dim.y) * smoothstep(1., 0.9 , dim.y);
-    
+
     vec4 color4 = vec4(((f*f*f+.6*f*f+.5*f)*color) * corner,1.0);
-    
+
     gl_FragColor = color4;
 }`;

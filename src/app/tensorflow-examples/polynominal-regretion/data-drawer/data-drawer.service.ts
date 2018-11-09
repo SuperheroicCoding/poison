@@ -56,7 +56,7 @@ export class DataDrawerService {
           }
         },
         {
-          'mark':{'type': 'line', 'orient': 'vertical'},
+          'mark': {'type': 'line', 'orient': 'vertical'},
           'encoding': {
             'x': {'field': 'x', 'type': 'quantitative'},
             'y': {'field': 'pred', 'type': 'quantitative'},

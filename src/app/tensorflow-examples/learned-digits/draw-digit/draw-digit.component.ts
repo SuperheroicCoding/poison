@@ -64,7 +64,7 @@ export class DrawDigitComponent implements AfterViewChecked {
             p.endShape();
           }
         });
-        p.endShape()
+        p.endShape();
       };
 
       p.mouseReleased = () => {
@@ -103,7 +103,7 @@ export class DrawDigitComponent implements AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    this.initScetch()
+    this.initScetch();
   }
 }
 

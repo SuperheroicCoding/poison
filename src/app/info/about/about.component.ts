@@ -14,7 +14,7 @@ export class AboutComponent implements OnInit {
 
 
   constructor(@Inject(ROUTER_LINKS) _routerLinks: AppRoute[], private router: Router) {
-    this.routerLinks = _routerLinks.filter(route => route.data.linkText !== 'Home')
+    this.routerLinks = _routerLinks.filter(route => route.data.linkText !== 'Home');
   }
 
   ngOnInit() {

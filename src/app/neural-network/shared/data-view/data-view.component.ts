@@ -34,8 +34,8 @@ export class DataViewComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   @Input() perceptron: Perceptron;
   @Input() points: Point[];
-  @Input() canvasWidth? = 400;
-  @Input() canvasHeight? = 400;
+  @Input() canvasWidth ? = 400;
+  @Input() canvasHeight ? = 400;
   @Input() showLinearDivider = true;
   @Output() dataViewClicked: EventEmitter<{ x: number, y: number, click: 'left' | 'right' }> = new EventEmitter();
 

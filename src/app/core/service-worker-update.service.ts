@@ -7,7 +7,7 @@ import {Router} from '@angular/router';
 
 @Injectable()
 export class ServiceWorkerUpdateService {
-  constructor(private swUpdate: SwUpdate, private snackbar: MatSnackBar,private router: Router) {
+  constructor(private swUpdate: SwUpdate, private snackbar: MatSnackBar, private router: Router) {
   }
 
   showSnackOnUpdateAvailable() {

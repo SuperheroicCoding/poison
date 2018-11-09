@@ -3,6 +3,8 @@ export class Vector {
   constructor(public x: number, public y: number) {
   }
 
+  ng;
+
   mag() {
     return Math.sqrt(this.x * this.x + this.y * this.y);
   }
@@ -38,8 +40,6 @@ export class Vector {
   fastDist(vec: Vector) {
     return Math.abs(Math.pow(this.x - vec.x, 2) + Math.pow(this.y - vec.y, 2));
   }
-
-  ng
 
   dist(vec: Vector) {
     return Math.sqrt(this.fastDist(vec));

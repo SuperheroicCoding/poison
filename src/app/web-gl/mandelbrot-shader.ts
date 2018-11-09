@@ -6,10 +6,10 @@ export const MandelbrotVertex = `
   uniform float zoom;
   void main () {
     vPos = (modelViewMatrix * vec4(position, 1.0)).xyz;
- 
+
     vNormal = vec3(0.,1.,0.);
-    vMandelbrotPos = position.xy * zoom; 
-        
+    vMandelbrotPos = position.xy * zoom;
+
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
   }
 `;
@@ -30,9 +30,9 @@ export const MandelbrotFragment = `
   varying vec3 vPos;
   varying vec3 vNormal;
   varying vec2 vMandelbrotPos;
-   
+
   void main () {
-   
+
     vec2 fractal = vMandelbrotPos.xy;
     for (int i = 0; i < 35; i++) {
       fractal = vMandelbrotPos.xy + vec2(
@@ -46,7 +46,7 @@ export const MandelbrotFragment = `
         gl_FragColor = vec4(0.0, 0.0, 0.0, 1.);
       }
     }
-    
+
     vec4 addedLights = vec4(0.0,0.0,0.0, 1.0);
     for(int l = 0; l < NUM_POINT_LIGHTS; l++) {
       vec3 lightDirection = normalize(vPos - pointLights[l].position);

@@ -16,7 +16,7 @@ export class CanvasDrawService {
     return this;
   }
 
-  destroy(){
+  destroy() {
   }
 
   setFillColor(fillColor: string) {

@@ -13,7 +13,7 @@ import {ActivatedRoute} from '@angular/router';
 import {ReactionDiffKernelModules} from './reaction-diff-window';
 
 
-type Dimensions = { width: number, height: number; };
+interface Dimensions { width: number; height: number; }
 
 type RouteData = Observable<{ kernels: ReactionDiffKernelModules }>;
 

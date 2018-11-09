@@ -70,11 +70,11 @@ export const calcNextDiffStep = function (input: CalcNextParam): WorkerPostParam
 
   const calcNextCell = (cell: Cell,
                         laplaceA: number,
-                        laplaceB: number,x:number,y:number): Cell => {
+                        laplaceB: number, x: number, y: number): Cell => {
 
     let dynK = k;
     let dynF = f;
-    if(dynamicKillFeed){
+    if (dynamicKillFeed) {
       dynK = dynK + ((x / width) * 0.025);
       dynF = dynF + ((y / height) * 0.09);
     }
@@ -103,7 +103,7 @@ export const calcNextDiffStep = function (input: CalcNextParam): WorkerPostParam
         setCell(x, y, calcNextCell(
           getCell(x, y),
           lap.sumA,
-          lap.sumB, x,y));
+          lap.sumB, x, y));
       }
     }
   }

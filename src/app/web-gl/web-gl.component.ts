@@ -178,7 +178,7 @@ export class WebGlComponent implements OnInit, AfterViewInit, OnDestroy {
       );
       this.pointLight.color.set(pointLightColor);
 
-      let meshBasicMaterial = (this.pointLightSphere.material as MeshBasicMaterial);
+      const meshBasicMaterial = (this.pointLightSphere.material as MeshBasicMaterial);
       meshBasicMaterial.color.set(pointLightColor);
 
       this.renderer.render(this.scene, this.camera);

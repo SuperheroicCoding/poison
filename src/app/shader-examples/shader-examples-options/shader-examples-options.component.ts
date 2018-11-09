@@ -22,11 +22,11 @@ export class ShaderExamplesOptionsComponent implements OnInit {
     this.showCodeEditor = this.shaderExamplesQuery.showCodeEditor;
   }
 
-  toggleShowFPS(){
+  toggleShowFPS() {
     this.shaderExamplesService.toggleShowFps();
   }
 
-  toggleShowCodeEditor(){
+  toggleShowCodeEditor() {
     this.shaderExamplesService.toggleShowEditor();
   }
 }

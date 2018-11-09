@@ -8,18 +8,7 @@ export class WorkerPostParams<T> {
 
 type WorkerParams<T> = WorkerPostParams<T> | T;
 
-export const mapWorker = <T, R>(workerFunction: (input: T) => WorkerParams<R>) =>
-  (source: Observable<WorkerParams<T>>) =>
-    new Observable<R>((subscriber) => {
 
-      if (!(workerFunction instanceof Function)) {
-        throw new TypeError('argument is not a function!');
-      }
-      const worker: Worker = createWorker(workerFunction);
-      source.subscribe(
-        new MapWorkerSubscriber(subscriber, worker)
-      );
-    });
 
 /*
 export function mapWorker<T, R>(this: Observable<WorkerParams<T>>,
@@ -39,7 +28,7 @@ export class MapWorkerOperator<T, R> implements Operator<T, R> {
   }
 
   call(subscriber: Subscriber<R>, source: any): any {
-    return
+    return;
   }
 }
 
@@ -92,3 +81,16 @@ function createWorker(fn) {
   const url = URL.createObjectURL(blob);
   return new Worker(url);
 }
+
+export const mapWorker = <T, R>(workerFunction: (input: T) => WorkerParams<R>) =>
+  (source: Observable<WorkerParams<T>>) =>
+    new Observable<R>((subscriber) => {
+
+      if (!(workerFunction instanceof Function)) {
+        throw new TypeError('argument is not a function!');
+      }
+      const worker: Worker = createWorker(workerFunction);
+      source.subscribe(
+        new MapWorkerSubscriber(subscriber, worker)
+      );
+    });
