@@ -1,11 +1,10 @@
 import {NgModule} from '@angular/core';
-import {ShaderExamplesComponent} from './shader-examples.component';
-
-import {ShaderExamplesRoutingModule} from './shader-examples-routing.module';
-import {SharedModule} from '../shared/shared.module';
+import {AngularFireStorageModule} from '@angular/fire/storage';
 import {MatPaginatorModule} from '@angular/material';
-import {AngularFireStorageModule} from 'angularfire2/storage';
-import { ShaderExamplesOptionsComponent } from './shader-examples-options/shader-examples-options.component';
+import {SharedModule} from '../shared/shared.module';
+import {ShaderExamplesOptionsComponent} from './shader-examples-options/shader-examples-options.component';
+import {ShaderExamplesRoutingModule} from './shader-examples-routing.module';
+import {ShaderExamplesComponent} from './shader-examples.component';
 
 @NgModule({
   imports: [

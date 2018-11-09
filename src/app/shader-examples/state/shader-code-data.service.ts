@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {combineLatest, Observable} from 'rxjs';
-import {AngularFirestore, AngularFirestoreCollection} from 'angularfire2/firestore';
+import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 import {map, shareReplay, take, tap} from 'rxjs/operators';
 import {ShaderCode} from './shader-code.model';
 import {AuthenticationService} from '../../core/authentication.service';

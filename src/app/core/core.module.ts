@@ -1,16 +1,16 @@
 import {ModuleWithProviders, NgModule, Optional, SkipSelf} from '@angular/core';
-import {TitleService} from './title.service';
+import {AngularFireModule} from '@angular/fire';
+import {AngularFireAuthModule} from '@angular/fire/auth';
+import {AngularFirestoreModule} from '@angular/fire/firestore';
+import {MatSnackBarModule} from '@angular/material';
+import {environment} from '../../environments/environment';
+import {GpuJsService} from './gpujs.service';
+import {IsAuthenticatedGuard} from './guards/is-authenticated-guard.service';
+import {HeadlineAnimationService} from './headline-animation.service';
 import {RandomService} from './random.service';
 import {ServiceWorkerLogUpdateService} from './service-worker-log-update.service';
 import {ServiceWorkerUpdateService} from './service-worker-update.service';
-import {MatSnackBarModule} from '@angular/material';
-import {HeadlineAnimationService} from './headline-animation.service';
-import {GpuJsService} from './gpujs.service';
-import {AngularFireModule} from 'angularfire2';
-import {environment} from '../../environments/environment';
-import {AngularFirestoreModule} from 'angularfire2/firestore';
-import {AngularFireAuthModule} from 'angularfire2/auth';
-import {IsAuthenticatedGuard} from './guards/is-authenticated-guard.service';
+import {TitleService} from './title.service';
 
 @NgModule({
   imports: [MatSnackBarModule,

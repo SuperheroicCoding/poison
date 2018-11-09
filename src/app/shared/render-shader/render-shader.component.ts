@@ -1,29 +1,7 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Input,
-  NgZone,
-  OnChanges,
-  OnDestroy,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core';
-import {
-  Camera,
-  CanvasRenderer,
-  Mesh,
-  OrthographicCamera,
-  PlaneBufferGeometry,
-  Renderer,
-  Scene,
-  ShaderMaterial,
-  Vector2,
-  WebGLRenderer
-} from 'three';
-import * as Detector from 'three/examples/js/Detector';
-import {defaultVertexShader} from './default-vertex-shader';
+import {AfterViewInit, Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, SimpleChanges, ViewChild} from '@angular/core';
 import * as Stats from 'stats.js';
+import {Camera, Mesh, OrthographicCamera, PlaneBufferGeometry, Renderer, Scene, ShaderMaterial, Vector2, WebGLRenderer} from 'three';
+import {defaultVertexShader} from './default-vertex-shader';
 
 @Component({
   selector: 'app-render-shader',
@@ -62,7 +40,7 @@ export class RenderShaderComponent implements AfterViewInit, OnChanges, OnDestro
       antialias: true,
       canvas: this.webGLCanvas.nativeElement,
     };
-    this.renderer = Detector.webgl ? new WebGLRenderer(renderParams) : new CanvasRenderer(renderParams);
+    this.renderer = new WebGLRenderer(renderParams);
 
     this.uniforms = {
       time: {value: 1.0},
