@@ -1,3 +1,4 @@
+import {HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
@@ -30,6 +31,7 @@ import {AkitaNgDevtools} from '@datorama/akita-ngdevtools';
   ],
   imports: [
     environment.production ? [] : AkitaNgDevtools.forRoot(),
+    HttpClientModule,
     CoreModule.forRoot(),
     LoginModule,
     BrowserModule,

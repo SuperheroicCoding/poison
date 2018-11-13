@@ -11,6 +11,5 @@ if (environment.production) {
   enableAkitaProdMode();
 }
 
-persistState();
-
 platformBrowserDynamic().bootstrapModule(AppModule);
+persistState({exclude: ['performance-test']});

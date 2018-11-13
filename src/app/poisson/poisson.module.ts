@@ -20,7 +20,6 @@ import {CanvasViewModule} from './views/canvas-view/canvas-view.module';
     CanvasViewModule,
     PoissonShared
   ],
-  exports: [PoissonComponent],
   providers: [PoissonConfigService, PoissonCalcService],
 })
 export class PoissonModule {

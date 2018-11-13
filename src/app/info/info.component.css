@@ -1,9 +1,10 @@
 .technologyCards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  justify-items: center;
-  align-items: stretch;
+  justify-content: stretch;
+  align-content: stretch;
   grid-gap: 1rem;
+  height: auto;
 }
 
 

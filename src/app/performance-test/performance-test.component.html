@@ -1,0 +1,22 @@
+<mat-card class="mat-typography">
+  <mat-card-title>Performance comparisons</mat-card-title>
+  <mat-card-subtitle>We measure the generation of an 10 Million numbers long array or stream and operations on it.
+  </mat-card-subtitle>
+  <ng-template #loading>
+    <mat-spinner></mat-spinner>
+  </ng-template>
+  <mat-action-list *ngIf="!(isLoading$ | async); else loading">
+    <mat-list-item *ngFor="let performanceTest of (performanceTest$ | async); trackBy: trackByPerformanceTestId"
+                   [ngClass]="{active: (activePerformanceTest$ | async)?.id == performanceTest.id}">
+      <mat-spinner *ngIf="performanceTest.id == ((activePerformanceTest$ | async)?.id)"></mat-spinner>
+      <button
+        mat-icon-button
+        aria-label="run performance test"
+        (click)="startTest(performanceTest)">
+        <mat-icon color="accent">fast_forward</mat-icon>
+      </button>
+      <h4 matLine class="mat-h4">{{performanceTest.name}}</h4>
+      <p matLine class="mat-caption">{{performanceTest.result > 0 ? performanceTest.result : '-'}} ms</p>
+    </mat-list-item>
+  </mat-action-list>
+</mat-card>

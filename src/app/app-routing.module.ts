@@ -48,6 +48,10 @@ export const routes: AppRoute[] = [
     path: 'poisson',
     loadChildren: 'app/poisson/poisson.module#PoissonModule',
     data: {linkText: 'Poisson Distribution Algorithm'}
+  }, {
+    path: 'performanceTests',
+    loadChildren: 'app/performance-test/performance-test.module#PerformanceTestModule',
+    data: {linkText: 'Performance Tests'}
   },
   {path: '**', redirectTo: '/home'}
 ];
