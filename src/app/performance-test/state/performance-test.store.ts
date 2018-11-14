@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {EntityState, EntityStore, getInitialEntitiesState, ID, StoreConfig} from '@datorama/akita';
+import {EntityState, EntityStore, getInitialEntitiesState, StoreConfig} from '@datorama/akita';
 import {createPerformanceTest, PerformanceTest} from './performance-test.model';
 
 export interface PerformanceTestState extends EntityState<PerformanceTest> {

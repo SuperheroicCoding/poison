@@ -13,4 +13,16 @@ mat-list-item {
   &.active {
     background-color: rgba(255, 255, 255, 0.1);
   }
+
+  span {
+    margin-right: 1rem;
+  }
+  mat-progress-bar {
+    opacity: 0;
+    transition: opacity 50ms;
+  }
+
+  &.active mat-progress-bar {
+    opacity: 1;
+  }
 }

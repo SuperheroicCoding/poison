@@ -8,21 +8,6 @@ export class WorkerPostParams<T> {
 
 type WorkerParams<T> = WorkerPostParams<T> | T;
 
-
-
-/*
-export function mapWorker<T, R>(this: Observable<WorkerParams<T>>,
-                                workerFunction: (input: T) => WorkerParams<R>,
-                                thisArg?: any): Observable<R> {
-  if (!(workerFunction instanceof Function)) {
-    throw new TypeError('argument is not a function!');
-  }
-
-  const worker: Worker = createWorker(workerFunction);
-  return this.lift(new MapWorkerOperator(worker, thisArg));
-}
-*/
-
 export class MapWorkerOperator<T, R> implements Operator<T, R> {
   constructor(private worker: Worker, private thisArg: any) {
   }

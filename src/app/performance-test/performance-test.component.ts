@@ -3,7 +3,7 @@ import {ID} from '@datorama/akita';
 import {Observable} from 'rxjs';
 import {PerformanceTest} from './state/performance-test.model';
 import {PerformanceTestQuery} from './state/performance-test.query';
-import {PerformanceTestService} from './state/performance-test.service';
+import {arrayItems, PerformanceTestService} from './state/performance-test.service';
 
 @Component({
   selector: 'app-performance-test',
@@ -15,7 +15,7 @@ export class PerformanceTestComponent implements OnInit {
   performanceTest$: Observable<PerformanceTest[]>;
   isLoading$: Observable<boolean>;
   activePerformanceTest$: Observable<PerformanceTest>;
-
+  arrayItems: number = arrayItems;
 
   constructor(private performanceTestQuery: PerformanceTestQuery,
               private performanceTestService: PerformanceTestService
