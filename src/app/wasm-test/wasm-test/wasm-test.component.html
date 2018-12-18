@@ -1,0 +1,51 @@
+<mat-toolbar>
+  Web Assembly Examples
+</mat-toolbar>
+<ng-template #loading>Loading WebAssemblyCode...</ng-template>
+<mat-card class="web-assembly-card" *ngIf="!(isLoading$ | async); else loading">
+  <mat-card-title>
+    Calc Fibonacci with wasm compiled from Typescript!
+  </mat-card-title>
+  <mat-card-subtitle>
+    It's using a naive recursive algorithm. Be aware of O(n²)!
+  </mat-card-subtitle>
+  <mat-card-content>
+    <form [formGroup]="fibOptionsForm">
+      <mat-form-field class="n-input">
+        <input matInput type="number" placeholder="n" formControlName="fibN">
+        <mat-error *ngIf="fibOptionsForm.controls['fibN'].hasError('min')">
+          Fibonacci can only be calculated for positive numbers
+        </mat-error>
+        <mat-error *ngIf="fibOptionsForm.controls['fibN'].hasError('max')">
+          because of i32 arithmetic, we get an overflow if n > 45
+        </mat-error>
+        <mat-error *ngIf="fibOptionsForm.controls['fibN'].hasError('required')">
+          please enter a value
+        </mat-error>
+      </mat-form-field>
+    </form>
+    <mat-divider></mat-divider>
+    <div *ngIf="!(fibRunning$ | async)">
+      <div *ngIf="fibResult$ | async as result">
+        <h2>Result</h2>
+        <h3>Result for {{result.n}} is: {{result.fibOfN}}
+        </h3>
+        <h3>Time wasm: {{result.fibWasmTime}}
+        </h3>
+        <h3>Time JS: {{result.fibJSTime}}
+        </h3>
+      </div>
+    </div>
+
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="accent" [disabled]="(fibRunning$ | async) || !fibOptionsForm.valid"
+            (click)="calcFib()">
+      <span class="calc-button">
+        <span>Calc fibonacci!</span>
+        <mat-spinner *ngIf="(fibRunning$ | async)" class="calc-spinner" [diameter]="25"></mat-spinner>
+      </span>
+    </button>
+  </mat-card-actions>
+</mat-card>
+

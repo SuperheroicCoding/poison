@@ -1,8 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/purple-green.css";
+@import "./app-loading-style.scss";
+
+body, html {
+  height: 100vh;
+}
 
 body {
   margin: 0;
   overflow:hidden;
 }
+
 

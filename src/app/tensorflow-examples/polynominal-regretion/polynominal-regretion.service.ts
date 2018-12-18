@@ -58,7 +58,7 @@ export class PolynominalRegretionService {
 
   get trainingData() {
     if (!this._trainingData) {
-      this._trainingData = this.dataService.generateData(100, this.trueCoefficients);
+      this._trainingData = this.dataService.generateData(400, this.trueCoefficients);
     }
     return this._trainingData;
   }

@@ -5,6 +5,7 @@
     "baseUrl": "./",
     "module": "esnext",
     "types": [
+
     ]
   },
   "exclude": [

@@ -53,6 +53,11 @@ export const routes: AppRoute[] = [
     loadChildren: 'app/performance-test/performance-test.module#PerformanceTestModule',
     data: {linkText: 'Performance Tests'}
   },
+  {
+    path: 'webassemblyTests',
+    loadChildren: 'app/wasm-test/wasm-test.module#WasmTestModule',
+    data: {linkText: 'Web Assembly Tests'}
+  },
   {path: '**', redirectTo: '/home'}
 ];
 

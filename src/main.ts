@@ -12,4 +12,4 @@ if (environment.production) {
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule);
-persistState({exclude: ['performance-test']});
+persistState({exclude: ['performance-test', 'wasm-test']});
