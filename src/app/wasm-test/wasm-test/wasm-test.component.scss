@@ -3,10 +3,8 @@
     max-width: 450px;
   }
 
-  .calc-button {
-    width: 130px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  .calc-spinner {
+    display: inline-block;
+    margin-left: 1rem;
   }
 }

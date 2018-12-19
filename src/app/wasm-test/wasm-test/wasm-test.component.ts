@@ -1,14 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, RequiredValidator, Validators} from '@angular/forms';
-import {REQUIRED_VALIDATOR} from '@angular/forms/src/directives/validators';
-import {ID, PersistNgFormPlugin} from '@datorama/akita';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {PersistNgFormPlugin} from '@datorama/akita';
 import {Observable, Subscription} from 'rxjs';
-import {WasmTestService} from '../state/wasm-test.service';
 import {WasmTestQuery} from '../state/wasm-test.query';
+import {WasmTestService} from '../state/wasm-test.service';
 import {FibResult} from '../state/wasm-test.store';
-
-class WasmTest {
-}
 
 @Component({
   selector: 'app-wasm-test',
@@ -57,8 +53,14 @@ export class WasmTestComponent implements OnInit, OnDestroy {
     this.wasmTestService.startFibCalc();
   }
 
+  calcFibMem() {
+    this.wasmTestService.startFibMemCalc();
+  }
+
   ngOnDestroy() {
     this.subscription && this.subscription.unsubscribe();
     this.persistForm && this.persistForm.destroy();
   }
+
+
 }
