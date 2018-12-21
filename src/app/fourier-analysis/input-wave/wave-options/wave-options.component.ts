@@ -12,8 +12,8 @@ import {InputWaveOptionsState} from '../../state/input-wave-options.store';
 })
 export class WaveOptionsComponent implements OnDestroy {
   private persistForm: PersistNgFormPlugin;
-  private waveOptions$: Observable<InputWaveOptionsState>;
-  private form: FormGroup;
+  waveOptions$: Observable<InputWaveOptionsState>;
+  form: FormGroup;
 
   constructor(private fb: FormBuilder, private inputWaveOptionsQuery: InputWaveOptionsQuery) {
     this.waveOptions$ = this.inputWaveOptionsQuery.select();
