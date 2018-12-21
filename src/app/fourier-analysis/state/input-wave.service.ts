@@ -16,7 +16,6 @@ export class InputWaveService {
       tap(x => this.inputWaveStore.setLoading(true)),
       delay(1),
       map((options: InputWaveOptionsState) => {
-        console.log('Update wave;');
         const points = createFrequencyPoints(options.frequencies, options.lengthInMs, options.samples);
         return createFrequencyWave(options, points);
       }))

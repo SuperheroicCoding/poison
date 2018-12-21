@@ -33,7 +33,6 @@ export class BrainSettingsComponent implements OnInit {
   }
 
   resetPerceptron() {
-    console.log(this.perceptronLayers);
     if (this.perceptronLayers) {
       this.brainService.createMultiPerceptron(2, this.perceptronLayers);
     } else {

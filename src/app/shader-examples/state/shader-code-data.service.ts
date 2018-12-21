@@ -53,7 +53,6 @@ export class ShaderCodeDataService {
       `angularExamples/shaderExamples/${this.authentication.uid}`,
       ref => ref.where('id', '==', shader.id)
     );
-    console.log('update shader');
     const batch = this.afs.firestore.batch();
     const newShader = {...shader, ...{code: newCode}};
 
