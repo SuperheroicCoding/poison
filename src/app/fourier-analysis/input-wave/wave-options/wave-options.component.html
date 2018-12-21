@@ -4,8 +4,8 @@
     <div *ngFor="let frequency of frequencies?.controls; let i=index">
       <mat-slider
         class="config-slider"
-        [max]="100"
-        [min]="1"
+        [max]="500"
+        [min]="20"
         [step]="1"
         [thumbLabel]="true"
         [formControlName]="i"
@@ -24,8 +24,8 @@
   <div>
     <mat-slider
       class="config-slider"
-      [max]="2000"
-      [min]="1"
+      [max]="5000"
+      [min]="200"
       [step]="1"
       [thumbLabel]="true"
       formControlName="lengthInMs"
@@ -36,14 +36,14 @@
   <div>
     <mat-slider
       class="config-slider"
-      [max]="100000"
-      [min]="1000"
-      [step]="50"
+      [max]="10000"
+      [min]="3000"
+      [step]="100"
       [thumbLabel]="true"
-      formControlName="samples"
+      formControlName="samplesPerSec"
       [vertical]="false">
     </mat-slider>
-    <span>Samples: {{waveOptions.samples}}</span>
+    <span>Sample rate: {{waveOptions.samplesPerSec}}</span>
   </div>
 </form>
 

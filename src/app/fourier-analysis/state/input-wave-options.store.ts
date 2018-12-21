@@ -5,19 +5,19 @@ import {InputWave} from './input-wave.model';
 export interface InputWaveOptionsState {
   frequencies: number[];
   lengthInMs: number;
-  samples: number;
+  samplesPerSec: number;
 }
 
 export function createInitialState(): InputWaveOptionsState {
   return {
     frequencies: [20],
     lengthInMs: 1000,
-    samples: 30000,
+    samplesPerSec: 30000,
   };
 }
 
 export function waveOptionsFromWave(wave: InputWave): InputWaveOptionsState {
-  return {frequencies: wave.frequencies, lengthInMs: wave.lengthInMs, samples: wave.samples};
+  return {frequencies: wave.frequencies, lengthInMs: wave.lengthInMs, samplesPerSec: wave.samplesPerSec};
 }
 
 @Injectable({providedIn: 'root'})

@@ -16,8 +16,12 @@ export class InputWaveComponent {
   @Input() height: number;
   activeWave$: Observable<InputWave>;
 
-  constructor(private waveQuery: InputWaveQuery) {
+  constructor(private waveQuery: InputWaveQuery, private inputWaveService: InputWaveService) {
     this.activeWave$ = waveQuery.selectActive();
+  }
+
+  listenToWaveAudio(){
+    this.inputWaveService.listenToWave();
   }
 
 

@@ -1,9 +1,13 @@
 <mat-card>
   <mat-card-title>
     <span>Input Wave</span>
+    <button mat-icon-button (click)="listenToWaveAudio()">
+      <mat-icon>volume_up</mat-icon>
+    </button>
   </mat-card-title>
   <mat-card-content>
     <app-wave-canvas *ngIf="activeWave$ | async as wave" [waveWidth]="width" [waveHeight]="height" [wave]="wave">
     </app-wave-canvas>
   </mat-card-content>
+
 </mat-card>

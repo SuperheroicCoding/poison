@@ -31,12 +31,12 @@ export class WaveOptionsComponent implements OnDestroy {
       frequencies: this.fb.array([]),
       lengthInMs: this.fb.control(null,
         [Validators.min(10)]),
-      samples: this.fb.control(
+      samplesPerSec: this.fb.control(
         null,
         [Validators.min(100)]),
     });
     this.persistForm = new PersistNgFormPlugin(
-      this.inputWaveOptionsQuery).setForm(this.form, this.fb);
+      this.inputWaveOptionsQuery, null, {debounceTime: 500}).setForm(this.form, this.fb);
   }
 
   ngOnDestroy(): void {
@@ -46,7 +46,7 @@ export class WaveOptionsComponent implements OnDestroy {
   }
 
   addFrequency() {
-    this.frequencies.push(this.fb.control(10));
+    this.frequencies.push(this.fb.control(this.frequencies.at(this.frequencies.length - 1).value));
   }
 
   removeFrequency(i: number) {

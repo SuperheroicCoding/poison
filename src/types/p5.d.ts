@@ -6279,13 +6279,13 @@ declare class p5 {
 
   /**
    *   Returns a number representing the sample rate, in
-   *   samples per second, of all sound objects in this
+   *   samplesPerSec per second, of all sound objects in this
    *   audio context. It is determined by the sampling
    *   rate of your operating system's sound card, and it
    *   is not currently possile to change. It is often
    *   44100, or twice the range of human hearing.
    *
-   *   @return samplerate samples per second
+   *   @return samplerate samplesPerSec per second
    */
   sampleRate(): number
 
@@ -8756,7 +8756,7 @@ declare namespace p5 {
      *
      *
      *   sampleFactor - the ratio of path-length to number
-     *   of samples (default=.25); higher values yield more
+     *   of samplesPerSec (default=.25); higher values yield more
      *   points and are therefore more precise
      *
      *
@@ -9355,7 +9355,7 @@ declare namespace p5 {
     sampleRate(): number
 
     /**
-     *   Return the number of samples in a sound file.
+     *   Return the number of samplesPerSec in a sound file.
      *   Equal to sampleRate * duration.
      *
      *   @return [sampleCount]
@@ -9577,7 +9577,7 @@ declare namespace p5 {
      *
      *   • FFT.waveform() computes amplitude values along
      *   the time domain. The array indices correspond to
-     *   samples across a brief moment in time. Each value
+     *   samplesPerSec across a brief moment in time. Each value
      *   represents amplitude of the waveform at that
      *   sample of time.
      *
@@ -9761,9 +9761,9 @@ declare namespace p5 {
      *   This is necessary because Web Audio is processed
      *   on a seprate clock. For example, the p5 draw loop
      *   runs about 60 times per second. But the audio
-     *   clock must process samples 44100 times per second.
+     *   clock must process samplesPerSec 44100 times per second.
      *   If we want to add a value to each of those
-     *   samples, we can't do it in the draw loop, but we
+     *   samplesPerSec, we can't do it in the draw loop, but we
      *   can do it by adding a constant-rate audio
      *   signal.</p.
      *
