@@ -1,0 +1,7 @@
+<mat-card>
+  <mat-card-title>Center point analysis</mat-card-title>
+  <mat-card-content>
+    <app-circle-canvas *ngIf="activeWave$ | async as wave" [waveWidth]="width" [waveHeight]="height" [wave]="wave">
+    </app-circle-canvas>
+  </mat-card-content>
+</mat-card>

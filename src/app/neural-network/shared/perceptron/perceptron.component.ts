@@ -1,5 +1,6 @@
 import {AfterContentInit, Component, ElementRef, Input, OnDestroy, ViewChild} from '@angular/core';
 import {Perceptron} from '../perceptron';
+import * as p5 from 'p5';
 
 @Component({
   selector: 'app-perceptron',

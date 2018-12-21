@@ -58,6 +58,11 @@ export const routes: AppRoute[] = [
     loadChildren: 'app/wasm-test/wasm-test.module#WasmTestModule',
     data: {linkText: 'Web Assembly Tests'}
   },
+  {
+    path: 'fourierAnalysis',
+    loadChildren: 'app/fourier-analysis/fourier-analysis.module#FourierAnalysisModule',
+    data: {linkText: 'Fourier Analysis Example'}
+  },
   {path: '**', redirectTo: '/home'}
 ];
 

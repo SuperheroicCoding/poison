@@ -11,8 +11,8 @@ import {PoissonCalcService} from './poisson-calc.service';
 })
 export class PoissonComponent implements OnInit, OnDestroy {
 
-  canvasWidth = 350;
-  canvasHeight = 350;
+  canvasWidth = 600;
+  canvasHeight = 600;
 
   play = false;
 

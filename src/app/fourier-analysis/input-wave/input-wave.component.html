@@ -1,0 +1,9 @@
+<mat-card>
+  <mat-card-title>
+    <span>Input Wave</span>
+  </mat-card-title>
+  <mat-card-content>
+    <app-wave-canvas *ngIf="activeWave$ | async as wave" [waveWidth]="width" [waveHeight]="height" [wave]="wave">
+    </app-wave-canvas>
+  </mat-card-content>
+</mat-card>

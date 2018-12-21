@@ -1,4 +1,5 @@
 import {AfterViewChecked, Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
+import * as p5 from 'p5';
 
 @Component({
   selector: 'app-draw-digit',

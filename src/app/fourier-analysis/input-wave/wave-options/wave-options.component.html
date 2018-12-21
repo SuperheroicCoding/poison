@@ -1,0 +1,49 @@
+<form *ngIf="waveOptions$ | async as waveOptions" [formGroup]="form">
+  <div formArrayName="frequencies">
+    <p>Frequencies:</p>
+    <div *ngFor="let frequency of frequencies?.controls; let i=index">
+      <mat-slider
+        class="config-slider"
+        [max]="100"
+        [min]="1"
+        [step]="1"
+        [thumbLabel]="true"
+        [formControlName]="i"
+        [vertical]="false"
+      >
+      </mat-slider>
+      <span>
+      <button color="warn" mat-icon-button (click)="removeFrequency(i)">
+        <mat-icon>remove</mat-icon>
+      </button>
+      <span>{{frequency?.value}} Hz</span>
+        </span>
+    </div>
+    <button mat-button (click)="addFrequency()">Add frequency</button>
+  </div>
+  <div>
+    <mat-slider
+      class="config-slider"
+      [max]="2000"
+      [min]="1"
+      [step]="1"
+      [thumbLabel]="true"
+      formControlName="lengthInMs"
+      [vertical]="false">
+    </mat-slider>
+    <span>Duration in ms : {{waveOptions.lengthInMs}}</span>
+  </div>
+  <div>
+    <mat-slider
+      class="config-slider"
+      [max]="100000"
+      [min]="1000"
+      [step]="50"
+      [thumbLabel]="true"
+      formControlName="samples"
+      [vertical]="false">
+    </mat-slider>
+    <span>Samples: {{waveOptions.samples}}</span>
+  </div>
+</form>
+

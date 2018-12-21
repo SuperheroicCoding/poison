@@ -1,0 +1,35 @@
+<mat-sidenav class="wave-options" #sidenav position="end">
+  <mat-card class="wave-options--card">
+    <mat-card-title>Wave options</mat-card-title>
+    <mat-card-content>
+      <app-wave-options class="wave-options">
+      </app-wave-options>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button (click)="sidenav.close()">Close</button>
+    </mat-card-actions>
+  </mat-card>
+</mat-sidenav>
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <div>Fourier Transformation Examples</div>
+    <span class="spacer"></span>
+    <button class="configure-button" mat-icon-button (click)="sidenav.open()">
+      <mat-icon>build</mat-icon>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
+<ng-template #loading>
+  <mat-spinner color="accent"></mat-spinner>
+</ng-template>
+<app-input-wave *ngIf="!(isLoading$ | async)  else loading"
+                [width]="inputWaveCanvasWidth"
+                [height]="inputWaveCanvasHeight"
+></app-input-wave>
+
+<app-circle-analysis
+  *ngIf="!(isLoading$ | async)  else loading"
+  [width]="circleCanvasWidth"
+  [height]="circleCanvasHeight">
+</app-circle-analysis>
+

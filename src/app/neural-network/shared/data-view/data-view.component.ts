@@ -16,6 +16,7 @@ import {Perceptron} from '../perceptron';
 import {Point} from '../point';
 import {DataP5Scetch} from './data-p5-scetch';
 import {BrainService} from '../brain.service';
+import * as p5 from 'p5';
 
 interface ChangeInputs extends SimpleChanges {
   points: SimpleChange;

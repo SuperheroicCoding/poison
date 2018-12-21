@@ -1,6 +1,6 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RaiseCardDirective} from './raise-card.directive';
 import 'hammerjs';
 
@@ -33,6 +33,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
   exports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     MatButtonModule,
     MatCheckboxModule,
     MatInputModule,
