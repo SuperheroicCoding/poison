@@ -20,7 +20,7 @@ export class InputWaveComponent {
     this.activeWave$ = waveQuery.selectActive();
   }
 
-  listenToWaveAudio(){
+  listenToWaveAudio() {
     this.inputWaveService.listenToWave();
   }
 

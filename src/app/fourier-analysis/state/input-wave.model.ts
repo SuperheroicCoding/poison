@@ -35,9 +35,7 @@ export function createFrequencyPoints(frequencies: number[] = [220],            
     }
   }
 
-  const waveArray = Array.from(gen());
-  console.log(waveArray.length);
-  return waveArray;
+  return Array.from(gen());
 }
 
 export function createFrequencyWave({frequencies, samplesPerSec, lengthInMs}: InputWaveOptionsState, points: number[]): InputWave {

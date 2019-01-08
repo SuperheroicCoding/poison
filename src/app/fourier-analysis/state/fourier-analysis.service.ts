@@ -6,6 +6,9 @@ export class FourierAnalysisService {
 
   constructor(private fourierAnalysisStore: FourierAnalysisStore,
   ) {
+
+
   }
+
 
 }
