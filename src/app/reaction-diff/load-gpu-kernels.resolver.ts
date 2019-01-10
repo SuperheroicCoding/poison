@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, of, zip} from 'rxjs';
+import {iif, Observable, of, zip} from 'rxjs';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {map} from 'rxjs/operators';
+import {map, take} from 'rxjs/operators';
 import {ReactionDiffKernelModules} from './reaction-diff-window';
 import {tap} from 'rxjs/internal/operators';
 
@@ -17,18 +17,21 @@ export class LoadGpuKernelsResolver implements Resolve<ReactionDiffKernelModules
     this.imageKernelModule$ = httpClient.get('./assets/reaction-diff/image-kernel.js', {responseType: 'text'});
   }
 
+  /* tslint:disable:no-eval */
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ReactionDiffKernelModules> {
-    if (this.kernels) {
-      return of(this.kernels);
-    }
-    return zip(this.calcNextKernel$, this.imageKernelModule$).pipe(
+
+    return iif(() => this.kernels != null,
+      of(this.kernels),
+      zip(this.calcNextKernel$, this.imageKernelModule$).pipe(
       map(([calcNext, image]) => {
         return ({
           calcNextKernelModule: eval(calcNext),
           imageKernelModule: eval(image)
         });
       }),
+      take(1),
       tap(kernels => this.kernels = kernels)
+      )
     );
   }
 

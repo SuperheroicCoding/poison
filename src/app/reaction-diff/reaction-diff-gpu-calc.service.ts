@@ -48,7 +48,6 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
 
     const first = this.createCalcNextGpuKernel();
     const second = this.createCalcNextGpuKernel();
-
     this.calcNextKernels = {
       first,
       second
@@ -80,14 +79,13 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
       this.calcParams.diffRateB,
       this.calcParams.feedRate,
       this.calcParams.killRate,
-      this.calcParams.dynamicKillFeed
+      this.calcParams.dynamicKillFeed ? 1. : 0.
     ];
 
     for (let i = 0; i < repeat; i++) {
       // using texture swap to prevent input texture == output texture webGl error;
 
       const calcKernel = this.lastNextCalc === 0 ? this.calcNextKernels.first : this.calcNextKernels.second;
-
       this.grid = calcKernel(
         this.grid,
         this.weights,
@@ -162,7 +160,6 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
       .setFunctions(kernelModule.usedFunctions)
       .setGraphical(true);
   }
-
 
   updateNumberThreads(numberWebWorkers: number): void {
     // nothing to do here.

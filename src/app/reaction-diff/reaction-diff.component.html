@@ -21,7 +21,6 @@
       [showFps]="showFps"
       (mousePressed)="addChemical($event)">
     </app-p5-view>
-
     <mat-card-actions>
       <a mat-raised-button (click)="toggleRunSim()">{{start ? 'Pause' : 'Run'}}</a>
       <a mat-raised-button color="accent" (click)="reset()">Reset</a>
@@ -95,8 +94,8 @@
              [(ngModel)]="numberWebWorkers"
              (change)="updateNumberOfWebWorkers()">
     </mat-form-field>
-    <mat-checkbox [(ngModel)]="useGpu" (change)="updateUseGpu()" disabled="disabled">
-      Use gpu.js (currently not working)
+    <mat-checkbox [(ngModel)]="useGpu" (change)="updateUseGpu()">
+      Use gpu.js
     </mat-checkbox>
 
     <div *ngIf="showFps">Calculation needs: {{calculationTime$ | async}}ms</div>

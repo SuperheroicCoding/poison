@@ -4,6 +4,7 @@ import * as GpuJs from 'gpu.js';
 export interface BuildKernelSettings {
   mode?: 'gpu' | 'cpu';
   output?: number[];
+  debug?: boolean;
 }
 
 
@@ -25,6 +26,8 @@ export interface KernelFunction<T> {
   setFunctions(functions: Function[] | { [key: string]: (...argArray: any[]) => number }): this;
 
   setConstants(constants: { [key: string]: number }): this;
+
+  setHardcodeConstants(hardcode: boolean): this;
 }
 
 
@@ -37,14 +40,15 @@ export interface TextureKernelFunction extends KernelFunction<GpuJsTexture> {
 }
 
 
-
 export interface GPUJS {
-  createKernel(kernelFunction: Function, parameters?: { mode: 'gpu' | 'cpu' }): KernelFunction<ArrayLike<number>>;
+  createKernel(kernelFunction: Function, parameters?: { mode: 'gpu' | 'cpu', debug?: boolean }): KernelFunction<ArrayLike<number>>;
 
   createKernelMap(kernels: { [key: string]: Function }, megaKernel: Function): KernelFunction<{ [key: string]: ArrayLike<number> }>;
 
   combineKernels(kernel1: KernelFunction<GpuJsTexture>, kernel2: KernelFunction<GpuJsTexture>, megaKernel: Function):
     KernelFunction<ArrayLike<number>>;
+
+  addFunction(func: Function): void;
 }
 
 export interface GpuJsTexture {
@@ -83,6 +87,10 @@ export class GpuJsService implements GPUJS {
 
   setUseGPU(useGPU: boolean = true): GPUJS {
     return this.delegateGPU = new GpuJs({mode: useGPU ? 'gpu' : 'cpu'}) as GPUJS;
+  }
+
+  addFunction(func: Function) {
+    return this.delegateGPU.addFunction(func);
   }
 
 }

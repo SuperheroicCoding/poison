@@ -75,7 +75,7 @@ export class P5ViewComponent implements OnChanges, OnDestroy {
 
       if (this.showFps) {
         const frameRate = p.frameRate();
-        this.frameRate = this.frameRate * 0.99 + frameRate * 0.01;
+        this.frameRate = this.frameRate * 0.8 + frameRate * 0.2;
         p.fill('green');
         p.text('fps: ' + p.floor(this.frameRate), 10, 10);
       }

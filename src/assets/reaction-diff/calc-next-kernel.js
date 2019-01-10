@@ -25,7 +25,8 @@
   }
 
   function smoothy(lowLim, highLim, value) {
-    return limit((value - lowLim) / (highLim - lowLim), 0.0, 1.0);
+    const smoothedValue = (value - lowLim) / (highLim - lowLim);
+    return limit(smoothedValue, 0.0, 1.0);
   }
 
   function mixValues(value, value2, ratio) {
@@ -76,7 +77,6 @@
     return limit(fluidBToAdd, 0.0, 1.0);
   }
 
-
   const usedFunctions = {
     whenLe,
     whenGe,
@@ -89,8 +89,8 @@
     wrapAround,
     cellValue,
     calcWeightedSum,
-    calcNextA,
-    calcFluidBToAdd
+    calcFluidBToAdd,
+    calcNextA
   };
 
   function calcNextKernel(grid, weights, calcParams, addChemicalsParams) {
@@ -125,6 +125,5 @@
 
     return limit(fluid, 0, 1);
   }
-
   return {usedFunctions, calcNextKernel};
 })();

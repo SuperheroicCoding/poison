@@ -37,9 +37,9 @@ export class ReactionDiffComponent implements OnInit, OnDestroy {
   public selectedExample: string;
   public addChemicalRadius: number;
   public speed = 1;
-  public useGpu = false;
+  public useGpu = true;
   dimensions$: Observable<Dimensions>;
-  calculationTime$: Observable<number>;
+  calculationTime$: Observable<string>;
   drawImageTime$: Observable<number>;
 
   private dimensionsSubject$: Subject<Dimensions> = new Subject();
@@ -83,11 +83,13 @@ export class ReactionDiffComponent implements OnInit, OnDestroy {
       }),
       map((measures: PerformanceMeasure[]) => {
         if (measures.length === 0) {
-          return 0;
+          return '0.0';
         }
         const measuresmentsToTake = Math.min(measures.length, 30);
-        return measures.slice(measures.length - measuresmentsToTake)
-          .reduce((acc, next) => acc + next.duration / measuresmentsToTake, 0);
+        return (measures.slice(measures.length - measuresmentsToTake)
+          .reduce((acc, next) => {
+            return acc + next.duration;
+          }, 0) / measuresmentsToTake).toFixed(2);
       }));
 
     this.drawImageTime$ = interval(1000).pipe(

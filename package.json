@@ -38,7 +38,7 @@
     "core-js": "2.6.0",
     "firebase": "^5.7.0",
     "gl-matrix": "2.8.1",
-    "gpu.js": "1.10.4",
+    "gpu.js": "1.3.0",
     "hammerjs": "^2.0.8",
     "mathjs": "^5.4.0",
     "ng2-ace-editor": "0.3.8",
