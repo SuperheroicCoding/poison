@@ -36,8 +36,8 @@ export class BacteriaGameComponent implements AfterViewInit {
 
   @ViewChild('canvasElement')
   private canvasRef: ElementRef;
-  private width = 640;
-  private height = 480;
+  width = 640;
+  height = 480;
   private cx: CanvasRenderingContext2D;
 
   state$: Observable<GameStateState>;
