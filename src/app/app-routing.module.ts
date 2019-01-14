@@ -63,6 +63,11 @@ export const routes: AppRoute[] = [
     loadChildren: 'app/fourier-analysis/fourier-analysis.module#FourierAnalysisModule',
     data: {linkText: 'Fourier Analysis Example'}
   },
+  {
+    path: 'bacteriaGame',
+    loadChildren: 'app/bacteria-game/bacteria-game.module#BacteriaGameModule',
+    data: {linkText: 'Bacteria Game'}
+  },
   {path: '**', redirectTo: '/home'}
 ];
 

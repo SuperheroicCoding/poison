@@ -12,4 +12,4 @@ if (environment.production) {
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule);
-persistState({exclude: ['performance-test', 'wasm-test', 'input-wave']});
+persistState({exclude: ['performance-test', 'wasm-test', 'input-wave', 'game-state', 'bacteria-player']});
