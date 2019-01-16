@@ -20,6 +20,11 @@ export const routes: AppRoute[] = [
     canLoad: [IsAuthenticatedGuard]
   },
   {
+    path: 'bacteriaGame',
+    loadChildren: 'app/bacteria-game/bacteria-game.module#BacteriaGameModule',
+    data: {linkText: 'Bacteria Game'}
+  },
+  {
     path: 'someGpuCalculations',
     loadChildren: 'app/some-gpu-calculation/some-gpu-calculation.module#SomeGpuCalculationModule',
     data: {linkText: 'Some Gpu Accelerated Calculations (gpu.js)'}
@@ -62,11 +67,6 @@ export const routes: AppRoute[] = [
     path: 'fourierAnalysis',
     loadChildren: 'app/fourier-analysis/fourier-analysis.module#FourierAnalysisModule',
     data: {linkText: 'Fourier Analysis Example'}
-  },
-  {
-    path: 'bacteriaGame',
-    loadChildren: 'app/bacteria-game/bacteria-game.module#BacteriaGameModule',
-    data: {linkText: 'Bacteria Game'}
   },
   {path: '**', redirectTo: '/home'}
 ];
