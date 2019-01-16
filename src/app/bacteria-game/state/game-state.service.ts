@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {applyTransaction} from '@datorama/akita';
 import {animationFrameScheduler, interval, Observable} from 'rxjs';
 import {filter, map, pairwise, switchMapTo, takeUntil, tap, timestamp} from 'rxjs/operators';
 import {HeadlineAnimationService} from '../../core/headline-animation.service';
@@ -55,11 +56,13 @@ export class GameStateService {
         ))),
       map(players => this.determineWinner(players)),
       filter(winner => winner != null)
-    ).subscribe(winner => {
-        this.gameStateStore.update({winner: winner});
-        this.gameStateStore.update({currentState: GameState.END});
-      }
-    );
+    ).subscribe(winner =>
+
+      applyTransaction(() => {
+          this.gameStateStore.update({currentState: GameState.END});
+          this.gameStateStore.update({winner: winner});
+        }
+      ));
   }
 
   init(width: number, height: number) {
