@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Store, StoreConfig} from '@datorama/akita';
+import {Player} from './player.model';
+
 
 export enum GameState {
   RUNNING,
@@ -8,13 +10,14 @@ export enum GameState {
   START
 }
 
-
 export interface GameStateState {
   currentState: GameState;
   timePassed: number;
   timeDelta: number;
   width: number;
   height: number;
+  winner: Player;
+  keysPressed: string[];
 }
 
 
@@ -24,7 +27,9 @@ export function createInitialState(): GameStateState {
     timePassed: 1,
     timeDelta: 1,
     width: 480,
-    height: 320
+    height: 320,
+    winner: null,
+    keysPressed: []
   };
 }
 

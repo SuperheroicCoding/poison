@@ -11,7 +11,7 @@ export class WeightsConfigComponent implements OnChanges {
   @Input() weights: CellWeights;
   @Output() onWeightsChanged: EventEmitter<CellWeights> = new EventEmitter<CellWeights>();
 
-  private sumOfWeights;
+  sumOfWeights;
 
   constructor() {
   }

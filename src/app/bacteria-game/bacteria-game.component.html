@@ -7,19 +7,22 @@
     <div *ngIf="state$ | async; let state" class="statistics">
       <span>{{'Game time: ' + state.timePassed}}</span>
       <span>{{'FPS: ' + (fps$ | async)}}</span>
-      <div *ngFor="let player of (players$ | async); ">Player {{player.id}}: {{player.bacterias.length}} bacterias</div>
+      <div *ngFor="let player of (players$ | async); ">Player {{player.id + 1}}: {{player.bacterias.length}}bacterias
+      </div>
     </div>
-    <canvas #canvasElement id="canvasElement" (mousemove)="mouseMoved($event)" width="{{width}}" height="{{height}}">
+    <canvas #canvasElement id="canvasElement" width="{{width}}" height="{{height}}">
     </canvas>
   </mat-card-content>
   <mat-card-actions>
     <button mat-raised-button
             (click)="startGame()"
+            [disabled]="isRunning$ | async"
     >
       Start
     </button>
     <button mat-raised-button
             (click)="resetGame()"
+            [disabled]="!(isRunning$ | async)"
     >
       Reset
     </button>
