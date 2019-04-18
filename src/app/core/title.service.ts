@@ -11,7 +11,7 @@ export class TitleService {
               private titleService: Title) {
     const linkText$ = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
-      switchMap<NavigationEnd, Data>((ignored) => {
+      switchMap<NavigationEnd, any>((ignored) => {
         let actRoute = this.activatedRoute;
         while (actRoute.firstChild != null && actRoute.firstChild.outlet === 'primary') {
           actRoute = actRoute.firstChild;

@@ -1,7 +1,7 @@
-import {Data, Route, RouterModule} from '@angular/router';
 import {ModuleWithProviders} from '@angular/core';
-import {InfoComponent} from './info/info.component';
+import {Data, Route, RouterModule} from '@angular/router';
 import {IsAuthenticatedGuard} from './core/guards/is-authenticated-guard.service';
+import {InfoComponent} from './info/info.component';
 
 export interface AppRouteData extends Data {
   linkText?: string;
@@ -14,16 +14,22 @@ export interface AppRoute extends Route {
 export const routes: AppRoute[] = [
   {path: 'home', component: InfoComponent, data: {linkText: 'Home'}},
   {
-    path: 'shaderExamples',
-    loadChildren: 'app/shader-examples/shader-examples.module#ShaderExamplesModule',
-    data: {linkText: 'WebGL Shader examples with live code editor (three.js)'},
-    canLoad: [IsAuthenticatedGuard]
+    path: 'fourierAnalysis',
+    loadChildren: 'app/fourier-analysis/fourier-analysis.module#FourierAnalysisModule',
+    data: {linkText: 'Fourier Analysis Example'}
   },
   {
     path: 'bacteriaGame',
     loadChildren: 'app/bacteria-game/bacteria-game.module#BacteriaGameModule',
     data: {linkText: 'Bacteria Game'}
   },
+  {
+    path: 'shaderExamples',
+    loadChildren: 'app/shader-examples/shader-examples.module#ShaderExamplesModule',
+    data: {linkText: 'WebGL Shader examples with live code editor (three.js)'},
+    canLoad: [IsAuthenticatedGuard]
+  },
+
   {
     path: 'someGpuCalculations',
     loadChildren: 'app/some-gpu-calculation/some-gpu-calculation.module#SomeGpuCalculationModule',
@@ -62,11 +68,6 @@ export const routes: AppRoute[] = [
     path: 'webassemblyTests',
     loadChildren: 'app/wasm-test/wasm-test.module#WasmTestModule',
     data: {linkText: 'Web Assembly Tests'}
-  },
-  {
-    path: 'fourierAnalysis',
-    loadChildren: 'app/fourier-analysis/fourier-analysis.module#FourierAnalysisModule',
-    data: {linkText: 'Fourier Analysis Example'}
   },
   {path: '**', redirectTo: '/home'}
 ];

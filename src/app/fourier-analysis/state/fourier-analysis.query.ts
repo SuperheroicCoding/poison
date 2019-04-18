@@ -9,9 +9,9 @@ import {InputWaveQuery} from './input-wave.query';
 export class FourierAnalysisQuery extends Query<FourierAnalysisState> {
   selectActiveWave: Observable<InputWave>;
 
-  constructor(protected store: FourierAnalysisStore, private waveQuey: InputWaveQuery) {
+  constructor(protected store: FourierAnalysisStore, private waveQuery: InputWaveQuery) {
     super(store);
-    this.selectActiveWave = this.waveQuey.selectActive();
+    this.selectActiveWave = this.waveQuery.selectActive();
   }
 
 

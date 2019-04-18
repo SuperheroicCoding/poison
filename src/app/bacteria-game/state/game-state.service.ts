@@ -70,7 +70,7 @@ export class GameStateService {
   }
 
   private initPlayers() {
-    const {width, height} = this.gameStateQuery.getSnapshot();
+    const {width, height} = this.gameStateQuery.getValue();
     this.playerService.init([
       {x: width / 4, y: height / 2, color: [255, 100, 20, 255]}, {
         x: (width / 4) * 3,

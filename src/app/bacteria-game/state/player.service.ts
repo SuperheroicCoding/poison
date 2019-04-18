@@ -81,7 +81,7 @@ export class PlayerService {
         }
       }
     );
-    const gameState = this.gameStateQuery.getSnapshot();
+    const gameState = this.gameStateQuery.getValue();
     if (gameState.currentState === GameState.RUNNING) {
       this.playerStore.update(0, state => ({
         x: Math.max(Math.min(state.x + xDir0 * (state.maxSpeed * deltaTimeInSec), gameState.width), 0),

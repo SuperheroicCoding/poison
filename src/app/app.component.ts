@@ -2,7 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {AppRoute} from './app-routing.module';
 import {TitleService} from './core/title.service';
 import {ROUTER_LINKS} from './app-routes.token';
-
+import { auth } from 'firebase/app';
 
 @Component({
   selector: 'app-root',

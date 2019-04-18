@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
+import * as firebase from 'firebase';
 import {AngularFireAuth} from '@angular/fire/auth';
-import {auth} from 'firebase';
+import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {map, tap} from 'rxjs/operators';
 import {AuthUser} from './auth-user';
-import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,7 @@ export class AuthenticationService {
   uid: string | number;
 
   constructor(private afAuth: AngularFireAuth, private router: Router) {
+    console.log('AuthService');
     this.user = this.afAuth.user.pipe(
       tap(user => this.uid = user ? user.uid : null),
       map(user => user == null ? null : new AuthUser(user.displayName, user.photoURL))
@@ -26,12 +27,11 @@ export class AuthenticationService {
   }
 
   signIn() {
-    return this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
+    return firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
   }
 
   signOut() {
     this.router.navigate(['/']);
     return this.afAuth.auth.signOut();
   }
-
 }

@@ -4,6 +4,7 @@ import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {MatSnackBarModule} from '@angular/material';
 import {environment} from '../../environments/environment';
+import {AuthenticationService} from './authentication.service';
 import {GpuJsService} from './gpujs.service';
 import {IsAuthenticatedGuard} from './guards/is-authenticated-guard.service';
 import {HeadlineAnimationService} from './headline-animation.service';
@@ -13,7 +14,8 @@ import {ServiceWorkerUpdateService} from './service-worker-update.service';
 import {TitleService} from './title.service';
 
 @NgModule({
-  imports: [MatSnackBarModule,
+  imports: [
+    MatSnackBarModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule]
@@ -27,6 +29,7 @@ export class CoreModule {
         RandomService,
         ServiceWorkerLogUpdateService,
         ServiceWorkerUpdateService,
+        AuthenticationService,
         HeadlineAnimationService,
         GpuJsService,
         IsAuthenticatedGuard]

@@ -56,7 +56,7 @@ export class ShaderExamplesService {
 
   @Transaction()
   toggleShowEditor() {
-    const snapshot = this.shaderExamplesQuery.getSnapshot();
+    const snapshot = this.shaderExamplesQuery.getValue();
     if (!snapshot.showCodeEditor) {
       this.updateShadersPerPage(1);
     }

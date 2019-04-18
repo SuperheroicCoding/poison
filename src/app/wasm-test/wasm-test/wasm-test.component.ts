@@ -34,7 +34,7 @@ export class WasmTestComponent implements OnInit, OnDestroy {
 
     this.fibOptionsForm = this.builder.group({
       fibN: this.builder.control(
-        this.wasmTestQuery.getSnapshot().fibOptions.fibN,
+        this.wasmTestQuery.getValue().fibOptions.fibN,
         [Validators.min(0), Validators.max(45), Validators.required]),
     });
 

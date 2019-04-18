@@ -36,7 +36,7 @@ export class GameStateQuery extends Query<GameStateState> {
   }
 
   selectKeysPressed(): Observable<{ keysPressed: string[], deltaTimeSec: number }> {
-    return this.select<GameStateState>().pipe(
+    return this.select().pipe(
       filter(value => value.currentState === GameState.RUNNING),
       map(store1 => (
         {keysPressed: store1.keysPressed, deltaTimeSec: store1.timeDelta / 1000.0})

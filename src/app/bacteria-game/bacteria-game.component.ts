@@ -65,7 +65,7 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
     this.isRunning$ = this.query.selectCurrentGameState().pipe(map(state => state === GameState.RUNNING || state === GameState.PAUSED));
 
     this.query.selectTimeDelta().pipe(
-      filter(value => query.getSnapshot().currentState === GameState.RUNNING),
+      filter(value => query.getValue().currentState === GameState.RUNNING),
       untilDestroyed(this)
     ).subscribe(deltaTimeMs => {
         const dTSec = deltaTimeMs / 1000;

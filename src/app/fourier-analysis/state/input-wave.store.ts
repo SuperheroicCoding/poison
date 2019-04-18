@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { EntityState, EntityStore, StoreConfig } from '@datorama/akita';
+import {ActiveState, EntityState, EntityStore, StoreConfig} from '@datorama/akita';
 import { InputWave } from './input-wave.model';
 
-export interface InputWaveState extends EntityState<InputWave> {}
+export interface InputWaveState extends EntityState<InputWave>, ActiveState {}
 
 @Injectable({ providedIn: 'root' })
 @StoreConfig({ name: 'input-wave' })

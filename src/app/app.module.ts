@@ -31,10 +31,10 @@ import {AkitaNgDevtools} from '@datorama/akita-ngdevtools';
   ],
   imports: [
     environment.production ? [] : AkitaNgDevtools.forRoot(),
-    HttpClientModule,
-    CoreModule.forRoot(),
-    LoginModule,
     BrowserModule,
+    CoreModule.forRoot(),
+    HttpClientModule,
+    LoginModule,
     appRoutes,
     BrowserAnimationsModule,
     SharedModule.forRoot(),
