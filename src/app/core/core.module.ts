@@ -3,6 +3,7 @@ import {AngularFireModule} from '@angular/fire';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {MatSnackBarModule} from '@angular/material';
+import {Angulartics2Module} from 'angulartics2';
 import {environment} from '../../environments/environment';
 import {AuthenticationService} from './authentication.service';
 import {GpuJsService} from './gpujs.service';
@@ -17,6 +18,7 @@ import {TitleService} from './title.service';
   imports: [
     MatSnackBarModule,
     AngularFireModule.initializeApp(environment.firebase),
+    Angulartics2Module.forRoot(),
     AngularFirestoreModule,
     AngularFireAuthModule]
 })
@@ -32,7 +34,8 @@ export class CoreModule {
         AuthenticationService,
         HeadlineAnimationService,
         GpuJsService,
-        IsAuthenticatedGuard]
+        IsAuthenticatedGuard
+      ]
     };
   }
 

@@ -1,6 +1,7 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {Angulartics2Module} from 'angulartics2';
 import {RaiseCardDirective} from './raise-card.directive';
 import 'hammerjs';
 
@@ -57,7 +58,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     AceEditorModule,
     CodeEditorComponent,
     RenderShaderComponent,
-    FlexLayoutModule
+    FlexLayoutModule,
+    Angulartics2Module
   ],
   declarations: [RaiseCardDirective, SafeHtmlPipe, CodeEditorComponent, RenderShaderComponent]
 })

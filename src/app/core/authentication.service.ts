@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {Angulartics2} from 'angulartics2';
 import * as firebase from 'firebase';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {Router} from '@angular/router';
@@ -15,10 +16,10 @@ export class AuthenticationService {
   authenticated: Observable<boolean>;
   uid: string | number;
 
-  constructor(private afAuth: AngularFireAuth, private router: Router) {
-    console.log('AuthService');
+  constructor(private afAuth: AngularFireAuth, private router: Router, angulartics: Angulartics2) {
     this.user = this.afAuth.user.pipe(
       tap(user => this.uid = user ? user.uid : null),
+      tap(user => angulartics.setUsername.next(('' + this.uid))),
       map(user => user == null ? null : new AuthUser(user.displayName, user.photoURL))
     );
     this.authenticated = this.afAuth.authState.pipe(
