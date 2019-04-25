@@ -29,6 +29,7 @@
     "@angular/material": "7.3.7",
     "@angular/platform-browser": "7.2.12",
     "@angular/platform-browser-dynamic": "7.2.12",
+    "@angular/pwa": "^0.12.4",
     "@angular/router": "7.2.12",
     "@angular/service-worker": "7.2.12",
     "@datorama/akita": "^3.5.5",
@@ -88,5 +89,10 @@
     "ts-node": "7.0.1",
     "tslint": "5.15.0",
     "typescript": "3.2.4"
+  },
+  "akitaCli": {
+    "customFolderName": "true",
+    "isAngular": true,
+    "basePath": "./src/app/"
   }
 }
