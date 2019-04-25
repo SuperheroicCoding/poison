@@ -12,6 +12,5 @@
     "**/*.spec.ts"
   ],
   "angularCompilerOptions": {
-    "enableIvy": true
   }
 }
