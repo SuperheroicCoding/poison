@@ -5,11 +5,13 @@
     "baseUrl": "./",
     "module": "esnext",
     "types": [
-
     ]
   },
   "exclude": [
     "test.ts",
     "**/*.spec.ts"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "enableIvy": true
+  }
 }
