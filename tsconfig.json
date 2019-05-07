@@ -17,6 +17,15 @@
       "es2017",
       "dom",
       "es2018"
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "sc-thanos": [
+        "dist/sc-thanos"
+      ],
+      "sc-thanos/*": [
+        "dist/sc-thanos/*"
+      ]
+    }
   }
 }

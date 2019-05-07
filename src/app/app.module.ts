@@ -37,7 +37,7 @@ import {SharedModule} from './shared/shared.module';
     LoginModule,
     appRoutes,
     BrowserAnimationsModule,
-    SharedModule.forRoot(),
+    SharedModule,
     ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
   ],
   providers: [

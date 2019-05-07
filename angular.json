@@ -130,6 +130,44 @@
           }
         }
       }
+    },
+    "sc-thanos": {
+      "root": "projects/sc-thanos",
+      "sourceRoot": "projects/sc-thanos/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/sc-thanos/tsconfig.lib.json",
+            "project": "projects/sc-thanos/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/sc-thanos/src/test.ts",
+            "tsConfig": "projects/sc-thanos/tsconfig.spec.json",
+            "karmaConfig": "projects/sc-thanos/karma.conf.js",
+            "assets": [
+              "projects/sc-thanos/src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/sc-thanos/tsconfig.lib.json",
+              "projects/sc-thanos/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "AngularExamples",

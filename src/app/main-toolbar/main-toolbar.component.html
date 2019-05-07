@@ -1,14 +1,12 @@
 <mat-toolbar role="toolbar" class="page-title">
-  <mat-toolbar-row>
     <button class="sidenav-icon" mat-icon-button (click)="clickSideNav.emit($event)">
       <mat-icon>menu</mat-icon>
     </button>
-    <div fxShow fxHide.lt-sm>SuperheroicCoding&nbsp;</div>
-    <div>Angular Demos</div>
+    <span fxHide.sm="true">SuperheroicCoding&nbsp;</span>
+    <span>Angular Demos</span>
     <span class="toolbar-spacer"></span>
-    <app-service-worker-update fxShow fxHide.lt-sm></app-service-worker-update>
-    <app-login fxShow></app-login>
-  </mat-toolbar-row>
+    <app-service-worker-update fxShow.gt-sm fxHide.lt-md="true"></app-service-worker-update>
+    <app-login></app-login>
   <div class="shader-background" #shaderContainer>
     <app-render-shader
       [shaderCode]="shaderCode"
