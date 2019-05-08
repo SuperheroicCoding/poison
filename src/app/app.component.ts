@@ -11,6 +11,7 @@ import {TitleService} from './core/title.service';
 })
 export class AppComponent {
 
+
   // we need title service to update page title.
   // the logUpdate service is used to log service worker changes.
   constructor(private titleService: TitleService,
@@ -18,5 +19,7 @@ export class AppComponent {
               @Inject(ROUTER_LINKS) public routerLinks: AppRoute[]) {
     gtmManager.startTracking();
   }
+
+
 }
 

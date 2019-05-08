@@ -1,21 +1,28 @@
-import {AfterViewInit, Directive, ElementRef, NgZone} from '@angular/core';
+import {Directive, ElementRef, NgZone, OnDestroy} from '@angular/core';
+import {Subscription} from 'rxjs';
 import {ScThanosService} from './sc-thanos.service';
 
 @Directive({
-  // tslint:disable-next-line:directive-selector
   selector: '[scThanos]',
 })
-export class ScThanosDirective implements AfterViewInit {
+export class ScThanosDirective implements OnDestroy {
+
+  private subscription: Subscription;
 
   constructor(private vaporizeDomElem: ElementRef<HTMLElement>, private thanosService: ScThanosService, private zone: NgZone) {
   }
 
   vaporize() {
-    this.zone.runOutsideAngular(() =>this.thanosService.vaporize(this.vaporizeDomElem.nativeElement).subscribe(
-    ));
+    const elem = this.vaporizeDomElem.nativeElement;
+    this.subscription = this.thanosService.vaporize(elem).subscribe({
+      complete: () => this.zone.run(() => elem.parentElement.removeChild(elem))
+    });
   }
 
-  ngAfterViewInit(): void {
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
 }

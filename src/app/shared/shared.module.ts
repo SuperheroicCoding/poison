@@ -2,6 +2,7 @@ import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Angulartics2Module} from 'angulartics2';
+import {ScThanosModule} from '../../../projects/sc-thanos/src/lib/sc-thanos.module';
 import {RaiseCardDirective} from './raise-card.directive';
 import 'hammerjs';
 
@@ -59,7 +60,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     CodeEditorComponent,
     RenderShaderComponent,
     FlexLayoutModule,
-    Angulartics2Module
+    Angulartics2Module,
+    ScThanosModule
   ],
   declarations: [RaiseCardDirective, SafeHtmlPipe, CodeEditorComponent, RenderShaderComponent]
 })

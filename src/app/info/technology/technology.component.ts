@@ -1,4 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {ScThanosDirective} from '../../../../projects/sc-thanos/src/lib/sc-thanos.directive';
 
 @Component({
   selector: 'app-technology',
@@ -11,6 +12,9 @@ export class TechnologyComponent implements OnInit {
   @Input() link;
   @Input() image;
 
+  @ViewChild(ScThanosDirective)
+  private thanos: ScThanosDirective;
+
   constructor() {
   }
 
@@ -18,7 +22,8 @@ export class TechnologyComponent implements OnInit {
   }
 
   openTechnology() {
-    window.open(this.link, '_blank');
+    this.thanos.vaporize();
+    // window.open(this.link, '_blank');
   }
 
 

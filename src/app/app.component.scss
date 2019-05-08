@@ -1,16 +1,21 @@
 @import '../variables';
 
+:host {
+  height: 100%;
+}
+
 .navigationSidenav {
   max-width: 300px;
 }
 
 .pageGrid {
   display: grid;
-  grid-template-rows: $main-toolbar-height calc(100vh - #{$main-toolbar-height});
+  grid-template-rows: $main-toolbar-height 1fr;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   grid-template-areas: "header" "main";
   width: 100vw;
-  overflow: hidden;
+  height: 100%;
+  min-height: 100vh;
 }
 
 app-main-toolbar {
@@ -26,7 +31,7 @@ app-main-toolbar {
 
 @media (max-width: 600px) {
   .pageGrid {
-    grid-template-rows: $main-toolbar-height__small auto;
+    grid-template-rows: $main-toolbar-height__small 1fr;
   }
 
   app-main-toolbar {

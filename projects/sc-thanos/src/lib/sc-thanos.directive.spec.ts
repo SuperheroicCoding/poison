@@ -2,18 +2,20 @@ import {Component, ViewChild} from '@angular/core';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 import {ScThanosDirective} from './sc-thanos.directive';
+import {ScThanosModule} from './sc-thanos.module';
 import {ScThanosService} from './sc-thanos.service';
 
 describe('ScThanosDirective', () => {
   @Component({
     template: `
-      <div scThanos><h1>My content for the div</h1>
-        <img alt="funny-face" style="height: 400px" src="../assets/how-to-be-funny.jpg">
+      <div class="thanos-test-container" scThanos><h1>My content for the div</h1>
+        <img alt="funny-face" style="height: 400px" src="../assets/how-to-be-funny.png">
       </div>
+      <div>Test without Thanos</div>
     `,
     styles: [`
-      [scThanos] {
-        background-color: lightblue;
+      .thanos-test-container {
+        padding: 14px;
       }`]
   })
   class HostComponent {
@@ -35,7 +37,8 @@ describe('ScThanosDirective', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ScThanosDirective, HostComponent]
+      imports: [ScThanosModule.forRoot()],
+      declarations: [HostComponent]
     })
       .compileComponents();
   }));
@@ -58,7 +61,7 @@ describe('ScThanosDirective', () => {
       spyOn(thanosService, 'vaporize').and.callThrough();
     });
 
-    fit('should call htmlToCanvas on content', () => {
+    fit('should call thanosService.vaporize', () => {
       whenVaporizeIsCalled();
       thenThanosServiceVaporizeWasCalled();
     });

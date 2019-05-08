@@ -1,13 +1,30 @@
 {
   "name": "sc-thanos",
   "description": "the superheroic implementation of a cool thanos effect for destroying dom elements",
+  "homepage": "https://angularexamples.superheroiccoding.de",
+  "keywords": [
+    "superheroicCoding",
+    "angular",
+    "angular-cli",
+    "angular-lib",
+    "DOM",
+    "particles",
+    "animations",
+    "css",
+    "effects",
+    "html2canvas",
+    "rxjs"
+  ],
   "version": "0.0.1",
   "dependencies": {
-
+    "html2canvas": "^1.0.0-rc.1"
   },
   "peerDependencies": {
     "@angular/common": "^7.2.0",
     "@angular/core": "^7.2.0",
-    "html2canvas": "^1.0.0-rc.1"
+    "rxjs": "^6.5.1"
+  },
+  "devDependencies": {
+    "@types/html2canvas": "^0.0.35"
   }
 }

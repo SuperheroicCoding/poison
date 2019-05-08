@@ -3,5 +3,6 @@
   "dest": "../../dist/sc-thanos",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": ["html2canvas"]
 }

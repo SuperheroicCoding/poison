@@ -10,7 +10,7 @@
     </mat-nav-list>
   </mat-sidenav>
   <section class="pageGrid">
-    <app-main-toolbar (clickSideNav)="sidenav.open($event)"></app-main-toolbar>
+    <app-main-toolbar (clickSideNav)="sidenav.open()"></app-main-toolbar>
     <div class="pageContent">
       <router-outlet></router-outlet>
     </div>
