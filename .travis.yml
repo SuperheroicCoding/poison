@@ -13,8 +13,8 @@ addons:
 install:
   - npm install codecov -g
   - npm install
-  - npm install -g increase-memory-limit
-  - increase-memory-limitache
+  - npm run fix-memory-limit
+
 
 cache:
   directories:
@@ -35,7 +35,7 @@ before_deploy: npm version patch
 
 deploy:
   # deploy develop to the staging environment
-  - provider: script
+  - provider: scripts
     script: npm run deploy-without-build
     skip_cleanup: true
     on:
