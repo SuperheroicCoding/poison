@@ -18,7 +18,9 @@
     "updateFirebase": "node node-scripts/init-firebase",
     "deploy": "npm version patch && npm run asbuild && npm run build-thanos && npm run buildS3 && node node-scripts/sync-S3",
     "deploy-without-build": "node node-scripts/sync-S3",
-    "deploy-exclude-assets": "npm version patch && npm run asbuild && npm run build-thanos && npm run buildS3 && node node-scripts/sync-S3 --excludeAssets"
+    "deploy-exclude-assets": "npm version patch && npm run asbuild && npm run build-thanos && npm run buildS3 && node node-scripts/sync-S3 --excludeAssets",
+    "fix-memory-limit": "cross-env LIMIT=3096 increase-memory-limit"
+
   },
   "private": true,
   "dependencies": {
@@ -60,6 +62,10 @@
     "zone.js": "^0.8.29"
   },
   "devDependencies": {
+
+
+"increase-memory-limit": "^1.0.3",
+    "cross-env": "^5.0.5",
     "@angular-devkit/build-angular": "^0.13.8",
     "@angular-devkit/build-ng-packagr": "~0.13.0",
     "@angular-devkit/schematics": "^7.3.8",
