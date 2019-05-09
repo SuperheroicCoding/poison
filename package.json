@@ -10,6 +10,7 @@
     "test-thanos": "ng test sc-thanos",
     "test": "ng test",
     "lint": "ng lint",
+    "lint-ci": "ng lint  --format=checkstyle > lintResult.xml",
     "e2e": "ng e2e",
     "asbuild": "asc src/assets/wasm/fib.wasm.as -o src/assets/wasm/fib.wasm -O3 --validate --noAssert --importMemory --sourceMap --measure",
     "ghPages": "npm run asbuild && ng build --prod --output-path docs --named-chunks --base-href https://superheroiccoding.github.io/AngularExamples/",

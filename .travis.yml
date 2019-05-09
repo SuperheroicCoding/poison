@@ -21,9 +21,9 @@ install:
   - npm install
 
 script:
-  - npm run lint --format json --silent
+  - npm run lint-ci
   - npm run test -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
-  - npm run test-thanos --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
+  - npm run test-thanos -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
 scripts:
 
 after_success:
