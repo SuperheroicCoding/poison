@@ -58,9 +58,11 @@ export class WasmTestComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription && this.subscription.unsubscribe();
-    this.persistForm && this.persistForm.destroy();
+    if (this.subscription != null) {
+      this.subscription.unsubscribe();
+    }
+    if (this.persistForm != null) {
+      this.persistForm.destroy();
+    }
   }
-
-
 }

@@ -1,6 +1,32 @@
 import {AfterViewChecked, Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
 import * as p5 from 'p5';
 
+class Path {
+
+  constructor(public x: number, public  y: number) {
+  }
+
+  isEnd() {
+    return false;
+  }
+
+  isStart() {
+    return false;
+  }
+}
+
+class End extends Path {
+  isEnd() {
+    return true;
+  }
+}
+
+class Start extends Path {
+  isStart() {
+    return true;
+  }
+}
+
 @Component({
   selector: 'app-draw-digit',
   templateUrl: './draw-digit.component.html',
@@ -108,28 +134,3 @@ export class DrawDigitComponent implements AfterViewChecked {
   }
 }
 
-class Path {
-
-  constructor(public x: number, public  y: number) {
-  }
-
-  isEnd() {
-    return false;
-  }
-
-  isStart() {
-    return false;
-  }
-}
-
-class End extends Path {
-  isEnd() {
-    return true;
-  }
-}
-
-class Start extends Path {
-  isStart() {
-    return true;
-  }
-}

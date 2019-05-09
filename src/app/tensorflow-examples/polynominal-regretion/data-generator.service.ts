@@ -7,7 +7,9 @@ export class DataGeneratorService {
   constructor() {
   }
 
-  generateData(numPoints: number, coeff: { a: number, b: number, c: number, d: number }, sigma = 0.125): { xs: tf.Tensor<tf.Rank.R1>, ys: tf.Tensor<tf.Rank.R1> } {
+  generateData(numPoints: number,
+               coeff: { a: number, b: number, c: number, d: number }, sigma = 0.125):
+    { xs: tf.Tensor<tf.Rank.R1>, ys: tf.Tensor<tf.Rank.R1> } {
     return tf.tidy(
       () => {
         const [a, b, c, d]: tf.Tensor<tf.Rank.R0>[] = [
