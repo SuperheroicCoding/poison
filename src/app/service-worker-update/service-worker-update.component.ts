@@ -1,11 +1,11 @@
 import {Component, NgZone} from '@angular/core';
 import {SwUpdate} from '@angular/service-worker';
+import {UpdateAvailableEvent} from '@angular/service-worker/src/low_level';
+import {from, interval} from 'rxjs';
 import {delay, finalize, flatMap, map, tap} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
-import {UpdateAvailableEvent} from '@angular/service-worker/src/low_level';
 import {ServiceWorkerLogUpdateService} from '../core/service-worker-log-update.service';
 import {ServiceWorkerUpdateService} from '../core/service-worker-update.service';
-import {interval, from} from 'rxjs';
 
 
 @Component({
@@ -18,7 +18,10 @@ export class ServiceWorkerUpdateComponent {
   updatesAvailable = false;
 
 
-  constructor(private swUpdates: SwUpdate, private  zone: NgZone, updateLogger: ServiceWorkerLogUpdateService, private  updateService: ServiceWorkerUpdateService) {
+  constructor(private swUpdates: SwUpdate,
+              private  zone: NgZone,
+              updateLogger: ServiceWorkerLogUpdateService,
+              private  updateService: ServiceWorkerUpdateService) {
     if (!environment.production) {
       return;
     }

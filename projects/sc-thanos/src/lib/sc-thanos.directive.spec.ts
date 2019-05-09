@@ -61,7 +61,7 @@ describe('ScThanosDirective', () => {
       spyOn(thanosService, 'vaporize').and.callThrough();
     });
 
-    fit('should call thanosService.vaporize', () => {
+    it('should call thanosService.vaporize', () => {
       whenVaporizeIsCalled();
       thenThanosServiceVaporizeWasCalled();
     });

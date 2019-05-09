@@ -1,5 +1,5 @@
 export interface ShaderExamplesShaderCode {
-
+  shaderCode: string;
 }
 
 /**
@@ -8,6 +8,6 @@ export interface ShaderExamplesShaderCode {
  */
 export function createShaderExamplesShaderCode(params: Partial<ShaderExamplesShaderCode>) {
   return {
-
+      ...params
   } as ShaderExamplesShaderCode;
 }

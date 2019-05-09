@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 
 import {MatSnackBar} from '@angular/material';
+import {Router} from '@angular/router';
 import {SwUpdate} from '@angular/service-worker';
 import {environment} from '../../environments/environment';
-import {Router} from '@angular/router';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class ServiceWorkerUpdateService {
   constructor(private swUpdate: SwUpdate, private snackbar: MatSnackBar, private router: Router) {
   }

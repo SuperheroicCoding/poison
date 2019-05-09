@@ -111,16 +111,12 @@ export class WebGlComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.pointLight = pointLight;
     const sphere = new Mesh(new SphereGeometry(0.2, 8, 8));
-    new MeshBasicMaterial({
-      color: 0xff1111
-    });
     sphere.name = 'sphere';
     sphere.position.set(pointLight.position.x, pointLight.position.y, pointLight.position.z);
     this.pointLightSphere = sphere;
     this.pointLight.add(sphere);
 
     this.scene.add(pointLight);
-
 
     const geometry = new BoxGeometry(1, 1, 1);
     const material = new MeshPhongMaterial({color: 0x6611dd, specular: 0x009900, shininess: 30, flatShading: true});

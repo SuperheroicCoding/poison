@@ -11,10 +11,15 @@ import {ReactionDiffWorkerCalcService} from './reaction-diff-worker-calc.service
 export class ReactionDiffCalcServiceFactory {
   lastCalcService: ReactionDiffCalculator;
 
-  constructor(private configService: ReactionDiffConfigService, private gpuJsService: GpuJsService, private colorMapper: ColorMapperService) {
+  constructor(private configService: ReactionDiffConfigService,
+              private gpuJsService: GpuJsService,
+              private colorMapper: ColorMapperService) {
   }
 
-  public createCalcService(width: number, height: number, useGpuJs: boolean = false, kernels: ReactionDiffKernelModules) {
+  public createCalcService(width: number,
+                           height: number,
+                           useGpuJs: boolean = false,
+                           kernels: ReactionDiffKernelModules) {
     if (useGpuJs) {
       this.lastCalcService = new ReactionDiffGpuCalcService(
         width,

@@ -63,12 +63,10 @@ describe('RaiseCard directive', () => {
   }
 
   function thenElevationClassShouldBeSet() {
-    console.log(el.classList);
     expect(el.classList.contains('mat-elevation-z15')).toBeTruthy();
   }
 
   function thenOtherClassesShouldNotBeDeleted() {
-    console.log(el.classList);
     expect(el.classList.contains('classThatShouldNotBeDeleted')).toBeTruthy();
   }
 });
