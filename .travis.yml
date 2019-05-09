@@ -20,8 +20,8 @@ cache:
 
 scripts:
   - npm run lint-ci
-  - npm run build-thanos
   - npm run test-thanos -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
+  - npm run build-thanos
   - npm run test -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
   - npm run asbuild
   - npm run buildS3
