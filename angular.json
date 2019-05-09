@@ -58,7 +58,7 @@
               "vendorChunk": false,
               "buildOptimizer": true,
               "serviceWorker": true,
-              "ngswConfigPath": "projects/angular-examples/ngsw-config.json",
+              "ngswConfigPath": "projects/angular-examples/src/ngsw-config.json",
               "budgets": [
                 {
                   "type": "initial",
@@ -152,106 +152,6 @@
             "tsConfig": [
               "projects/sc-thanos/tsconfig.lib.json",
               "projects/sc-thanos/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "testify": {
-      "root": "projects/testify/",
-      "sourceRoot": "projects/testify/src",
-      "projectType": "application",
-      "prefix": "app",
-      "schematics": {},
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/testify",
-            "index": "projects/testify/src/index.html",
-            "main": "projects/testify/src/main.ts",
-            "polyfills": "projects/testify/src/polyfills.ts",
-            "tsConfig": "projects/testify/tsconfig.app.json",
-            "assets": [
-              "projects/testify/src/favicon.ico",
-              "projects/testify/src/assets"
-            ],
-            "styles": [
-              "projects/testify/src/styles.css"
-            ],
-            "scripts": [],
-            "es5BrowserSupport": true
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/testify/src/environments/environment.ts",
-                  "with": "projects/testify/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "testify:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "testify:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "testify:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/testify/src/test.ts",
-            "polyfills": "projects/testify/src/polyfills.ts",
-            "tsConfig": "projects/testify/tsconfig.spec.json",
-            "karmaConfig": "projects/testify/karma.conf.js",
-            "styles": [
-              "projects/testify/src/styles.css"
-            ],
-            "scripts": [],
-            "assets": [
-              "projects/testify/src/favicon.ico",
-              "projects/testify/src/assets"
-            ]
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/testify/tsconfig.app.json",
-              "projects/testify/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
