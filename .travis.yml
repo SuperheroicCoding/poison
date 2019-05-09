@@ -13,6 +13,8 @@ addons:
 install:
   - npm install codecov -g
   - npm install
+  - npm install -g increase-memory-limit
+  - increase-memory-limitache
 
 cache:
   directories:
