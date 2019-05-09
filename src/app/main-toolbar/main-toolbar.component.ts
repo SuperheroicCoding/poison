@@ -13,7 +13,7 @@ import {filter} from 'rxjs/operators';
 export class MainToolbarComponent implements OnInit {
 
   @Output() clickSideNav = new EventEmitter<Event>();
-  public shaderCode = shader;
+  public shaderCode: string;
   runAnimation: Observable<boolean>;
 
   constructor(headlineAnimations: HeadlineAnimationService, private router: Router) {
@@ -25,6 +25,7 @@ export class MainToolbarComponent implements OnInit {
       .subscribe(() => {
         return headlineAnimations.startAnimation();
       });
+    setTimeout(() => this.shaderCode = shader, 500);
   }
 
   ngOnInit() {

@@ -3,6 +3,7 @@ import {AngularFireModule} from '@angular/fire';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {MatSnackBarModule} from '@angular/material';
+import {ServiceWorkerModule} from '@angular/service-worker';
 import {Angulartics2Module} from 'angulartics2';
 import {environment} from '../../environments/environment';
 import {AuthenticationService} from './authentication.service';
@@ -20,7 +21,8 @@ import {TitleService} from './title.service';
     AngularFireModule.initializeApp(environment.firebase),
     Angulartics2Module.forRoot(),
     AngularFirestoreModule,
-    AngularFireAuthModule]
+    AngularFireAuthModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production})]
 })
 export class CoreModule {
   static forRoot(): ModuleWithProviders {

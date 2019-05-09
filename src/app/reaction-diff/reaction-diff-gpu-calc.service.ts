@@ -29,7 +29,6 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
               speed$: Observable<number>,
               private gpuJs: GpuJsService,
               private kernels: ReactionDiffKernelModules) {
-    console.log('Create GPU');
     calcParams$.subscribe((calcParams) => {
       this.setCalcParams(calcParams);
     });

@@ -1,6 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+import {CoreModule} from '../../core/core.module';
+import {SharedModule} from '../../shared/shared.module';
 
-import { ShaderExamplesOptionsComponent } from './shader-examples-options.component';
+import {ShaderExamplesOptionsComponent} from './shader-examples-options.component';
 
 describe('ShaderExamplesOptionsComponent', () => {
   let component: ShaderExamplesOptionsComponent;
@@ -8,9 +11,10 @@ describe('ShaderExamplesOptionsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ShaderExamplesOptionsComponent ]
+      imports: [SharedModule, CoreModule.forRoot(), RouterTestingModule],
+      declarations: [ShaderExamplesOptionsComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
