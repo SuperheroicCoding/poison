@@ -24,7 +24,21 @@ script:
   - npm run lint-ci
   - npm run test -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
   - npm run test-thanos -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
+  - npm run asbuild
+  - npm run build-thanos
+  - npm run buildS3
 scripts:
 
 after_success:
   - codecov
+
+deploy:
+  # deploy develop to the staging environment
+  - provider: script
+    script: npm run deploy-without-build
+    skip_cleanup: true
+    on:
+      tags: false
+      branch: master
+before_deploy: npm version patch
+after_deploy: git push --tags
