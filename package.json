@@ -8,7 +8,7 @@
     "build": "npm run asbuild && ng build",
     "build-thanos": "ng build sc-thanos",
     "test-thanos": "ng test sc-thanos",
-    "test": "ng test",
+    "test": "ng test angular-examples",
     "lint": "ng lint",
     "lint-ci": "ng lint  --format=checkstyle > lintResult.xml",
     "e2e": "ng e2e",
