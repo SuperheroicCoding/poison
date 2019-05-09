@@ -1,6 +1,25 @@
+dist: trusty
+sudo: false
+
 language: node_js
-cache: npm
-install: npm install
+node_js:
+  - "8"
+
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+
+cache:
+  directories:
+    - ./node_modules
+
+install:
+  - npm install
+
 script:
-  - npm run test-thanos -- -coverage
-  - npm run test -- -coverage
+  - npm run lint
+  - npm run test -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
+  - npm run test-thanos --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
