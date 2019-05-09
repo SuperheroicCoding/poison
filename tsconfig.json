@@ -20,7 +20,7 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "sc-Thanos": [
+      "sc-thanos": [
         "dist/sc-thanos"
       ],
       "sc-thanos/*": [

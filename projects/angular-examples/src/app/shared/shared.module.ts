@@ -2,7 +2,7 @@ import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Angulartics2Module} from 'angulartics2';
-import {ScThanosModule} from '../../../projects/sc-thanos/src/lib/sc-thanos.module';
+import {ScThanosModule} from 'sc-thanos';
 import {RaiseCardDirective} from './raise-card.directive';
 import 'hammerjs';
 

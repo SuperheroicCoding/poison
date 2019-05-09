@@ -3,7 +3,7 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AkitaNgDevtools} from '@datorama/akita-ngdevtools';
-import {ScThanosModule} from '../../projects/sc-thanos/src/lib/sc-thanos.module';
+import {ScThanosModule} from 'sc-thanos';
 import {environment} from '../environments/environment';
 import {ROUTER_LINKS} from './app-routes.token';
 import {appRoutes, routes} from './app-routing.module';
@@ -33,7 +33,7 @@ import {SharedModule} from './shared/shared.module';
     environment.production ? [] : AkitaNgDevtools.forRoot(),
     BrowserModule,
     CoreModule.forRoot(),
-    ScThanosModule.forRoot({maxParticleCount: 100000, animationLength: 2000}),
+    ScThanosModule.forRoot({maxParticleCount: 100000, animationLength: 5000}),
     HttpClientModule,
     LoginModule,
     appRoutes,

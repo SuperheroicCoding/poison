@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {ScThanosDirective} from '../../../../projects/sc-thanos/src/lib/sc-thanos.directive';
+import {ScThanosDirective} from 'sc-thanos';
 
 @Component({
   selector: 'app-technology',
