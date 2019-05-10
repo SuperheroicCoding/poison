@@ -15,7 +15,7 @@ install:
   - npm ci
   - npm install codecov -g
 
-before_script: npm run fix-memory-limit
+# before_script: npm run fix-memory-limit
 
 script:
   - npm run lint-ci
