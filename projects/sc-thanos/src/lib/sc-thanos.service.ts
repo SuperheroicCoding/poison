@@ -38,7 +38,7 @@ export class ScThanosService {
   constructor(
     @Inject(SC_THANOS_OPTIONS_TOKEN)
     private thanosOptions: ScThanosOptions,
-    private ngZone: NgZone) {
+    @Inject(NgZone) private _ngZone: NgZone) {
   }
 
   private static getParticleIndicesForBase(base: number): ParticleIndices {
@@ -195,7 +195,7 @@ export class ScThanosService {
   }
 
   async vaporize(elem: HTMLElement): Promise<Observable<any>> {
-    return this.ngZone.runOutsideAngular(async () => {
+    return this._ngZone.runOutsideAngular(async () => {
       try {
         elem.style.opacity = elem.style.opacity || '1';
         elem.style.transition = `opacity ${~~(this.thanosOptions.animationLength * .5)}ms ease-out`;

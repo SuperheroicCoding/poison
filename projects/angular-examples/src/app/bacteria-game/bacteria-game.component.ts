@@ -1,4 +1,14 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, HostListener, NgZone, OnDestroy, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  HostListener,
+  Inject,
+  NgZone,
+  OnDestroy,
+  ViewChild
+} from '@angular/core';
 import { MatDialog } from "@angular/material/dialog";
 import {untilDestroyed} from 'ngx-take-until-destroy';
 import {Observable} from 'rxjs';
@@ -55,7 +65,7 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
               private gameStateService: GameStateService,
               private playerService: PlayerService,
               private playerQuery: PlayerQuery,
-              private ngZone: NgZone,
+              @Inject(NgZone) private _ngZone: NgZone,
               private matDialog: MatDialog
   ) {
     this.state$ = this.query.select();
@@ -112,7 +122,7 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    this.ngZone.runOutsideAngular(() => {
+    this._ngZone.runOutsideAngular(() => {
       this.cx.fillStyle = 'rgba(0,0,0,0.5)';
       this.cx.fillRect(0, 0, this.width, this.height);
       this.cx.fillStyle = 'rgb(200,200,200)';

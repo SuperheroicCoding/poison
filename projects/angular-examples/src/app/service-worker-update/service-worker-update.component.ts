@@ -1,4 +1,4 @@
-import {Component, NgZone} from '@angular/core';
+import {Component, Inject, NgZone} from '@angular/core';
 import {SwUpdate, UpdateAvailableEvent} from '@angular/service-worker';
 import {from, interval} from 'rxjs';
 import {delay, finalize, flatMap, map, tap} from 'rxjs/operators';
@@ -18,7 +18,7 @@ export class ServiceWorkerUpdateComponent {
 
 
   constructor(private swUpdates: SwUpdate,
-              private  zone: NgZone,
+              @Inject(NgZone) private _ngZone: NgZone,
               updateLogger: ServiceWorkerLogUpdateService,
               private  updateService: ServiceWorkerUpdateService) {
     if (!environment.production) {
@@ -28,11 +28,11 @@ export class ServiceWorkerUpdateComponent {
     updateService.showSnackOnUpdateAvailable();
     console.log('Service Worker enabled?', this.swUpdates.isEnabled);
 
-    zone.runOutsideAngular(() => {
+    this._ngZone.runOutsideAngular(() => {
       interval(environment.serviceWorkerCheckInterval).pipe(
         tap(intervalTime => this.isLoading = true),
         tap(() => console.log('service worker is checking for new update.')),
-        flatMap(intervalTime => this.zone.run(() => from(this.swUpdates.checkForUpdate()))),
+        flatMap(intervalTime => this._ngZone.run(() => from(this.swUpdates.checkForUpdate()))),
         delay(200), // to make the spinner visible
         finalize(() => this.isLoading = false)
       )
@@ -53,7 +53,7 @@ export class ServiceWorkerUpdateComponent {
   }
 
   set isLoading(isLoading: boolean) {
-    this.zone.run(() => this._isLoading = isLoading);
+    this._ngZone.run(() => this._isLoading = isLoading);
   }
 
   activateUpdate() {

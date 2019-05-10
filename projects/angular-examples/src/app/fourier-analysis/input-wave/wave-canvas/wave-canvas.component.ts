@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  Inject,
   Input,
   NgZone,
   OnChanges,
@@ -26,7 +27,7 @@ interface WaveCanvasChanges extends SimpleChanges {
 })
 export class WaveCanvasComponent implements OnChanges, AfterViewInit, OnDestroy {
 
-  @ViewChild('canvasContainer', { static: true }) canvasContainerRef: ElementRef;
+  @ViewChild('canvasContainer', {static: true}) canvasContainerRef: ElementRef;
   private canvasContainer: HTMLElement;
 
   @Input() waveWidth: number;
@@ -36,7 +37,7 @@ export class WaveCanvasComponent implements OnChanges, AfterViewInit, OnDestroy 
   private sketch: p5;
   private wavePartsToDraw: number;
 
-  constructor(private zone: NgZone) {
+  constructor(@Inject(NgZone) private zone: NgZone) {
   }
 
   ngAfterViewInit(): void {

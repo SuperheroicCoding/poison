@@ -134,7 +134,8 @@
           "options": {
             "tsConfig": "projects/sc-thanos/tsconfig.lib.json",
             "project": "projects/sc-thanos/ng-package.json"
-          }
+          },
+          "es5BrowserSupport": false
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",

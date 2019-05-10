@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, SimpleChanges, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, Input, NgZone, OnChanges, OnDestroy, SimpleChanges, ViewChild} from '@angular/core';
 import * as Stats from 'stats.js';
 import {Camera, Mesh, OrthographicCamera, PlaneBufferGeometry, Renderer, Scene, ShaderMaterial, Vector2, WebGLRenderer} from 'three';
 import {defaultVertexShader} from './default-vertex-shader';
@@ -28,11 +28,11 @@ export class RenderShaderComponent implements AfterViewInit, OnChanges, OnDestro
   private scene: Scene;
   private uniforms: any;
   private stats: Stats;
-  @ViewChild('canvasContainer', { static: true }) private canvasContainer: ElementRef<HTMLDivElement>;
-  @ViewChild('webGLCanvas', { static: true }) private webGLCanvas: ElementRef<HTMLCanvasElement>;
-  @ViewChild('stats', { static: true }) private statsElem: ElementRef;
+  @ViewChild('canvasContainer', {static: true}) private canvasContainer: ElementRef<HTMLDivElement>;
+  @ViewChild('webGLCanvas', {static: true}) private webGLCanvas: ElementRef<HTMLCanvasElement>;
+  @ViewChild('stats', {static: true}) private statsElem: ElementRef;
 
-  constructor(private ngZone: NgZone) {
+  constructor(@Inject(NgZone) private _ngZone: NgZone) {
   }
 
   ngAfterViewInit() {
@@ -145,7 +145,7 @@ export class RenderShaderComponent implements AfterViewInit, OnChanges, OnDestro
   }
 
   animate(time: number) {
-    this.ngZone.runOutsideAngular(() => {
+    this._ngZone.runOutsideAngular(() => {
       if (this.runAnimation) {
         requestAnimationFrame(timestamp => this.animate(timestamp));
       }
