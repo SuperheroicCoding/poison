@@ -1,12 +1,12 @@
 <mat-toolbar role="toolbar" class="page-title">
-    <button class="sidenav-icon" mat-icon-button (click)="clickSideNav.emit($event)">
-      <mat-icon>menu</mat-icon>
-    </button>
-    <span fxHide.sm="true">SuperheroicCoding&nbsp;</span>
-    <span>Angular Demos</span>
-    <span class="toolbar-spacer"></span>
-    <app-service-worker-update fxShow.gt-sm fxHide.lt-md="true"></app-service-worker-update>
-    <app-login></app-login>
+  <button class="sidenav-icon" mat-icon-button (click)="clickSideNav.emit($event)">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span fxHide.sm="true">SuperheroicCoding&nbsp;</span>
+  <span>Angular Demos</span>
+  <span class="toolbar-spacer"></span>
+  <app-service-worker-update fxShow.gt-sm="true" fxHide.lt-md="true"></app-service-worker-update>
+  <app-login></app-login>
   <div class="shader-background" #shaderContainer *ngIf="shaderCode">
     <app-render-shader
       [shaderCode]="shaderCode"

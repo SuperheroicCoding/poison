@@ -10,13 +10,13 @@ describe('MainToolbarComponent', () => {
   let component: MainToolbarComponent;
   let fixture: ComponentFixture<MainToolbarComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(async(() =>
     TestBed.configureTestingModule({
       imports: [SharedModule, LoginModule, CoreModule.forRoot(), RouterTestingModule],
-      declarations: [ MainToolbarComponent, ServiceWorkerUpdateComponent]
+      declarations: [MainToolbarComponent, ServiceWorkerUpdateComponent]
     })
-    .compileComponents();
-  }));
+      .compileComponents()
+  ));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MainToolbarComponent);
@@ -24,7 +24,7 @@ describe('MainToolbarComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  fit('should create', () => {
     expect(component).toBeTruthy();
   });
 });
