@@ -6,7 +6,9 @@ node_js:
 env:
   global:
     - NODE_OPTIONS=--max_old_space_size=7000
+
 cache: npm
+
 addons:
   apt:
     sources:
@@ -19,6 +21,7 @@ install:
   - npm install codecov -g
 
 script:
+  - node -p console.log(v8.getHeapStatistics().total_available_size / (1024 * 1024))
   - npm run lint-ci
   - npm run test-thanos -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
   - npm run build-thanos
