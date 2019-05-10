@@ -2,9 +2,11 @@ import {Inject, Injectable, NgZone} from '@angular/core';
 import {asapScheduler, interval, Observable, timer} from 'rxjs';
 import {animationFrame} from 'rxjs/internal/scheduler/animationFrame';
 import {takeUntil, tap, timeInterval} from 'rxjs/operators';
-import {canvas} from 'three/detector';
+import * as _html2canvas from 'html2canvas';
 import {gaussian} from './random-util';
 import {SC_THANOS_OPTIONS_TOKEN, ScThanosOptions} from './sc-thanos.options';
+
+const html2canvas: any = _html2canvas;
 
 const PARTICLE_BYTE_LENGTH = 10;
 const MIN_PARTICLE_ALPHA = ~~(255 * 0.01);
@@ -101,10 +103,9 @@ export class ScThanosService {
   }
 
   private static async drawParticles(drawCtx: CanvasRenderingContext2D, particles: Float32Array) {
-    drawCtx.globalAlpha = 0.1;
     const {width, height} = drawCtx.canvas;
-    const image = drawCtx.createImageData(width, height);
-
+    drawCtx.clearRect(0, 0, width, height);
+    const image = drawCtx.getImageData(0, 0, width, height);
     const imageData = image.data;
     for (let i = 0; i < particles.length; i += PARTICLE_BYTE_LENGTH) {
       const particleX = particles[i];
@@ -119,8 +120,7 @@ export class ScThanosService {
       imageData[b] = ~~particles[pI.b];
       imageData[a] = ~~particles[pI.a];
     }
-    const imageBitmap = await window.createImageBitmap(image);
-    drawCtx.drawImage(imageBitmap, 0, 0);
+    drawCtx.putImageData(image, 0, 0);
   }
 
   private static prepareCanvasForVaporize(
@@ -196,10 +196,9 @@ export class ScThanosService {
   async vaporize(elem: HTMLElement): Promise<Observable<any>> {
     return this.ngZone.runOutsideAngular(async () => {
 
-      const html2Canvas: any = await import('html2canvas');
-
-      const canvas: HTMLCanvasElement = await html2Canvas(elem, {backgroundColor: null, scale: 1, logging: false});
-      const {resultCanvas, particlesData} = ScThanosService.prepareCanvasForVaporize(canvas, this.thanosOptions.maxParticleCount);
+      const canvasFromElement: HTMLCanvasElement = await html2canvas(elem, {backgroundColor: null, scale: 1, logging: false});
+      const {resultCanvas, particlesData} =
+        ScThanosService.prepareCanvasForVaporize(canvasFromElement, this.thanosOptions.maxParticleCount);
 
       elem.style.opacity = elem.style.opacity || '1';
       elem.style.transition = elem.style.transition + `, opacity ${~~(this.thanosOptions.animationLength * .5)}ms ease-out`;

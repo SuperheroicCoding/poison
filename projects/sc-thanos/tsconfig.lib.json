@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "../../out-tsc/lib",
     "target": "es2015",
-    "module": "esnext",
+    "module": "es2015",
     "moduleResolution": "node",
     "declaration": true,
     "sourceMap": true,
@@ -11,7 +11,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "types": [],
+    "types": ["@types/html2canvas"],
     "lib": [
       "dom",
       "es2018"
