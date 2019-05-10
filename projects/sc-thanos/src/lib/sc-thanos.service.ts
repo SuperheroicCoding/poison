@@ -6,7 +6,7 @@ import {takeUntil, tap, timeInterval} from 'rxjs/operators';
 import {gaussian} from './random-util';
 import {SC_THANOS_OPTIONS_TOKEN, ScThanosOptions} from './sc-thanos.options';
 
-const html2canvas: any = _html2canvas;
+const html2canvas: Html2CanvasStatic = (_html2canvas as any);
 
 const PARTICLE_BYTE_LENGTH = 10;
 const MIN_PARTICLE_ALPHA = ~~(255 * 0.01);
@@ -199,8 +199,7 @@ export class ScThanosService {
         elem.style.opacity = elem.style.opacity || '1';
         elem.style.transition = `opacity ${~~(this.thanosOptions.animationLength * .5)}ms ease-out`;
 
-
-        const canvasFromElement: HTMLCanvasElement = await html2canvas(elem, {backgroundColor: null, scale: 1, logging: false});
+        const canvasFromElement: HTMLCanvasElement = await html2canvas(elem, {backgroundColor: null, scale: 1, logging: true});
         const {resultCanvas, particlesData} =
           ScThanosService.prepareCanvasForVaporize(canvasFromElement, this.thanosOptions.maxParticleCount);
 
