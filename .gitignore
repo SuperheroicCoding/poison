@@ -44,3 +44,5 @@ yarn-error.log
 Thumbs.db
 /
 /angular-examples.iml
+/lintResult.xml
+lintResult.xml
