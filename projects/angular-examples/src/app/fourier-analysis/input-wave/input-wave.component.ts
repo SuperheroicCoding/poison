@@ -24,5 +24,5 @@ export class InputWaveComponent {
     this.inputWaveService.listenToWave();
   }
 
-
 }
+

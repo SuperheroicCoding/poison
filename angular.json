@@ -37,8 +37,7 @@
               "node_modules/ace-builds/src/ace.js",
               "node_modules/ace-builds/src/mode-glsl.js",
               "node_modules/ace-builds/src/theme-eclipse.js",
-              "node_modules/vega-lite/build/vega-lite.js",
-              "node_modules/html2canvas/dist/html2canvas.min.js"
+              "node_modules/vega-lite/build/vega-lite.js"
             ]
           },
           "configurations": {
@@ -49,15 +48,15 @@
                   "with": "projects/angular-examples/src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": true,
+              "optimization": false,
               "outputHashing": "all",
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": true,
-              "aot": true,
+              "aot": false,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true,
+              "buildOptimizer": false,
               "serviceWorker": true,
               "ngswConfigPath": "projects/angular-examples/ngsw-config.json",
               "budgets": [

@@ -62,7 +62,7 @@ export class ScThanosService {
   }
 
   private static updateParticles(particlesData: ParticlesData, deltaTSec: number, animationT: number, maxWidth: number, maxHeight: number,
-                                 animationLength: number) {
+                                 animationLength: number): void {
     const {particles, maxParticleX, minParticleY} = particlesData;
     const time = Math.max(animationT * animationT, animationT);
     const startAccelerateX = maxParticleX - (time * maxParticleX);
@@ -102,7 +102,7 @@ export class ScThanosService {
     }
   }
 
-  private static async drawParticles(drawCtx: CanvasRenderingContext2D, particles: Float32Array) {
+  private static drawParticles(drawCtx: CanvasRenderingContext2D, particles: Float32Array): void {
     const {width, height} = drawCtx.canvas;
     drawCtx.clearRect(0, 0, width, height);
     const image = drawCtx.getImageData(0, 0, width, height);
@@ -143,7 +143,8 @@ export class ScThanosService {
     return {resultCanvas, particlesData};
   }
 
-  private static createParticlesForImageData(imageData: ImageData, maxParticleCount: number, resultWidth: number, resultHeight: number) {
+  private static createParticlesForImageData(imageData: ImageData, maxParticleCount: number, resultWidth: number, resultHeight: number):
+    { minParticleY: number; maxParticleX: number; particles: Float32Array } {
     const {width, height} = imageData;
     let particleCandidates = 0;
     let particleCount = 0;
