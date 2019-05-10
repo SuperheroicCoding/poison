@@ -1,8 +1,8 @@
 import {Inject, Injectable, NgZone} from '@angular/core';
+import * as _html2canvas from 'html2canvas';
 import {asapScheduler, interval, Observable, timer} from 'rxjs';
 import {animationFrame} from 'rxjs/internal/scheduler/animationFrame';
 import {takeUntil, tap, timeInterval} from 'rxjs/operators';
-import * as _html2canvas from 'html2canvas';
 import {gaussian} from './random-util';
 import {SC_THANOS_OPTIONS_TOKEN, ScThanosOptions} from './sc-thanos.options';
 
@@ -196,12 +196,12 @@ export class ScThanosService {
   async vaporize(elem: HTMLElement): Promise<Observable<any>> {
     return this.ngZone.runOutsideAngular(async () => {
 
+      elem.style.opacity = elem.style.opacity || '1';
+      elem.style.transition = elem.style.transition + `, opacity ${~~(this.thanosOptions.animationLength * .5)}ms ease-out`;
+
       const canvasFromElement: HTMLCanvasElement = await html2canvas(elem, {backgroundColor: null, scale: 1, logging: false});
       const {resultCanvas, particlesData} =
         ScThanosService.prepareCanvasForVaporize(canvasFromElement, this.thanosOptions.maxParticleCount);
-
-      elem.style.opacity = elem.style.opacity || '1';
-      elem.style.transition = elem.style.transition + `, opacity ${~~(this.thanosOptions.animationLength * .5)}ms ease-out`;
 
       elem.parentElement.style.position = elem.parentElement.style.position || 'relative';
       resultCanvas.style.position = 'absolute';
