@@ -12,11 +12,10 @@ addons:
       - google-chrome-stable
 
 install:
-  - npm install codecov -g
   - npm ci
+  - npm install codecov -g
 
 before_script: npm run fix-memory-limit
-
 
 script:
   - npm run lint-ci
