@@ -40,7 +40,7 @@
     "@tensorflow/tfjs": "1.1.2",
     "ace-builds": "^1.4.4",
     "angulartics2": "^7.5.2",
-    "browserslist": "^4.0.0",
+    "browserslist": "^4.5.6",
     "core-js": "2.6.5",
     "firebase": " 5.9.4",
     "gl-matrix": "2.8.1",
