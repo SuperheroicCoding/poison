@@ -195,41 +195,47 @@ export class ScThanosService {
 
   async vaporize(elem: HTMLElement): Promise<Observable<any>> {
     return this.ngZone.runOutsideAngular(async () => {
+      try {
+        elem.style.opacity = elem.style.opacity || '1';
+        elem.style.transition = `opacity ${~~(this.thanosOptions.animationLength * .5)}ms ease-out`;
 
-      elem.style.opacity = elem.style.opacity || '1';
-      elem.style.transition = elem.style.transition + `, opacity ${~~(this.thanosOptions.animationLength * .5)}ms ease-out`;
 
-      const canvasFromElement: HTMLCanvasElement = await html2canvas(elem, {backgroundColor: null, scale: 1, logging: false});
-      const {resultCanvas, particlesData} =
-        ScThanosService.prepareCanvasForVaporize(canvasFromElement, this.thanosOptions.maxParticleCount);
+        const canvasFromElement: HTMLCanvasElement = await html2canvas(elem, {backgroundColor: null, scale: 1, logging: false});
+        const {resultCanvas, particlesData} =
+          ScThanosService.prepareCanvasForVaporize(canvasFromElement, this.thanosOptions.maxParticleCount);
 
-      elem.parentElement.style.position = elem.parentElement.style.position || 'relative';
-      resultCanvas.style.position = 'absolute';
-      resultCanvas.style.left = 0 + 'px';
-      resultCanvas.style.top = '-' + elem.getBoundingClientRect().height + 'px';
-      resultCanvas.style.zIndex = '2000';
-      resultCanvas.style.opacity = '1';
-      elem.style.opacity = '0';
-      elem.insertAdjacentElement('beforebegin', resultCanvas);
-      let time = 0;
-      return interval(1000 / 60, animationFrame)
-        .pipe(
-          timeInterval(asapScheduler),
-          tap(deltaT => {
-            time += deltaT.interval;
-            const dT = deltaT.interval / 1000;
-            const animationTime = time / this.thanosOptions.animationLength;
-            ScThanosService.updateParticles(particlesData, dT, animationTime, resultCanvas.width, resultCanvas.height,
-              this.thanosOptions.animationLength);
-            ScThanosService.drawParticles(resultCanvas.getContext('2d'), particlesData.particles);
-          }),
-          takeUntil(timer(this.thanosOptions.animationLength + 1000)),
-          tap({
-            complete: () => {
-              return resultCanvas.remove();
-            }
-          })
-        );
+        elem.parentElement.style.position = elem.parentElement.style.position || 'relative';
+        resultCanvas.style.position = 'absolute';
+        resultCanvas.style.left = 0 + 'px';
+        resultCanvas.style.top = '-' + elem.getBoundingClientRect().height + 'px';
+        resultCanvas.style.zIndex = '2000';
+
+        // this should start the transition above defined
+        elem.style.opacity = '0';
+
+        elem.insertAdjacentElement('beforebegin', resultCanvas);
+        let time = 0;
+        return interval(1000 / 60, animationFrame)
+          .pipe(
+            timeInterval(asapScheduler),
+            tap(deltaT => {
+              time += deltaT.interval;
+              const dT = deltaT.interval / 1000;
+              const animationTime = time / this.thanosOptions.animationLength;
+              ScThanosService.updateParticles(particlesData, dT, animationTime, resultCanvas.width, resultCanvas.height,
+                this.thanosOptions.animationLength);
+              ScThanosService.drawParticles(resultCanvas.getContext('2d'), particlesData.particles);
+            }),
+            takeUntil(timer(this.thanosOptions.animationLength + 1000)),
+            tap({
+              complete: () => {
+                return resultCanvas.remove();
+              }
+            })
+          );
+      } catch (e) {
+        console.log(e);
+      }
     });
   }
 }
