@@ -3,6 +3,7 @@ sudo: false
 language: node_js
 node_js:
   - "10"
+cache: npm
 addons:
   apt:
     sources:
@@ -12,13 +13,10 @@ addons:
 
 install:
   - npm install codecov -g
-  - npm install
+  - npm ci
 
 before_script: npm run fix-memory-limit
 
-cache:
-  directories:
-    - ./node_modules
 
 script:
   - npm run lint-ci
@@ -32,9 +30,8 @@ after_success:
   - codecov
 
 before_deploy: npm version patch
-
 deploy:
-  # deploy develop to the staging environment
+  # deploy prod to the aws environment
   - provider: scripts
     script: npm run deploy-without-build
     skip_cleanup: true
