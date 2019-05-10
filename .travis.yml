@@ -33,14 +33,11 @@ script:
 after_success:
   - codecov
 
-before_deploy: npm version patch
 deploy:
   # deploy prod to the aws environment
   provider: script
   script: npm run deploy-without-build
   skip_cleanup: true
   on:
-    tags: false
     branch: master
 
-after_deploy: git push --tags
