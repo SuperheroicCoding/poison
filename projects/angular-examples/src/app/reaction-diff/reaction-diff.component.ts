@@ -5,7 +5,7 @@ import {CellWeights} from './cell-weights';
 import {ReactionDiffConfigService} from './reaction-diff-config.service';
 import {ReactionDiffCalcParams} from './reaction-diff-calc-params';
 import {interval, Observable, of, Subject} from 'rxjs';
-import { MatSelectChange } from "@angular/material/select";
+import { MatSelectChange } from '@angular/material/select';
 import {debounceTime, distinctUntilChanged, filter, flatMap, map, share, startWith, tap} from 'rxjs/operators';
 import {ReactionDiffCalculator} from './reaction-diff-calculator';
 import {HeadlineAnimationService} from '../core/headline-animation.service';

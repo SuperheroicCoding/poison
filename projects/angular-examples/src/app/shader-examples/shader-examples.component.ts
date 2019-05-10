@@ -1,5 +1,5 @@
 import {AfterContentInit, ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
-import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {animate, keyframes, transition, trigger} from '@angular/animations';
 import {fadeInLeft, fadeInRight, fadeOutLeft, fadeOutRight} from './leftInOut.animation';

@@ -9,7 +9,7 @@ import {
   OnDestroy,
   ViewChild
 } from '@angular/core';
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog } from '@angular/material/dialog';
 import {untilDestroyed} from 'ngx-take-until-destroy';
 import {Observable} from 'rxjs';
 import {distinctUntilChanged, filter, map} from 'rxjs/operators';

@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {AuthenticationService} from '../core/authentication.service';
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {AuthUser} from '../core/auth-user';
 
 @Component({

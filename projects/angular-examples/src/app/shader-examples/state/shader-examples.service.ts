@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {ShaderExampleState, ShaderExamplesUIStore} from './shader-examples.store';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {transaction as Transaction} from '@datorama/akita';
-import { PageEvent } from "@angular/material/paginator";
+import { PageEvent } from '@angular/material/paginator';
 import {ShaderCodeQuery} from './shader-code.query';
 import {ShaderCodeService} from './shader-code.service';
 import {ShaderCode} from './shader-code.model';

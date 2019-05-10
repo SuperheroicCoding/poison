@@ -2,7 +2,7 @@ import {ModuleWithProviders, NgModule, Optional, SkipSelf} from '@angular/core';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
-import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {ServiceWorkerModule} from '@angular/service-worker';
 import {Angulartics2Module} from 'angulartics2';
 import {environment} from '../../environments/environment';
