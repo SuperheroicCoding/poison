@@ -1,8 +1,8 @@
 import {Inject, Injectable, NgZone} from '@angular/core';
-import {asapScheduler, from, interval, Observable, timer} from 'rxjs';
+import {asapScheduler, interval, Observable, timer} from 'rxjs';
 import {animationFrame} from 'rxjs/internal/scheduler/animationFrame';
-import {map, switchMap, takeUntil, tap, timeInterval} from 'rxjs/operators';
-import {HTML2CANVAS_INJECTION_TOKEN} from './html-2-canvas.token';
+import {takeUntil, tap, timeInterval} from 'rxjs/operators';
+import {canvas} from 'three/detector';
 import {gaussian} from './random-util';
 import {SC_THANOS_OPTIONS_TOKEN, ScThanosOptions} from './sc-thanos.options';
 
@@ -33,11 +33,10 @@ interface ParticleIndices {
 @Injectable()
 export class ScThanosService {
 
-  constructor(@Inject(HTML2CANVAS_INJECTION_TOKEN)
-              private html2Canvas: any,
-              @Inject(SC_THANOS_OPTIONS_TOKEN)
-              private thanosOptions: ScThanosOptions,
-              private ngZone: NgZone) {
+  constructor(
+    @Inject(SC_THANOS_OPTIONS_TOKEN)
+    private thanosOptions: ScThanosOptions,
+    private ngZone: NgZone) {
   }
 
   private static getParticleIndicesForBase(base: number): ParticleIndices {
@@ -101,10 +100,11 @@ export class ScThanosService {
     }
   }
 
-  private static drawParticles(drawCtx: CanvasRenderingContext2D, particles: Float32Array) {
+  private static async drawParticles(drawCtx: CanvasRenderingContext2D, particles: Float32Array) {
+    drawCtx.globalAlpha = 0.1;
     const {width, height} = drawCtx.canvas;
-    drawCtx.clearRect(0, 0, width, height);
     const image = drawCtx.createImageData(width, height);
+
     const imageData = image.data;
     for (let i = 0; i < particles.length; i += PARTICLE_BYTE_LENGTH) {
       const particleX = particles[i];
@@ -119,7 +119,8 @@ export class ScThanosService {
       imageData[b] = ~~particles[pI.b];
       imageData[a] = ~~particles[pI.a];
     }
-    drawCtx.putImageData(image, 0, 0);
+    const imageBitmap = await window.createImageBitmap(image);
+    drawCtx.drawImage(imageBitmap, 0, 0);
   }
 
   private static prepareCanvasForVaporize(
@@ -192,46 +193,44 @@ export class ScThanosService {
     return {particles, maxParticleX, minParticleY};
   }
 
-  vaporize(elem: HTMLElement): Observable<any> {
-    return this.ngZone.runOutsideAngular(() => {
-      elem.style.opacity = elem.style.opacity || '1';
-      elem.style.transition = `opacity ${~~(this.thanosOptions.animationLength * .5)}ms ease-out`;
-      return from(this.html2Canvas(elem, {backgroundColor: null, scale: 1, logging: false})).pipe(
-        map((canvas: HTMLCanvasElement) => {
-          const {resultCanvas, particlesData} = ScThanosService.prepareCanvasForVaporize(canvas, this.thanosOptions.maxParticleCount);
-          elem.parentElement.style.position = elem.parentElement.style.position || 'relative';
-          resultCanvas.style.position = 'absolute';
-          resultCanvas.style.left = 0 + 'px';
-          resultCanvas.style.top = '-' + elem.getBoundingClientRect().height + 'px';
-          resultCanvas.style.zIndex = '2000';
-          resultCanvas.style.opacity = '1';
-          elem.style.opacity = '0';
-          elem.insertAdjacentElement('beforebegin', resultCanvas);
-          return {resultCanvas, particlesData};
-        }),
-        switchMap(({resultCanvas, particlesData}) => {
-          let time = 0;
+  async vaporize(elem: HTMLElement): Promise<Observable<any>> {
+    return this.ngZone.runOutsideAngular(async () => {
 
-          return interval(1000 / 60, animationFrame)
-            .pipe(
-              timeInterval(asapScheduler),
-              tap(deltaT => {
-                time += deltaT.interval;
-                const dT = deltaT.interval / 1000;
-                const animationTime = time / this.thanosOptions.animationLength;
-                ScThanosService.updateParticles(particlesData, dT, animationTime, resultCanvas.width, resultCanvas.height,
-                  this.thanosOptions.animationLength);
-                ScThanosService.drawParticles(resultCanvas.getContext('2d'), particlesData.particles);
-              }),
-              takeUntil(timer(this.thanosOptions.animationLength + 1000)),
-              tap({
-                complete: () => {
-                  return resultCanvas.remove();
-                }
-              })
-            );
-        }),
-      );
+      const html2Canvas: any = await import('html2canvas');
+
+      const canvas: HTMLCanvasElement = await html2Canvas(elem, {backgroundColor: null, scale: 1, logging: false});
+      const {resultCanvas, particlesData} = ScThanosService.prepareCanvasForVaporize(canvas, this.thanosOptions.maxParticleCount);
+
+      elem.style.opacity = elem.style.opacity || '1';
+      elem.style.transition = elem.style.transition + `, opacity ${~~(this.thanosOptions.animationLength * .5)}ms ease-out`;
+
+      elem.parentElement.style.position = elem.parentElement.style.position || 'relative';
+      resultCanvas.style.position = 'absolute';
+      resultCanvas.style.left = 0 + 'px';
+      resultCanvas.style.top = '-' + elem.getBoundingClientRect().height + 'px';
+      resultCanvas.style.zIndex = '2000';
+      resultCanvas.style.opacity = '1';
+      elem.style.opacity = '0';
+      elem.insertAdjacentElement('beforebegin', resultCanvas);
+      let time = 0;
+      return interval(1000 / 60, animationFrame)
+        .pipe(
+          timeInterval(asapScheduler),
+          tap(deltaT => {
+            time += deltaT.interval;
+            const dT = deltaT.interval / 1000;
+            const animationTime = time / this.thanosOptions.animationLength;
+            ScThanosService.updateParticles(particlesData, dT, animationTime, resultCanvas.width, resultCanvas.height,
+              this.thanosOptions.animationLength);
+            ScThanosService.drawParticles(resultCanvas.getContext('2d'), particlesData.particles);
+          }),
+          takeUntil(timer(this.thanosOptions.animationLength + 1000)),
+          tap({
+            complete: () => {
+              return resultCanvas.remove();
+            }
+          })
+        );
     });
   }
 }

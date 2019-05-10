@@ -25,7 +25,7 @@ script:
   - npm run build-thanos
   - npm run test -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
   - npm run asbuild
-  - node run buildS3
+  - npm run buildS3
 
 after_success:
   - codecov
