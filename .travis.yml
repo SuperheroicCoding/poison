@@ -21,8 +21,8 @@ install:
   - npm install codecov -g
 
 script:
-  - node -p console.log(v8.getHeapStatistics().total_available_size / (1024 * 1024))
-  - npm run lint-ci
+  - node -p "v8.getHeapStatistics().total_available_size / (1024 * 1024)"
+  - npm run lint
   - npm run test-thanos -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
   - npm run build-thanos
   - npm run test -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
