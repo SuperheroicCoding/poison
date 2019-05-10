@@ -3,6 +3,8 @@ sudo: false
 language: node_js
 node_js:
   - "10"
+env:
+  - NODE_OPTIONS=--max_old_space_size=7000
 cache: npm
 addons:
   apt:
@@ -23,7 +25,7 @@ script:
   - npm run build-thanos
   - npm run test -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
   - npm run asbuild
-  - node --max_old_space_size=6000 node_modules/@angular/cli/bin/ng build --prod --output-path=distS3 --base-href=https://angularexamples.superheroiccoding.de
+  - node run buildS3
 
 after_success:
   - codecov
