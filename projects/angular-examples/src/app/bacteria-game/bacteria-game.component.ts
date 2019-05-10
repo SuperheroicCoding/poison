@@ -1,5 +1,5 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, HostListener, NgZone, OnDestroy, ViewChild} from '@angular/core';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from "@angular/material/dialog";
 import {untilDestroyed} from 'ngx-take-until-destroy';
 import {Observable} from 'rxjs';
 import {distinctUntilChanged, filter, map} from 'rxjs/operators';
@@ -37,7 +37,7 @@ export function createImageDataFromBacterias(
 })
 export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
 
-  @ViewChild('canvasElement')
+  @ViewChild('canvasElement', { static: true })
   private canvasRef: ElementRef;
 
 

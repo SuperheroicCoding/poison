@@ -209,6 +209,7 @@ export class ScThanosService {
         resultCanvas.style.left = 0 + 'px';
         resultCanvas.style.top = '-' + elem.getBoundingClientRect().height + 'px';
         resultCanvas.style.zIndex = '2000';
+        resultCanvas.style.pointerEvents = 'none';
 
         // this should start the transition above defined
         elem.style.opacity = '0';
@@ -239,6 +240,3 @@ export class ScThanosService {
     });
   }
 }
-
-
-

@@ -1,6 +1,6 @@
 {
   "name": "sc-thanos",
-  "description": "the superheroic implementation of a cool thanos effect for destroying dom elements",
+  "description": "Superheroic implementation of a cool thanos vaporizing effect for destroying dom elements",
   "homepage": "https://angularexamples.superheroiccoding.de",
   "keywords": [
     "superheroicCoding",
@@ -16,10 +16,8 @@
     "rxjs"
   ],
   "version": "0.0.1",
-  "dependencies": {
-    "html2canvas": "^1.0.0-rc.1"
-  },
   "peerDependencies": {
+    "html2canvas": "^1.0.0-rc.1",
     "@angular/common": "^7.2.0",
     "@angular/core": "^7.2.0",
     "rxjs": "^6.5.1"

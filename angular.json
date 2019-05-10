@@ -38,7 +38,8 @@
               "node_modules/ace-builds/src/mode-glsl.js",
               "node_modules/ace-builds/src/theme-eclipse.js",
               "node_modules/vega-lite/build/vega-lite.js"
-            ]
+            ],
+            "es5BrowserSupport": true
           },
           "configurations": {
             "production": {
@@ -48,15 +49,15 @@
                   "with": "projects/angular-examples/src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": false,
+              "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": true,
-              "aot": false,
+              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": false,
+              "buildOptimizer": true,
               "serviceWorker": true,
               "ngswConfigPath": "projects/angular-examples/ngsw-config.json",
               "budgets": [

@@ -1,6 +1,5 @@
 import {Component, NgZone} from '@angular/core';
-import {SwUpdate} from '@angular/service-worker';
-import {UpdateAvailableEvent} from '@angular/service-worker/src/low_level';
+import {SwUpdate, UpdateAvailableEvent} from '@angular/service-worker';
 import {from, interval} from 'rxjs';
 import {delay, finalize, flatMap, map, tap} from 'rxjs/operators';
 import {environment} from '../../environments/environment';

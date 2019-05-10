@@ -28,9 +28,9 @@ export class RenderShaderComponent implements AfterViewInit, OnChanges, OnDestro
   private scene: Scene;
   private uniforms: any;
   private stats: Stats;
-  @ViewChild('canvasContainer') private canvasContainer: ElementRef<HTMLDivElement>;
-  @ViewChild('webGLCanvas') private webGLCanvas: ElementRef<HTMLCanvasElement>;
-  @ViewChild('stats') private statsElem: ElementRef;
+  @ViewChild('canvasContainer', { static: true }) private canvasContainer: ElementRef<HTMLDivElement>;
+  @ViewChild('webGLCanvas', { static: true }) private webGLCanvas: ElementRef<HTMLCanvasElement>;
+  @ViewChild('stats', { static: true }) private statsElem: ElementRef;
 
   constructor(private ngZone: NgZone) {
   }

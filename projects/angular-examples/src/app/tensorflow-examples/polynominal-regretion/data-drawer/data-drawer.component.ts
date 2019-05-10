@@ -9,8 +9,8 @@ import * as tf from '@tensorflow/tfjs';
 })
 export class DataDrawerComponent implements OnChanges {
 
-  @ViewChild('plot') plot: ElementRef;
-  @ViewChild('coeff') coeffContainer: ElementRef;
+  @ViewChild('plot', { static: true }) plot: ElementRef;
+  @ViewChild('coeff', { static: true }) coeffContainer: ElementRef;
 
   @Input() caption: string;
   @Input() coeffCaption: string;

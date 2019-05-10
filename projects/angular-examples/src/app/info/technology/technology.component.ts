@@ -12,7 +12,7 @@ export class TechnologyComponent implements OnInit {
   @Input() link;
   @Input() image;
 
-  @ViewChild(ScThanosDirective)
+  @ViewChild(ScThanosDirective, { static: true })
   private thanos: ScThanosDirective;
 
   constructor() {

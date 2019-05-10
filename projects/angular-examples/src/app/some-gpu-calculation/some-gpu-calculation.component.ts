@@ -13,7 +13,7 @@ import {GpuJsService, GraphicalKernelFunction} from '../core/gpujs.service';
 export class SomeGpuCalculationComponent implements AfterViewInit, OnDestroy {
 
 
-  @ViewChild('gpuResult') gpuResult: ElementRef;
+  @ViewChild('gpuResult', { static: true }) gpuResult: ElementRef;
 
   additionForm: FormGroup;
   calculationTime$: Observable<string>;

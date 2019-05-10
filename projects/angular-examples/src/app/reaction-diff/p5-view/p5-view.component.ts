@@ -20,7 +20,7 @@ import {ReactionDiffCalculator} from '../reaction-diff-calculator';
 })
 export class P5ViewComponent implements OnChanges, OnDestroy {
 
-  @ViewChild('drawArea') drawArea: ElementRef;
+  @ViewChild('drawArea', { static: true }) drawArea: ElementRef;
   @Input() simWidth: number;
   @Input() simHeight: number;
   @Input() calcService: ReactionDiffCalculator;

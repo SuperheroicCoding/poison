@@ -36,7 +36,7 @@ const TAU = Math.PI / 2;
 export class WebGlComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
-  @ViewChild('webGlCanvas') webGlCanvas: ElementRef;
+  @ViewChild('webGlCanvas', { static: true }) webGlCanvas: ElementRef;
 
   mouseup$ = new EventEmitter<MouseEvent>();
   mousedown$ = new EventEmitter<MouseEvent>();

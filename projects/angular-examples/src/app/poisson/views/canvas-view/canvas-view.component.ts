@@ -27,7 +27,7 @@ import {skipUntil} from 'rxjs/operators';
 export class CanvasViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
 
-  @ViewChild('canvas') canvas: ElementRef;
+  @ViewChild('canvas', { static: true }) canvas: ElementRef;
   @Input() canvasWidth: number;
   @Input() canvasHeight: number;
   @Input() circles: Circle[];

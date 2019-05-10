@@ -35,7 +35,7 @@ interface CenterData {
 })
 export class CircleCanvasComponent implements OnChanges, AfterViewInit, OnDestroy {
 
-  @ViewChild('canvasContainer') canvasContainerRef: ElementRef;
+  @ViewChild('canvasContainer', { static: true }) canvasContainerRef: ElementRef;
   private canvasContainer: HTMLElement;
 
   @Input() waveWidth: number;

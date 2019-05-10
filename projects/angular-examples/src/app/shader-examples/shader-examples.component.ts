@@ -1,5 +1,5 @@
 import {AfterContentInit, ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
-import {MatPaginator, PageEvent} from '@angular/material';
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import {BehaviorSubject, Observable} from 'rxjs';
 import {animate, keyframes, transition, trigger} from '@angular/animations';
 import {fadeInLeft, fadeInRight, fadeOutLeft, fadeOutRight} from './leftInOut.animation';
@@ -22,7 +22,7 @@ import {ShaderCode, ShaderCodeQuery, ShaderExamplesService, ShaderExamplesUIQuer
 })
 export class ShaderExamplesComponent implements AfterContentInit {
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   isLoadingShaders: Observable<boolean>;
   isLoading: Observable<boolean>;
   private animationEnded$: BehaviorSubject<boolean>;

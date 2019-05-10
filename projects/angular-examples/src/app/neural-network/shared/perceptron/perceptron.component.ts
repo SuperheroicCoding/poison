@@ -12,7 +12,7 @@ export class PerceptronComponent implements AfterContentInit, OnDestroy {
   @Input() perceptron: Perceptron;
   @Input() canvasHeight ? = 300;
   @Input() canvasWidth ? = 300;
-  @ViewChild('perceptronCanvas') perceptronCanvas: ElementRef;
+  @ViewChild('perceptronCanvas', { static: true }) perceptronCanvas: ElementRef;
   private scetch: p5;
 
   static roundFloat(input: number) {

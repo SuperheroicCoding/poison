@@ -8,9 +8,9 @@ import embed from 'vega-embed';
 })
 export class UiComponent implements OnChanges {
 
-  @ViewChild('lossCanvas') lossCanvas: ElementRef;
-  @ViewChild('accuracyCanvas') accuracyCanvas: ElementRef;
-  @ViewChild('images') images: ElementRef;
+  @ViewChild('lossCanvas', { static: true }) lossCanvas: ElementRef;
+  @ViewChild('accuracyCanvas', { static: true }) accuracyCanvas: ElementRef;
+  @ViewChild('images', { static: true }) images: ElementRef;
 
   lossLabel: string;
   accuracyLabel: string;

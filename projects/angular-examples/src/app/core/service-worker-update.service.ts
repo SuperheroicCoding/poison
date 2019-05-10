@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from "@angular/material/snack-bar";
 import {Router} from '@angular/router';
 import {SwUpdate} from '@angular/service-worker';
 import {environment} from '../../environments/environment';

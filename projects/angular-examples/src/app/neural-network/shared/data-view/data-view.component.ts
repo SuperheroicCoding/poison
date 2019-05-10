@@ -30,8 +30,8 @@ interface ChangeInputs extends SimpleChanges {
 })
 export class DataViewComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
 
-  @ViewChild('dataCanvas') dataCanvas: ElementRef;
-  @ViewChild('legendCanvas') legendCanvas: ElementRef;
+  @ViewChild('dataCanvas', { static: true }) dataCanvas: ElementRef;
+  @ViewChild('legendCanvas', { static: true }) legendCanvas: ElementRef;
 
   @Input() perceptron: Perceptron;
   @Input() points: Point[];
