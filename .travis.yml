@@ -23,7 +23,7 @@ script:
   - npm run build-thanos
   - npm run test -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
   - npm run asbuild
-  - npm run buildS3
+  - node --max_old_space_size=6000 node_modules/@angular/cli/bin/ng build --prod --output-path=distS3 --base-href=https://angularexamples.superheroiccoding.de
 
 after_success:
   - codecov
