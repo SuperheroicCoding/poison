@@ -4,6 +4,7 @@ import {ScThanosService} from './sc-thanos.service';
 
 @Directive({
   selector: '[scThanos]',
+  exportAs: 'thanos'
 })
 export class ScThanosDirective implements OnDestroy {
 
@@ -30,7 +31,6 @@ export class ScThanosDirective implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('destroy vaporize directive');
     if (this.subscription) {
       this.subscription.unsubscribe();
     }

@@ -19,6 +19,16 @@ interface ParticlesData {
   minParticleY: number;
 }
 
+interface UpdateParticleParams {
+  particlesData: ParticlesData;
+  deltaTSec: number;
+  animationT: number;
+  maxWidth: number;
+  maxHeight: number;
+  animationLength: number;
+  seed: number;
+}
+
 interface ParticleIndices {
   x: number;
   y: number;
@@ -61,8 +71,16 @@ export class ScThanosService {
     return {r: red, g: red + 1, b: red + 2, a: red + 3};
   }
 
-  private static updateParticles(particlesData: ParticlesData, deltaTSec: number, animationT: number, maxWidth: number, maxHeight: number,
-                                 animationLength: number): void {
+  private static updateParticles(updateParticleParams: UpdateParticleParams): void {
+    const {
+      particlesData,
+      deltaTSec,
+      animationT,
+      maxWidth,
+      maxHeight,
+      animationLength,
+      seed
+    } = updateParticleParams;
     const {particles, maxParticleX, minParticleY} = particlesData;
     const time = Math.max(animationT * animationT, animationT);
     const startAccelerateX = maxParticleX - (time * maxParticleX);
@@ -83,10 +101,10 @@ export class ScThanosService {
       let pYLength = maxHeight - particleY;
       let pXLength = particleX;
 
-      pXLength += Math.tan(pXLength / 20.12 * time) * 0.5;
+      pXLength += Math.tan(pXLength / 20.12 * time + seed) * 0.5;
       pXLength += (particleX % (deltaTSec)) * 0.5;
-      pXLength += Math.sin((pXLength / 30 + 723.394) * time) * 11;
-      pYLength += Math.cos((pYLength / 100 + 2323.234) * time) * 23;
+      pXLength += Math.sin((pXLength / 30 + 723.394) * time + seed * 12.5) * 11;
+      pYLength += Math.cos((pYLength / 100 + 2323.234) * time + seed * 456.1) * 23;
 
       const pLength = pXLength * pXLength + pYLength * pYLength;
       if (pLength > accelerateRadiusPow) {
@@ -195,6 +213,11 @@ export class ScThanosService {
     return {particles, maxParticleX, minParticleY};
   }
 
+  /**
+   * start the vaporize effect.
+   *
+   * It's running outside the ngZone.
+   */
   vaporize(elem: HTMLElement): Observable<any> {
     return this._ngZone.runOutsideAngular(() => this.vaporizeIntern(elem));
   }
@@ -223,6 +246,7 @@ export class ScThanosService {
       switchMap(({resultCanvas, particlesData}) => {
         let time = 0;
         const animationLength = this.thanosOptions.animationLength;
+        const randomSeed: number = ~~new Date() * 5873.43;
         return interval(1000 / 60, animationFrame)
           .pipe(
             timeInterval(asapScheduler),
@@ -230,7 +254,15 @@ export class ScThanosService {
               time += deltaT.interval;
               const dT = deltaT.interval / 1000;
               const animationTime = time / animationLength;
-              ScThanosService.updateParticles(particlesData, dT, animationTime, resultCanvas.width, resultCanvas.height, animationLength);
+              ScThanosService.updateParticles({
+                particlesData,
+                deltaTSec: dT,
+                animationT: animationTime,
+                maxWidth: resultCanvas.width,
+                maxHeight: resultCanvas.height,
+                animationLength,
+                seed: randomSeed
+              });
               ScThanosService.drawParticles(resultCanvas.getContext('2d'), particlesData.particles);
             }),
             takeWhile(deltaT => time < animationLength),

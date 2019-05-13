@@ -1,10 +1,10 @@
 import {Component, ViewChild} from '@angular/core';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
+import image from '../assets/how-to-be-funny.png';
 import {ScThanosDirective} from './sc-thanos.directive';
 import {ScThanosModule} from './sc-thanos.module';
 import {ScThanosService} from './sc-thanos.service';
-import image from '../assets/how-to-be-funny.png';
 
 describe('ScThanosDirective', () => {
   @Component({
@@ -13,6 +13,12 @@ describe('ScThanosDirective', () => {
         <img alt="funny-face" style="height: 400px" src="${image}">
       </div>
       <div>Test without Thanos</div>
+      <div>
+        <div style="border: 1px solid aqua; height: 100px; background: linear-gradient(to right, #cbe7e1 0%,#a7d7cc 17%,#84c8b8 33%,#00f6bd 52%,#00d2a1 83%,#00ae85 92%);" scThanos #myThanos="thanos">
+          This div should be disappear when clicked on button!
+        </div>
+        <button (click)="myThanos.vaporize()">Vaporize div above</button>
+      </div>
     `,
     styles: [`
       .thanos-test-container {
