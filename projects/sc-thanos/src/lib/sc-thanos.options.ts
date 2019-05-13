@@ -5,12 +5,15 @@ export interface ScThanosOptions {
   maxParticleCount: number;
 }
 
-export const defaultScThanosConfig: ScThanosOptions = {
-  animationLength: 5000,
-  maxParticleCount: 400000
-};
+export function createScThanosConfig(options?: Partial<ScThanosOptions>): ScThanosOptions {
+  return {
+    animationLength: 5000,
+    maxParticleCount: 400000,
+    ...options
+  };
+}
 
-export const SC_THANOS_OPTIONS_TOKEN = new InjectionToken<ScThanosOptions>('thaosOptions', {
+export const SC_THANOS_OPTIONS_TOKEN = new InjectionToken<ScThanosOptions>('thanosOptions', {
   providedIn: 'root',
-  factory: () => defaultScThanosConfig
+  factory: createScThanosConfig
 });

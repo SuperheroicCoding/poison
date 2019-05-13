@@ -12,7 +12,7 @@ export class TechnologyComponent implements OnInit {
   @Input() link;
   @Input() image;
 
-  @ViewChild(ScThanosDirective, { static: true })
+  @ViewChild(ScThanosDirective, {static: true})
   private thanos: ScThanosDirective;
 
   constructor() {
@@ -21,10 +21,8 @@ export class TechnologyComponent implements OnInit {
   ngOnInit() {
   }
 
-  openTechnology() {
+  vaporizeTechnology() {
     this.thanos.vaporize();
-    // window.open(this.link, '_blank');
   }
-
 
 }

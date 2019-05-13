@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start-prod": "cross-env NODE_OPTIONS=--max_old_space_size=7168 ng serve --prod --port=4300",
+    "start-prod": "cross-env NODE_OPTIONS=--max_old_space_size=12000 ng serve --prod --port=4300",
     "build": "npm run asbuild && ng build sc-thanos && ng build angular-examples",
     "build-thanos": "ng build sc-thanos",
     "test-thanos": "ng test sc-thanos",

@@ -1,8 +1,10 @@
-<mat-card scThanos (click)="openTechnology();"
-          class="technologyCard"
-          appRaiseCard>
-  <mat-card-title>
-    <a mat-button target="_blank" [href]="link">{{title}}</a>
-  </mat-card-title>
-  <img mat-card-image [src]="image">
-</mat-card>
+<div scThanos>
+  <mat-card (click)="vaporizeTechnology();"
+            class="technologyCard"
+            appRaiseCard>
+    <mat-card-title>
+      <a mat-button target="_blank" [href]="link">{{title}}</a>
+    </mat-card-title>
+    <img mat-card-image [src]="image">
+  </mat-card>
+</div>

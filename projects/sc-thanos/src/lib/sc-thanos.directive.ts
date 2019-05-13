@@ -13,14 +13,24 @@ export class ScThanosDirective implements OnDestroy {
               @Inject(NgZone) private _ngZone: NgZone) {
   }
 
-  async vaporize() {
+  vaporize(): void {
     const elem = this.vaporizeDomElem.nativeElement;
-    this.subscription = (await this.thanosService.vaporize(elem)).subscribe({
-      complete: () => this._ngZone.run(() => elem.parentElement.removeChild(elem))
+    this.subscription = this.thanosService.vaporize(elem).subscribe({
+      complete: () => {
+        this._ngZone.run(() => {
+          elem.parentElement.removeChild(elem);
+          return;
+        });
+      },
+      error: (error) => {
+        console.log('error emitted by vaporize', error);
+        throw error;
+      }
     });
   }
 
   ngOnDestroy(): void {
+    console.log('destroy vaporize directive');
     if (this.subscription) {
       this.subscription.unsubscribe();
     }

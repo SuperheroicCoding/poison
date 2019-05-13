@@ -142,10 +142,7 @@
           "options": {
             "main": "projects/sc-thanos/src/test.ts",
             "tsConfig": "projects/sc-thanos/tsconfig.spec.json",
-            "karmaConfig": "projects/sc-thanos/karma.conf.js",
-            "assets": [
-              "projects/sc-thanos/src/assets"
-            ]
+            "karmaConfig": "projects/sc-thanos/karma.conf.js"
           }
         },
         "lint": {

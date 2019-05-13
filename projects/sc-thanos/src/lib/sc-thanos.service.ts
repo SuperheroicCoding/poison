@@ -1,8 +1,8 @@
 import {Inject, Injectable, NgZone} from '@angular/core';
 import * as _html2canvas from 'html2canvas';
-import {asapScheduler, interval, Observable, timer} from 'rxjs';
+import {asapScheduler, from, interval, Observable} from 'rxjs';
 import {animationFrame} from 'rxjs/internal/scheduler/animationFrame';
-import {takeUntil, tap, timeInterval} from 'rxjs/operators';
+import {map, switchMap, takeWhile, tap, timeInterval} from 'rxjs/operators';
 import {gaussian} from './random-util';
 import {SC_THANOS_OPTIONS_TOKEN, ScThanosOptions} from './sc-thanos.options';
 
@@ -131,6 +131,7 @@ export class ScThanosService {
   } {
     const {width, height} = divCanvas;
 
+    // scale result canvas to have more room to draw particles while vaporizing;
     const resultHeight = height * HEIGHT_SCALE;
     const resultWidth = width * WIDTH_SCALE;
     const resultCanvas: HTMLCanvasElement = document.createElement('canvas');
@@ -194,15 +195,18 @@ export class ScThanosService {
     return {particles, maxParticleX, minParticleY};
   }
 
-  async vaporize(elem: HTMLElement): Promise<Observable<any>> {
-    return this._ngZone.runOutsideAngular(async () => {
-      try {
-        elem.style.opacity = elem.style.opacity || '1';
-        elem.style.transition = `opacity ${~~(this.thanosOptions.animationLength * .5)}ms ease-out`;
+  vaporize(elem: HTMLElement): Observable<any> {
+    return this._ngZone.runOutsideAngular(() => this.vaporizeIntern(elem));
+  }
 
-        const canvasFromElement: HTMLCanvasElement = await html2canvas(elem, {backgroundColor: null, scale: 1, logging: true});
-        const {resultCanvas, particlesData} =
-          ScThanosService.prepareCanvasForVaporize(canvasFromElement, this.thanosOptions.maxParticleCount);
+  private vaporizeIntern(elem: HTMLElement): Observable<any> {
+    elem.style.opacity = elem.style.opacity || '1';
+    elem.style.transition = `opacity ${~~(this.thanosOptions.animationLength * .5)}ms ease-out`;
+    const html2CanvasPromise = html2canvas(elem, {backgroundColor: null, scale: 1, logging: false});
+    return from(html2CanvasPromise).pipe(
+      map(canvasFromHtmlElem => {
+        const canvasAndParticles = ScThanosService.prepareCanvasForVaporize(canvasFromHtmlElem, this.thanosOptions.maxParticleCount);
+        const {resultCanvas} = canvasAndParticles;
 
         elem.parentElement.style.position = elem.parentElement.style.position || 'relative';
         resultCanvas.style.position = 'absolute';
@@ -211,32 +215,31 @@ export class ScThanosService {
         resultCanvas.style.zIndex = '2000';
         resultCanvas.style.pointerEvents = 'none';
 
+        elem.insertAdjacentElement('beforebegin', resultCanvas);
         // this should start the transition above defined
         elem.style.opacity = '0';
-
-        elem.insertAdjacentElement('beforebegin', resultCanvas);
+        return canvasAndParticles;
+      }),
+      switchMap(({resultCanvas, particlesData}) => {
         let time = 0;
+        const animationLength = this.thanosOptions.animationLength;
         return interval(1000 / 60, animationFrame)
           .pipe(
             timeInterval(asapScheduler),
             tap(deltaT => {
               time += deltaT.interval;
               const dT = deltaT.interval / 1000;
-              const animationTime = time / this.thanosOptions.animationLength;
-              ScThanosService.updateParticles(particlesData, dT, animationTime, resultCanvas.width, resultCanvas.height,
-                this.thanosOptions.animationLength);
+              const animationTime = time / animationLength;
+              ScThanosService.updateParticles(particlesData, dT, animationTime, resultCanvas.width, resultCanvas.height, animationLength);
               ScThanosService.drawParticles(resultCanvas.getContext('2d'), particlesData.particles);
             }),
-            takeUntil(timer(this.thanosOptions.animationLength + 1000)),
+            takeWhile(deltaT => time < animationLength),
             tap({
               complete: () => {
                 return resultCanvas.remove();
               }
             })
           );
-      } catch (e) {
-        console.log(e);
-      }
-    });
+      }));
   }
 }

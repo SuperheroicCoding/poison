@@ -4,12 +4,13 @@ import {By} from '@angular/platform-browser';
 import {ScThanosDirective} from './sc-thanos.directive';
 import {ScThanosModule} from './sc-thanos.module';
 import {ScThanosService} from './sc-thanos.service';
+import image from '../assets/how-to-be-funny.png';
 
 describe('ScThanosDirective', () => {
   @Component({
     template: `
       <div class="thanos-test-container" scThanos><h1>My content for the div</h1>
-        <img alt="funny-face" style="height: 400px" src="../assets/how-to-be-funny.png">
+        <img alt="funny-face" style="height: 400px" src="${image}">
       </div>
       <div>Test without Thanos</div>
     `,
