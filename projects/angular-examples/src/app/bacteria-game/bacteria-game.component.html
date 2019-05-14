@@ -3,7 +3,7 @@
     <mat-card-title>Bacteria Game</mat-card-title>
     <mat-card-subtitle>Try to eat the other players bacteria. Orange use WASD and Blue use arrow keys to direct your bacteria</mat-card-subtitle>
   </mat-card-header>
-  <mat-card-content>
+  <mat-card-content scThanos>
     <div *ngIf="state$ | async; let state" class="statistics">
       <span>{{'Game time: ' + state.timePassed}}</span>
       <span>{{'FPS: ' + (fps$ | async)}}</span>

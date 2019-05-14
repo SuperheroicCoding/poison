@@ -21,8 +21,4 @@ export class TechnologyComponent implements OnInit {
   ngOnInit() {
   }
 
-  vaporizeTechnology() {
-    this.thanos.vaporize();
-  }
-
 }

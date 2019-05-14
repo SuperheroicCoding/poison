@@ -2,6 +2,9 @@
 A superheroicCodings implementation of a Thanos like vaporize effect usable as an angular directive. 
 This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.0.RC-3
 
+#### Live Demo: 
+Click the technology cards on https://angularexamples.superheroiccoding.de
+
 ## Usage
 #### Depedencies: 
 To install run 
@@ -13,34 +16,50 @@ This lib uses html2canvas. So please run
 npm install html2canvas --save.
 ``` 
 
-#### And in your angular app: 
-Add 
+#### Prepare your angular app: 
+Add to your root app module.
 ```
-ScThanosModule.forRoot(config?)
+@NgModule({
+  ...
+  imports: [...
+    ScThanosModule.forRoot(options)
+  ]
+})
+export class AppModule {...}
 ``` 
-to your root app module.
 
-And add:
+And add ScThanosModule to your shared module exports to make the directive available. 
 ``` 
-`ScThanosModule`
+@NgModule({
+  ...
+  exports: [...
+    ScThanosModule
+  ]
+})
+export class SharedModule {...}
+]
 ``` 
-to your shared module exports to make the directive available.
+#### `ScThanosOptions` can be injected into the forRoot method: 
+| field        | type | default          | description  |
+| ------------- | :-----: | -----: | -----:|
+| animationLength | number | 5000 | the animation length in ms |
+| maxParticleCount | number | 400000 |  max amount of particles |
+| particleAcceleration | number | 30 |    speed of the particle acceleration |
 
+###`ScThanosDirective` usage
 Use the directive `scThanos` on your element and reference it using `@ViewChild(ScThanosDirective)` in your component
 or directly in html via template ref: 
 ```
-<div scThanos #thanos="thanos"></div>
-<button (click)="thanos.vaporize()"> 
+<div scThanos 
+  #thanos="thanos" 
+  (scThanosComplete)=onComplete()>
+  This div will be vaporized on click
+  </div>
+<button (click)="thanos.vaporize(removeElement)"> 
 ```
 
-## Build
-Run `ng build sc-thanos` to build the project. The build artifacts will be stored in the `dist/` directory.
+###`ScThanosService` usage 
+Inject the 'ScThanosService' into your class. Call 'vaporize()' and subscribe to it.  
 
-## Publishing
-After building your library with `ng build sc-thanos`, go to the dist folder `cd dist/sc-thanos` and run `npm publish`.
-
-## Running unit tests
-Run `ng test sc-thanos` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Further help
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## Collaboration
+Send issues or PRs to https://github.com/SuperheroicCoding/AngularExamples

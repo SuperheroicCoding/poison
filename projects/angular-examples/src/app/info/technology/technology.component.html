@@ -1,5 +1,5 @@
-<div scThanos>
-  <mat-card (click)="vaporizeTechnology();"
+<div scThanos #thanos="thanos">
+  <mat-card (click)="thanos.vaporize(false);"
             class="technologyCard"
             appRaiseCard>
     <mat-card-title>

@@ -1,3 +1,4 @@
+import {CommonModule} from '@angular/common';
 import {Component, ViewChild} from '@angular/core';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
@@ -9,24 +10,33 @@ import {ScThanosService} from './sc-thanos.service';
 describe('ScThanosDirective', () => {
   @Component({
     template: `
-      <div class="thanos-test-container" scThanos><h1>My content for the div</h1>
+      <div class="thanos-test-container"
+       scThanos
+       (scThanosComplete)="completed();"><h1>My content for the div</h1>
         <img alt="funny-face" style="height: 400px" src="${image}">
       </div>
-      <div>Test without Thanos</div>
       <div>
-        <div style="border: 1px solid aqua; height: 100px; background: linear-gradient(to right, #cbe7e1 0%,#a7d7cc 17%,#84c8b8 33%,#00f6bd 52%,#00d2a1 83%,#00ae85 92%);" scThanos #myThanos="thanos">
+        <div class="div-without-remove"
+        scThanos
+        #myThanos="thanos">
           This div should be disappear when clicked on button!
         </div>
-        <button (click)="myThanos.vaporize()">Vaporize div above</button>
+        <button (click)="myThanos.vaporize(false)">Vaporize div above</button>
       </div>
     `,
     styles: [`
+      .div-without-remove {
+        border: 1px solid aqua;
+        height: 300px;
+        background: linear-gradient(to right, #cbe7e1 0%, #a7d7cc 17%, #84c8b8 33%, #00f6bd 52%, #00d2a1 83%, #00ae85 92%);
+      }
       .thanos-test-container {
         padding: 14px;
       }`]
   })
   class HostComponent {
     private scThanosDirective: ScThanosDirective;
+    showComplete = false;
 
     @ViewChild(ScThanosDirective)
     set thanos(thanos: ScThanosDirective) {
@@ -34,7 +44,12 @@ describe('ScThanosDirective', () => {
     }
 
     startThanos() {
+      this.showComplete = false;
       this.scThanosDirective.vaporize();
+    }
+
+    completed() {
+      console.log('Completed');
     }
   }
 
@@ -44,7 +59,7 @@ describe('ScThanosDirective', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ScThanosModule.forRoot()],
+      imports: [ScThanosModule.forRoot({animationLength: 20000}), CommonModule],
       declarations: [HostComponent]
     })
       .compileComponents();

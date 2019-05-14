@@ -33,7 +33,7 @@ import {SharedModule} from './shared/shared.module';
     environment.production ? [] : AkitaNgDevtools.forRoot(),
     BrowserModule,
     CoreModule.forRoot(),
-    ScThanosModule.forRoot({maxParticleCount: 200000, animationLength: 4000}),
+    ScThanosModule.forRoot({maxParticleCount: 600000, animationLength: 5000}),
     HttpClientModule,
     LoginModule,
     appRoutes,

@@ -3,15 +3,17 @@ import * as _html2canvas from 'html2canvas';
 import {asapScheduler, from, interval, Observable} from 'rxjs';
 import {animationFrame} from 'rxjs/internal/scheduler/animationFrame';
 import {map, switchMap, takeWhile, tap, timeInterval} from 'rxjs/operators';
-import {gaussian} from './random-util';
 import {SC_THANOS_OPTIONS_TOKEN, ScThanosOptions} from './sc-thanos.options';
+import {SimplexNoise} from './simplex-noise';
 
 const html2canvas: Html2CanvasStatic = (_html2canvas as any);
 
 const PARTICLE_BYTE_LENGTH = 10;
 const MIN_PARTICLE_ALPHA = ~~(255 * 0.01);
-const HEIGHT_SCALE = 2;
+const HEIGHT_SCALE = 5;
 const WIDTH_SCALE = 2;
+const DRAW_FLOW_FIELD = true;
+const FLOW_FIELD_RES = 1. / 20.;
 
 interface ParticlesData {
   particles: Float32Array;
@@ -19,13 +21,18 @@ interface ParticlesData {
   minParticleY: number;
 }
 
-interface UpdateParticleParams {
-  particlesData: ParticlesData;
+interface AnimationState {
   deltaTSec: number;
   animationT: number;
   maxWidth: number;
   maxHeight: number;
-  animationLength: number;
+}
+
+interface UpdateParticleParams {
+  particlesData: ParticlesData;
+  animationState: AnimationState;
+  thanosOptions: ScThanosOptions;
+  noise: SimplexNoise;
   seed: number;
 }
 
@@ -71,18 +78,21 @@ export class ScThanosService {
     return {r: red, g: red + 1, b: red + 2, a: red + 3};
   }
 
-  private static updateParticles(updateParticleParams: UpdateParticleParams): void {
+  private static updateParticles(params: UpdateParticleParams): void {
+    const seed = params.seed;
+    const noise: SimplexNoise = params.noise;
     const {
-      particlesData,
       deltaTSec,
       animationT,
       maxWidth,
-      maxHeight,
-      animationLength,
-      seed
-    } = updateParticleParams;
-    const {particles, maxParticleX, minParticleY} = particlesData;
-    const time = Math.max(animationT * animationT, animationT);
+      maxHeight
+    } = params.animationState;
+    const {animationLength, particleAcceleration} = params.thanosOptions;
+    const {particles, maxParticleX, minParticleY} = params.particlesData;
+
+    // the time is used to calculate the vaporization front.
+    const time = Math.sin(animationT * (Math.PI / 2)) * 1.1;
+
     const startAccelerateX = maxParticleX - (time * maxParticleX);
     const startAccelerateY = time * (maxHeight - minParticleY) + minParticleY;
 
@@ -94,29 +104,44 @@ export class ScThanosService {
       const particleX = particles[x];
       const particleY = particles[y];
 
+      // only update particles that are inside view and visible
       if (particleX > maxWidth || particleX < 0 || particleY > maxHeight || particleY < 0 || particles[a] < MIN_PARTICLE_ALPHA) {
         continue;
       }
 
-      let pYLength = maxHeight - particleY;
-      let pXLength = particleX;
+      if (!(Math.abs(particles[ax]) > 0 || Math.abs(particles[ay]) > 0)) {
+        let pYLength = maxHeight - particleY;
+        let pXLength = particleX;
 
-      pXLength += Math.tan(pXLength / 20.12 * time + seed) * 0.5;
-      pXLength += (particleX % (deltaTSec)) * 0.5;
-      pXLength += Math.sin((pXLength / 30 + 723.394) * time + seed * 12.5) * 11;
-      pYLength += Math.cos((pYLength / 100 + 2323.234) * time + seed * 456.1) * 23;
+        // we calculate some random looking numbers and functions to have nice looking vaporizing front of particles
+        // todo consider to use noise;
+        pXLength += Math.tan(pXLength / 20.12 * time + seed) * 0.5;
+        pXLength += (particleX % (deltaTSec)) * 0.5;
+        pXLength += Math.sin((pXLength / 30 + 723.394) * time + seed * 12.5) * 11;
+        pYLength += Math.tan(pYLength / 0.45 * time + seed * 1.5) * 0.5;
+        pYLength += Math.cos((pYLength / 100 + 2323.234) * time + seed * 456.1) * 23;
 
-      const pLength = pXLength * pXLength + pYLength * pYLength;
-      if (pLength > accelerateRadiusPow) {
-        particles[ax] = gaussian(100, 5) * (10000 / animationLength);
-        particles[ay] = gaussian(-100, 2) * (10000 / animationLength);
+        const pLength = pXLength * pXLength + pYLength * pYLength;
+        if (pLength > accelerateRadiusPow) {
+          particles[ax] = Math.random();
+          particles[ay] = Math.random() * -1;
+        }
+      } else {
+        // use noise to flow along velocity field
+        const flowFieldAcc = ScThanosService.getXYFromFlowField(noise, seed, particleX, particleY);
+        const accelerationX = flowFieldAcc[0];
+        const accelerationY = flowFieldAcc[1];
+        particles[ax] += accelerationX;
+        particles[ay] += accelerationY;
       }
 
-      particles[dx] += particles[ax] * deltaTSec;
-      particles[dy] += particles[ay] * deltaTSec;
+      // * Math.pow(1 + animationT, 4)
+      particles[dx] += particles[ax] * particleAcceleration * deltaTSec;
+      particles[dy] += particles[ay] * particleAcceleration * deltaTSec;
       particles[x] += particles[dx] * deltaTSec;
       particles[y] += particles[dy] * deltaTSec;
-      particles[a] = 255 - Math.sqrt(particles[dx] * particles[dx] + particles[dy] * particles[dy]) / 1.2;
+      // fade particle out ( very late);
+      particles[a] *= 1 - Math.pow(animationT, 15); // 255 - Math.sqrt(particles[dx] * particles[dx] + particles[dy] * particles[dy]) / 1.2;
     }
   }
 
@@ -213,6 +238,12 @@ export class ScThanosService {
     return {particles, maxParticleX, minParticleY};
   }
 
+  private static getXYFromFlowField(noise: SimplexNoise, seed: number, x: number, y: number) {
+    const sampleX = noise.scaled3D(x, y, seed + 33.23, FLOW_FIELD_RES);
+    const sampleY = noise.scaled3D(x, seed / 13.23, y, FLOW_FIELD_RES) * -1.;
+    return [sampleX, sampleY];
+  }
+
   /**
    * start the vaporize effect.
    *
@@ -224,8 +255,11 @@ export class ScThanosService {
 
   private vaporizeIntern(elem: HTMLElement): Observable<any> {
     elem.style.opacity = elem.style.opacity || '1';
-    elem.style.transition = `opacity ${~~(this.thanosOptions.animationLength * .5)}ms ease-out`;
-    const html2CanvasPromise = html2canvas(elem, {backgroundColor: null, scale: 1, logging: false});
+    elem.style.transition = `opacity ${~~(this.thanosOptions.animationLength * .8)}ms ease-out`;
+    const noise = new SimplexNoise({frequency: 0.01, min: 0});
+    const seed = (new Date().getDate() * Math.random());
+    const html2CanvasPromise: Html2CanvasPromise<HTMLCanvasElement> =
+      html2canvas(elem, {backgroundColor: null, scale: 1, logging: false});
     return from(html2CanvasPromise).pipe(
       map(canvasFromHtmlElem => {
         const canvasAndParticles = ScThanosService.prepareCanvasForVaporize(canvasFromHtmlElem, this.thanosOptions.maxParticleCount);
@@ -234,7 +268,7 @@ export class ScThanosService {
         elem.parentElement.style.position = elem.parentElement.style.position || 'relative';
         resultCanvas.style.position = 'absolute';
         resultCanvas.style.left = 0 + 'px';
-        resultCanvas.style.top = '-' + elem.getBoundingClientRect().height + 'px';
+        resultCanvas.style.top = '-' + elem.getBoundingClientRect().height * (HEIGHT_SCALE - 1) + 'px';
         resultCanvas.style.zIndex = '2000';
         resultCanvas.style.pointerEvents = 'none';
 
@@ -245,27 +279,29 @@ export class ScThanosService {
       }),
       switchMap(({resultCanvas, particlesData}) => {
         let time = 0;
-        const animationLength = this.thanosOptions.animationLength;
-        const randomSeed: number = ~~new Date() * 5873.43;
+        const {animationLength, maxParticleCount, particleAcceleration} = this.thanosOptions;
         return interval(1000 / 60, animationFrame)
           .pipe(
             timeInterval(asapScheduler),
-            tap(deltaT => {
-              time += deltaT.interval;
-              const dT = deltaT.interval / 1000;
-              const animationTime = time / animationLength;
+            tap(deltaT => time += deltaT.interval),
+            map(deltaT => ({
+                deltaTSec: deltaT.interval / 1000,
+                animationT: time / animationLength,
+                maxWidth: resultCanvas.width,
+                maxHeight: resultCanvas.height
+              } as AnimationState)
+            ),
+            tap(animationState => {
               ScThanosService.updateParticles({
                 particlesData,
-                deltaTSec: dT,
-                animationT: animationTime,
-                maxWidth: resultCanvas.width,
-                maxHeight: resultCanvas.height,
-                animationLength,
-                seed: randomSeed
+                animationState,
+                thanosOptions: {animationLength, maxParticleCount, particleAcceleration},
+                noise,
+                seed
               });
               ScThanosService.drawParticles(resultCanvas.getContext('2d'), particlesData.particles);
             }),
-            takeWhile(deltaT => time < animationLength),
+            takeWhile(animationState => animationState.animationT <= 1.),
             tap({
               complete: () => {
                 return resultCanvas.remove();

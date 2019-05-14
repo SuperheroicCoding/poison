@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import {untilDestroyed} from 'ngx-take-until-destroy';
 import {Observable} from 'rxjs';
 import {distinctUntilChanged, filter, map} from 'rxjs/operators';
+import {ScThanosDirective} from 'sc-thanos';
 import {GameStateQuery} from './state/game-state.query';
 import {GameStateService} from './state/game-state.service';
 import {GameState, GameStateState} from './state/game-state.store';
@@ -49,8 +50,8 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
 
   @ViewChild('canvasElement', { static: true })
   private canvasRef: ElementRef;
-
-
+  @ViewChild(ScThanosDirective, { static: true })
+  private thanos: ScThanosDirective;
   private cx: CanvasRenderingContext2D;
   width = 640;
   height = 480;
@@ -113,6 +114,7 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
 
 
   resetGame() {
+    this.thanos.vaporize(false);
     this.gameStateService.reset();
     this.draw(1. / 1000.);
   }
