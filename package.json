@@ -50,7 +50,7 @@
     "ngx-take-until-destroy": "^5.4.0",
     "p5": "^0.8.0",
     "rxjs": "6.5.2",
-    "sc-thanos": "^0.2.2",
+    "sc-thanos": "^0.2.3",
     "stats.js": "^0.17.0",
     "three": "0.104.0",
     "three-orbitcontrols-ts": "^0.1.2",
