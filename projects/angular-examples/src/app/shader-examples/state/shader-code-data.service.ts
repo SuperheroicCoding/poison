@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {combineLatest, Observable} from 'rxjs';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
+import {combineLatest, Observable} from 'rxjs';
 import {map, shareReplay, take, tap} from 'rxjs/operators';
-import {ShaderCode} from './shader-code.model';
 import {AuthenticationService} from '../../core/authentication.service';
+import {ShaderCode} from './shader-code.model';
 
 @Injectable({
   providedIn: 'root'
@@ -31,8 +31,8 @@ export class ShaderCodeDataService {
   streamShaders(): Observable<ShaderCode[]> {
     if (this.shaders == null) {
       const defaultShaders = this.defaultShadersCol.valueChanges();
-      const userShaders = this.userShadersCol.stateChanges(['added']).pipe(
-        map(documentChanges => documentChanges.map(change => change.payload.doc.data()))
+      const userShaders: Observable<ShaderCode[]> = (this.userShadersCol.stateChanges(['added']) as any).pipe(
+        map((documentChanges: any) => documentChanges.map(change => change.payload.doc.data()))
       );
 
       const mapDefaultAndUserShaders = map(([defaults, users]: [ShaderCode[], ShaderCode[]]) =>
@@ -56,9 +56,9 @@ export class ShaderCodeDataService {
     const batch = this.afs.firestore.batch();
     const newShader = {...shader, ...{code: newCode}};
 
-    const deleteOldShadersAndUpdateInBatch = shaderByIdQuery.get({}).pipe(
+    const deleteOldShadersAndUpdateInBatch = (shaderByIdQuery.get({}) as any).pipe(
       take(1),
-      tap(ref => ref.docs.forEach(doc => doc.ref.delete())),
+      tap((ref: any) => ref.docs.forEach(doc => doc.ref.delete())),
       tap(ignored => {
         const newUid = this.afs.createId();
         const firestoreDocument = this.afs.doc(

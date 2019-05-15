@@ -10,6 +10,7 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
+    "strictBindCallApply": true,
     "target": "es5",
     "typeRoots": [
       "node_modules/@types"

@@ -15,21 +15,47 @@ describe('ScThanosDirective', () => {
        (scThanosComplete)="completed();"><h1>My content for the div</h1>
         <img alt="funny-face" style="height: 400px" src="${image}">
       </div>
-      <div>
+      <div class="grid-test">
         <div class="div-without-remove"
         scThanos
         #myThanos="thanos">
-          This div should be disappear when clicked on button!
+          This div should be vaporized when clicked on button and then become visible again!
+            <div class="inner">
+        </div>
+    
         </div>
         <button (click)="myThanos.vaporize(false)">Vaporize div above</button>
       </div>
     `,
     styles: [`
       .div-without-remove {
-        border: 1px solid aqua;
+        display: grid;
+        box-sizing: border-box;
+        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
+        place-content: center;
+        padding: 50px;
+        border: 10px solid darkorange;
+        border-radius: 30px;
         height: 300px;
-        background: linear-gradient(to right, #cbe7e1 0%, #a7d7cc 17%, #84c8b8 33%, #00f6bd 52%, #00d2a1 83%, #00ae85 92%);
+        background-image: linear-gradient(to right, #cbe7e1, #00ae85);
       }
+
+      .inner {
+        opacity: 0.5;
+        border-radius: 50%;
+        grid-column: 2;
+        grid-row: 1;
+        background-image: linear-gradient(to right, azure, darkorchid);
+      }
+
+      .grid-test {
+        box-sizing: border-box;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr auto;
+      }
+
       .thanos-test-container {
         padding: 14px;
       }`]
@@ -59,7 +85,7 @@ describe('ScThanosDirective', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ScThanosModule.forRoot({animationLength: 20000}), CommonModule],
+      imports: [ScThanosModule.forRoot(), CommonModule],
       declarations: [HostComponent]
     })
       .compileComponents();

@@ -1,8 +1,9 @@
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {NavigationEnd, Router, RouterEvent} from '@angular/router';
 import {untilDestroyed} from 'ngx-take-until-destroy';
 import {Observable} from 'rxjs';
-import {filter} from 'rxjs/operators';
+import {filter, map} from 'rxjs/operators';
 import {HeadlineAnimationService} from '../core/headline-animation.service';
 import {shader} from '../title-shader';
 
@@ -14,10 +15,11 @@ import {shader} from '../title-shader';
 export class MainToolbarComponent implements OnInit, OnDestroy {
 
   @Output() clickSideNav = new EventEmitter<Event>();
-  public shaderCode: string;
+  shaderCode: string;
   runAnimation: Observable<boolean>;
+  isHandset$: Observable<boolean>;
 
-  constructor(headlineAnimations: HeadlineAnimationService, private router: Router) {
+  constructor(headlineAnimations: HeadlineAnimationService, private router: Router, private breakpointObserver: BreakpointObserver) {
     this.runAnimation = headlineAnimations.runAnimation;
     this.router.events.pipe(
       filter<RouterEvent>(value => value instanceof NavigationEnd
@@ -27,6 +29,7 @@ export class MainToolbarComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         return headlineAnimations.startAnimation();
       });
+    this.isHandset$ = breakpointObserver.observe(Breakpoints.Handset).pipe(map(value => value.matches));
   }
 
   ngOnInit() {

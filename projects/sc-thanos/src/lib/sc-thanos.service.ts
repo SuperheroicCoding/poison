@@ -1,7 +1,6 @@
 import {Inject, Injectable, NgZone} from '@angular/core';
 import * as _html2canvas from 'html2canvas';
-import {asapScheduler, from, interval, Observable} from 'rxjs';
-import {animationFrame} from 'rxjs/internal/scheduler/animationFrame';
+import {animationFrameScheduler, from, interval, Observable} from 'rxjs';
 import {map, switchMap, takeWhile, tap, timeInterval} from 'rxjs/operators';
 import {SC_THANOS_OPTIONS_TOKEN, ScThanosOptions} from './sc-thanos.options';
 import {SimplexNoise} from './simplex-noise';
@@ -259,7 +258,7 @@ export class ScThanosService {
     const noise = new SimplexNoise({frequency: 0.01, min: 0});
     const seed = (new Date().getDate() * Math.random());
     const html2CanvasPromise: Html2CanvasPromise<HTMLCanvasElement> =
-      html2canvas(elem, {backgroundColor: null, scale: 1, logging: false});
+      html2canvas(elem, {backgroundColor: null, scale: 1, logging: false, svgRendering: true});
     return from(html2CanvasPromise).pipe(
       map(canvasFromHtmlElem => {
         const canvasAndParticles = ScThanosService.prepareCanvasForVaporize(canvasFromHtmlElem, this.thanosOptions.maxParticleCount);
@@ -280,9 +279,9 @@ export class ScThanosService {
       switchMap(({resultCanvas, particlesData}) => {
         let time = 0;
         const {animationLength, maxParticleCount, particleAcceleration} = this.thanosOptions;
-        return interval(1000 / 60, animationFrame)
+        return interval(1000 / 60, animationFrameScheduler)
           .pipe(
-            timeInterval(asapScheduler),
+            timeInterval(),
             tap(deltaT => time += deltaT.interval),
             map(deltaT => ({
                 deltaTSec: deltaT.interval / 1000,

@@ -39,7 +39,8 @@
               "node_modules/ace-builds/src/theme-eclipse.js",
               "node_modules/vega-lite/build/vega-lite.js"
             ],
-            "es5BrowserSupport": true
+            "es5BrowserSupport": true,
+            "preserveSymlinks": true
           },
           "configurations": {
             "production": {
