@@ -40,7 +40,7 @@
     "ace-builds": "^1.4.4",
     "angulartics2": "^7.5.2",
     "browserslist": "^4.6.0",
-    "core-js": "2.6.5",
+    "core-js": "3.3.4",
     "firebase": "5.11.1-0",
     "gl-matrix": "2.8.1",
     "gpu.js": "1.10.4",
