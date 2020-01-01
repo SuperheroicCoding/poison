@@ -74,7 +74,7 @@
     "@types/jasmine": "2.8.16",
     "@types/jasminewd2": "~2.0.6",
     "@types/mathjs": "^4.4.5",
-    "@types/node": "10.14.6",
+    "@types/node": "13.1.2",
     "@types/stats.js": "^0.17.0",
     "@types/three": "0.103.2",
     "@types/webassembly-js-api": "^0.0.3",
