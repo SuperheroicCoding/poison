@@ -22,7 +22,6 @@ describe('ScThanosDirective', () => {
           This div should be vaporized when clicked on button and then become visible again!
             <div class="inner">
         </div>
-    
         </div>
         <button (click)="myThanos.vaporize(false)">Vaporize div above</button>
       </div>
