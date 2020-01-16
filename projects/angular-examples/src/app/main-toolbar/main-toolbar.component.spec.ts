@@ -12,7 +12,7 @@ describe('MainToolbarComponent', () => {
 
   beforeEach(async(() =>
     TestBed.configureTestingModule({
-      imports: [SharedModule, LoginModule, CoreModule.forRoot(), RouterTestingModule],
+      imports: [SharedModule, LoginModule, CoreModule, RouterTestingModule],
       declarations: [MainToolbarComponent, ServiceWorkerUpdateComponent]
     })
       .compileComponents()
