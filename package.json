@@ -6,7 +6,7 @@
     "ng": "ng",
     "start": "ng serve",
     "start-prod": "cross-env NODE_OPTIONS=--max_old_space_size=12000 ng serve --prod --port=4300",
-    "build": "npm run asbuild && ng build angular-examples",
+    "build-deps": "npm run asbuild && npm run build-thanos",
     "build-thanos": "ng build sc-thanos",
     "test-thanos": "ng test sc-thanos",
     "test": "ng test angular-examples",
@@ -16,9 +16,9 @@
     "ghPages": "npm run asbuild && ng build --prod --output-path docs --named-chunks --base-href https://superheroiccoding.github.io/AngularExamples/",
     "buildS3": "cross-env NODE_OPTIONS=--max_old_space_size=7168 ng build --prod --output-path distS3 --base-href https://angularexamples.superheroiccoding.de",
     "updateFirebase": "node node-scripts/init-firebase",
-    "deploy": "npm version patch && npm run asbuild && npm run build-thanos && npm run buildS3 && node node-scripts/sync-S3",
+    "deploy": "npm version patch && npm run build-libs && npm run buildS3 && node node-scripts/sync-S3",
     "deploy-without-build": "node node-scripts/sync-S3",
-    "deploy-exclude-assets": "npm version patch && npm run asbuild && npm run build-thanos && npm run buildS3 && node node-scripts/sync-S3 --excludeAssets"
+    "deploy-exclude-assets": "npm version patch && npm run build-deps && npm run buildS3 && node node-scripts/sync-S3 --excludeAssets"
   },
   "private": true,
   "dependencies": {

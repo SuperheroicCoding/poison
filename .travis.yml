@@ -22,9 +22,9 @@ script:
   - node -p "v8.getHeapStatistics().total_available_size / (1024 * 1024)"
   - npm run lint
   - npm run test-thanos -- --watch=false --progress=false --browsers=ChromeHeadlessCI
-  - npm run asbuild
-  - npm run buildS3
+  - npm run build-deps
   - npm run test -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
+  - npm run buildS3
 
 after_success:
   - codecov
