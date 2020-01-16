@@ -1,5 +1,6 @@
-import {ModuleWithProviders} from '@angular/core';
+import {ModuleWithProviders, NgModule} from '@angular/core';
 import {Data, Route, RouterModule} from '@angular/router';
+import {ROUTER_LINKS} from './router-links.token';
 import {IsAuthenticatedGuard} from './core/guards/is-authenticated-guard.service';
 import {InfoComponent} from './info/info.component';
 
@@ -71,5 +72,15 @@ export const routes: AppRoute[] = [
   {path: '**', redirectTo: '/home'}
 ];
 
-export const appRoutes: ModuleWithProviders = RouterModule.forRoot(routes);
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+  providers: [
+    {
+      provide: ROUTER_LINKS, useValue: routes.filter(route => route.data ? route.data.linkText : false)
+    }],
+})
+export class AppRoutingModule {
+}
 

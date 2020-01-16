@@ -5,8 +5,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AkitaNgDevtools} from '@datorama/akita-ngdevtools';
 import {ScThanosModule} from 'sc-thanos';
 import {environment} from '../environments/environment';
-import {ROUTER_LINKS} from './app-routes.token';
-import {appRoutes, routes} from './app-routing.module';
+import {ROUTER_LINKS} from './router-links.token';
+import {AppRoutingModule, routes} from './app-routing.module';
 
 import {AppComponent} from './app.component';
 import {CoreModule} from './core/core.module';
@@ -38,12 +38,9 @@ import {SharedModule} from './shared/shared.module';
     HttpClientModule,
     LoginModule,
     SharedModule,
-    appRoutes,
+    AppRoutingModule,
   ],
-  providers: [
-    {
-      provide: ROUTER_LINKS, useValue: routes.filter(route => route.data ? route.data.linkText : false)
-    }],
+
   bootstrap: [AppComponent]
 })
 export class AppModule {

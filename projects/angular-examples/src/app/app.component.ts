@@ -1,6 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {Angulartics2GoogleTagManager} from 'angulartics2/gtm';
-import {ROUTER_LINKS} from './app-routes.token';
+import {ROUTER_LINKS} from './router-links.token';
 import {AppRoute} from './app-routing.module';
 import {TitleService} from './core/title.service';
 
