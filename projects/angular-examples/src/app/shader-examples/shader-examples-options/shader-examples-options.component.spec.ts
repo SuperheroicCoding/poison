@@ -11,7 +11,7 @@ describe('ShaderExamplesOptionsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [SharedModule, CoreModule.forRoot(), RouterTestingModule],
+      imports: [SharedModule, CoreModule, RouterTestingModule],
       declarations: [ShaderExamplesOptionsComponent]
     })
       .compileComponents();
