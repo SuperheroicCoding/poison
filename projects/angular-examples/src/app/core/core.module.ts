@@ -1,8 +1,9 @@
-import {ModuleWithProviders, NgModule, Optional, SkipSelf} from '@angular/core';
+import {NgModule, Optional, SkipSelf} from '@angular/core';
+
 import {AngularFireModule} from '@angular/fire';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {ServiceWorkerModule} from '@angular/service-worker';
 import {Angulartics2Module} from 'angulartics2';
 import {environment} from '../../environments/environment';
@@ -19,27 +20,21 @@ import {TitleService} from './title.service';
   imports: [
     MatSnackBarModule,
     AngularFireModule.initializeApp(environment.firebase),
-    Angulartics2Module.forRoot(),
     AngularFirestoreModule,
     AngularFireAuthModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production})]
+    Angulartics2Module.forRoot(),
+    ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production})],
+  providers: [
+    TitleService,
+    RandomService,
+    ServiceWorkerLogUpdateService,
+    ServiceWorkerUpdateService,
+    AuthenticationService,
+    HeadlineAnimationService,
+    GpuJsService,
+    IsAuthenticatedGuard]
 })
 export class CoreModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: CoreModule,
-      providers: [
-        TitleService,
-        RandomService,
-        ServiceWorkerLogUpdateService,
-        ServiceWorkerUpdateService,
-        AuthenticationService,
-        HeadlineAnimationService,
-        GpuJsService,
-        IsAuthenticatedGuard
-      ]
-    };
-  }
 
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
     if (parentModule) {

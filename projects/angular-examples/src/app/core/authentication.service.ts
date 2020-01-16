@@ -6,6 +6,9 @@ import * as firebase from 'firebase';
 import {Observable} from 'rxjs';
 import {map, tap} from 'rxjs/operators';
 import {AuthUser} from './auth-user';
+import GoogleAuthProvider = firebase.auth.GoogleAuthProvider;
+import UserCredential = firebase.auth.UserCredential;
+
 
 @Injectable({
   providedIn: 'root'
@@ -17,29 +20,25 @@ export class AuthenticationService {
   uid: string | number;
 
   constructor(private afAuth: AngularFireAuth, private router: Router, angulartics: Angulartics2) {
-    this.user = ((this.afAuth.user) as unknown as Observable<firebase.User>).pipe(
-      tap((user: firebase.User) => {
-        if (user != null) {
-          this.uid = user.uid;
-        } else {
-          this.uid = null;
-        }
+    this.user = this.afAuth.user.pipe(
+      tap(user => {
+        this.uid = user != null ? user.uid : null;
       }),
       tap(user => angulartics.setUsername.next(('' + this.uid))),
       map(user => user == null ? null : new AuthUser(user.displayName, user.photoURL))
     );
     // @ts-ignore
-    this.authenticated = (this.afAuth.authState as unknown as Observable<firebase.User>).pipe(
+    this.authenticated = this.afAuth.authState.pipe(
       map(user => user != null)
     );
   }
 
-  signIn() {
-    return firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
+  signIn(): Promise<UserCredential> {
+    return this.afAuth.auth.signInWithPopup(new GoogleAuthProvider());
   }
 
-  signOut() {
-    this.router.navigate(['/']);
+  async signOut(): Promise<void> {
+    await this.router.navigate(['/']);
     return this.afAuth.auth.signOut();
   }
 }

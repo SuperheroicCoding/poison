@@ -6,14 +6,14 @@
     <mat-chip-list class="mat-elevation-z2">
       <mat-chip [color]="'accent'" matTooltip="Welcome {{ user.displayName }}"><img [src]="user.photoURL"></mat-chip>
     </mat-chip-list>
-    <button mat-mini-fab color="primary" (click)="logout()" matTooltip="Logout">
+    <button mat-mini-fab color="warn" (click)="logout()" matTooltip="Logout">
       <mat-icon>logout</mat-icon>
     </button>
   </ng-template>
   <ng-template #showLogin>
     <div class="logged-in">
       <div class="mat-caption caption">Please login.</div>
-      <button mat-mini-fab color="warn" (click)="login()">
+      <button mat-mini-fab color="accent" (click)="login()">
         <mat-icon>input</mat-icon>
       </button>
     </div>
