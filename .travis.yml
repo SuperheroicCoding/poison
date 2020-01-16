@@ -4,16 +4,27 @@ sudo: false
 language: node_js
 node_js:
   - "10"
+env:
+  global:
+    - NODE_OPTIONS=--max_old_space_size=7000
+
+cache:
+  - npm
 
 addons:
   chrome: stable
 
-cache:
-  directories:
-    - ./node_modules
-
 install:
-  - npm install
+  - npm ci
+  - npm install codecov -g
 
 script:
+  - node -p "v8.getHeapStatistics().total_available_size / (1024 * 1024)"
+  - npm run lint
   - npm run test-thanos -- --watch=false --progress=false --browsers=ChromeHeadlessCI
+  - npm run asbuild
+  - npm run buildS3
+  - npm run test -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
+
+after_success:
+  - codecov
