@@ -15,7 +15,7 @@ addons:
     sources:
       - google-chrome
     packages:
-      - google-chrome-stable
+      - google-chrome
 
 install:
   - npm ci
