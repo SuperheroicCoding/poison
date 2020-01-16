@@ -1,42 +1,23 @@
 dist: trusty
 sudo: false
+
 language: node_js
 node_js:
-  - "10"
-env:
-  global:
-    - NODE_OPTIONS=--max_old_space_size=7000
-
-cache:
-  - npm
+  - "8"
 
 addons:
   apt:
     sources:
       - google-chrome
     packages:
-      - google-chrome
+      - google-chrome-stable
+
+cache:
+  directories:
+    - ./node_modules
 
 install:
-  - npm ci
-  - npm install codecov -g
+  - npm install
 
 script:
-  - node -p "v8.getHeapStatistics().total_available_size / (1024 * 1024)"
-  - npm run lint
-  - npm run test-thanos -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
-  - npm run asbuild
-  - npm run test -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
-  - npm run buildS3
-
-after_success:
-  - codecov
-
-deploy:
-  # deploy prod to the aws environment
-  provider: script
-  script: npm run deploy-without-build
-  skip_cleanup: true
-  on:
-    branch: master
-
+  - npm run test-thanos -- --watch=false --progress=false --browsers=ChromeHeadlessCI

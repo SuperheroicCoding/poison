@@ -7,7 +7,7 @@ import {CoreModule} from './core.module';
 describe('AuthenticationService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [CoreModule.forRoot(), RouterTestingModule],
+      imports: [CoreModule, RouterTestingModule],
     });
   });
 
