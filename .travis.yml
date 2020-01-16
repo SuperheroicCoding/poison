@@ -23,6 +23,7 @@ script:
 after_success:
 - codecov
 deploy:
+  skip_cleanup: true
   provider: s3
   access_key_id: AKIARJIXB7N7YBBNYQXY
   secret_access_key:
