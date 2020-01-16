@@ -38,5 +38,6 @@ deploy:
   region: eu-west-1
   on:
     repo: SuperheroicCoding/AngularExamples
-    tag:
+    branch: master
+    tags: true
 
