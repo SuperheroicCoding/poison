@@ -35,6 +35,7 @@ deploy:
   detect_encoding: true
   default_text_charset: 'utf-8'
   cache_control: "max-age=31536000"
+  region: eu-west-1
   on:
     repo: SuperheroicCoding/AngularExamples
     branch: travis-config
