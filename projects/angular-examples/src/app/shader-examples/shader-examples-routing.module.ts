@@ -1,7 +1,7 @@
-import {ModuleWithProviders} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {ShaderExamplesComponent} from './shader-examples.component';
 import {IsAuthenticatedGuard} from '../core/guards/is-authenticated-guard.service';
+import {ShaderExamplesComponent} from './shader-examples.component';
 
 const routes: Routes = [
   {
@@ -11,4 +11,9 @@ const routes: Routes = [
   },
 ];
 
-export const ShaderExamplesRoutingModule: ModuleWithProviders = RouterModule.forChild(routes);
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class ShaderExamplesRoutingModule {
+}
