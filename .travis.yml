@@ -38,5 +38,5 @@ deploy:
   region: eu-west-1
   on:
     repo: SuperheroicCoding/AngularExamples
-    branch: travis-config
+    tag:
 
