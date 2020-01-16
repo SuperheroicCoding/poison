@@ -23,19 +23,18 @@ script:
 after_success:
 - codecov
 deploy:
-  skip_cleanup: true
   provider: s3
-  access_key_id: AKIARJIXB7N7YBBNYQXY
+  access_key_id: AKIARJIXB7N7U5V2NTNH
   secret_access_key:
-    secure: JVb8DnhGqOpb5XR2f6/mpBNENj4yHpBLbY4YqIADU7fksMT2PwYyR4WC8TD4ft+3wwqL+MMq5rHy4P0/TJv8L1R+hQ9CkFKf0hVXWAXheEfWoWXm9H1yDXoQ8jpGlvDFjSXc5qPzmph+630DUcqVrcNtOPwxTIks1mbFy9iTuip/TQJluI+qqTNQ1ndcgJWuddqJJ3QI5bR5ETG26gWN76doURWwqwlXidOdC0aPV7ITrTOeAlNMpBK/XYbRetB8XoKfqKLw/sIZrO1/ARdJC2IZ8uUaMihQIDJ+sAF3H3a0/emszGhvfY9ztw981xByS7vN1XaRuVy0XRqztD4Glu55ytTAjhzzLetbPB5GQWanjLaAb5trOVgWrPaJ7Z70+h1B6fcYnqZFvri6zjeoXeeKzspn7e6xNP9lGSdBgYFT8PAcfIaZlefQSgYPUgZ/7h4h0jt/skMcwoZGCGX1F/RutFUJRK9iQnnVUHGy2QtctZdhDrqrwkfGbmH4P6L8evciC+j1a/JzgvFkkH69J7wo2kSCZxi8ytTyoM3j0LobKBjG1Ahqeuc9SLD8KI4UQDBNZoOqNIaR7u3j2BztcZAIVFU6pWXK0rMF8uDIl+Jnkurdb3ravlpE9b7t/P3wfP2mx/XMhH1DqqKqARdbGwZLam21tfMxzGswrUevG/Q=
+    secure: RLtXH9a4Cd9EAUKKGglMIFhFvEHGHSiL0CC6HSkeCijuKQUgHsJNf+/RzlJEMFP/wFUK06PqpNAb0GQZLryixIuj1Eq8B541SlE6N4edY971UeXjeOvTV2sKdBCEmRHFXslZiL/Ihf/7/0caWSumvpqEyw90bPDUBGMfgh7OvRuSRZPXIH2SLprf/MFzRCec0kxANyfCY8ij7tsnylcE93BfdNTFadiZovsr8db4ofLYLquNLZ0xvydfzCVtbz86T9zrVziPBgBwKj8uM48fXW4GZA5UxcXje9Vs6arSKZFyDEMJnsT65OQ8uyDPjy39QnJusBkobqC6gBdLeyy2PRiZ5a+tbMCjd4WVgSm3Aa56r/DKXjBdkaLbsx9gu2PiuJl8G7OmtqOCXSgE46iYS2Co6Xza0dRQ1mYQJEFmuP7zDY004NDICsMLxlgTLHlgTOxJ6qvUF+nD9Upow9LWgg4rvW4XsC9IwXpyukFI3irs7/biI0SwqJjKWt9PmtvstrNLxdY/hjwVfNuVTBb0QSXxifEfYljInSxqb/u+Da6tspAAjWJuv0ULtrpXlnB1JKFF8o0cabcyHRNJPBAd1NTvhj6FFXEdbOdKeZ8HS8Wx0/RT7qMC6ImPvRsf+tcplAkBcei1QsVmCuh89dplUOWS9RWrZ5t0J+6norIKBfk=
   bucket: superheroiccoding.de
-  acl: public_read
-  local_dir: distS3
+  local-dir: distS3
   upload-dir: angularExamples
+  region: eu-central-1
+  acl: public_read
   detect_encoding: true
   default_text_charset: utf-8
   cache_control: max-age=31536000
-  region: eu-central-1
   on:
     repo: SuperheroicCoding/AngularExamples
     branch: master
