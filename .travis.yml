@@ -28,14 +28,14 @@ deploy:
   access_key_id: AKIARJIXB7N7YBBNYQXY
   secret_access_key:
     secure: WS1DzzqMo0dYWVk54jMjaMvi31vq20TfgVuDf5r/ydBycoZJkJF5IJorFiFnzm1WQjBWVZtvyquQdklH+wc3o53T0CjNSmcoMY6Cse2cvkdVKV83TNzz6L+V22DDR3dvNktrw4q6JqNUYAxNxifYmb6OdNWI8oMiOjU1lgqO6fMc7gCEddUodaHUsLQ3W1MLMeWccJ8f3xtaLPW5FqGmBZnYm5APpizw5hinAK//T3hzH+xH+qS3JCI/dlIpj5AgnrpHUMDpqIdgNPY2KZnAU4WYyqGzZFQH8Z/py9g9zPUqEcjoODwKK9Y7l5bjTOok5UmdHCq6tXsx0auxfcdeYpzpNtiMl67qOVJZPrA4ZZYmvIs4/+GR3kzR3bjCJ/xf2wpCZEqAyhQvLsdKLQRj7qFKNA8w1n7JsjiTkTSevIjFCLyZdDJKSX9N3OMSQQIJyh4q/9GzyvNwnngvIguZvuOijDl5xZW8JyRxNuXxEXD/+ZDAvnD6W9jsxgTW5DfRUQ1ru2R2ZpKT4ccSeg3hMBuTzh5YAu5fWYxZlOQ8j0fq0CXybabkOo7yurN/OdReqtdxXR0plpdprkTdsc3NQdYNBbXJrHNVJdmPXMzbdwXhjL7XyrrRPesSdgVp6kxDNsfKdQbv5GhrYY834hkCOU2p9iMGmBZFqrJcq3cv/qA=
-  bucket: "superheroiccoding.de.s3.amazonaws.com"
+  bucket: "superheroiccoding.de"
   acl: public_read
   local_dir: distS3
   upload-dir: angularExamples
   detect_encoding: true
   default_text_charset: 'utf-8'
   cache_control: "max-age=31536000"
-  region: eu-west-1
+  region: eu-central-1
   on:
     repo: SuperheroicCoding/AngularExamples
     branch: master
