@@ -1,18 +1,29 @@
-# SuperheroicCoding: Some examples with Angular+, Angular-Material, p5, three.js  
+# SuperheroicCoding: Some examples with Angular+, Angular-Material, p5, three.js,  
 
 Just some cool examples implemented in Angular for topics that I am interested in. 
 
 The topics are science algorithms like poisson distribution and reaction diffusion.
 Also shader programming with webgl and AI are given. 
+Firebase is used for persistence.  
 For visualization p5 and three.js are used.
 
 I always try to keep a good code structure as defined in the Angular style guide.
-Also I love rxjs and use it as much as I can.   
-CSS wise I try to get my hands on grid layout.
+Also I love rxjs and use it as much as I can.
+For components I use Angular-Material.    
+CSS wise I try use grid and flex layout.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version ^6.0.x.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.x.
 
-A running version (not always up to date) can be found on github pages: https://angularexamples.superheroiccoding.de/
+To deploy it I use travisCI and AWS S3, with Cloudfront
+
+## sc-thanos
+A special library is extracted from these Experiments called sc-thanos. 
+It's a cool vaporizing effect for your html Elements. 
+[sc-thanos on npm](https://www.npmjs.com/package/sc-thanos)
+
+Readme under: [Sc-Thanos README.md](./projects/sc-thanos/README.md)
+
+A running version can be found on github pages: https://angularexamples.superheroiccoding.de/
 
 ## Development server
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.

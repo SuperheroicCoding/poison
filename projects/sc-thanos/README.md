@@ -1,6 +1,6 @@
 # ScThanos
-A superheroicCodings implementation of a Thanos like vaporize effect usable as an angular directive. 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.0.RC-3
+A SuperheroicCodings implementation of a Thanos like vaporize effect usable as an angular directive. 
+This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.x
 
 #### Live Demo: 
 Click the technology cards on https://angularexamples.superheroiccoding.de
