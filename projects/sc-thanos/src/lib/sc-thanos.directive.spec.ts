@@ -70,7 +70,7 @@ describe('ScThanosDirective', () => {
 
     startThanos() {
       this.showComplete = false;
-      this.scThanosDirective.vaporize();
+      return this.scThanosDirective.vaporize();
     }
 
     completed() {
@@ -84,7 +84,7 @@ describe('ScThanosDirective', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ScThanosModule.forRoot(), CommonModule],
+      imports: [ScThanosModule.forRoot({maxParticleCount: 10000, animationLength: 1000}), CommonModule],
       declarations: [HostComponent]
     })
       .compileComponents();
@@ -103,8 +103,12 @@ describe('ScThanosDirective', () => {
 
   describe('vaporize()', () => {
     let thanosService: ScThanosService;
+
+    let completedResult: boolean;
+
     beforeEach(() => {
       thanosService = TestBed.get(ScThanosService);
+      completedResult = false;
       spyOn(thanosService, 'vaporize').and.callThrough();
     });
 
@@ -113,12 +117,28 @@ describe('ScThanosDirective', () => {
       thenThanosServiceVaporizeWasCalled();
     });
 
+
+    it('should emit when vaporize is complete', async () => {
+      await whenVaporizeIsCalled();
+      thenThanosCompleteIsEmitted();
+    });
+
     function thenThanosServiceVaporizeWasCalled() {
       expect(thanosService.vaporize).toHaveBeenCalled();
     }
 
-    function whenVaporizeIsCalled() {
-      hostComp.startThanos();
+    function whenVaporizeIsCalled(): Promise<void> {
+      return new Promise<void>((then, error) =>
+        hostComp.startThanos().subscribe({
+          next: () => {
+            completedResult = true;
+            then();
+          }, error
+        }));
+    }
+
+    function thenThanosCompleteIsEmitted() {
+      expect(completedResult).toBeTruthy();
     }
   });
 });
