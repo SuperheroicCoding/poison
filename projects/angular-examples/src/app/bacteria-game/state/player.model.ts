@@ -2,7 +2,8 @@ import {ID} from '@datorama/akita';
 
 export type PlayerColorArray = [number, number, number, number];
 
-export const bacteriumMaxEnergy = 0.3;
+export const bacteriumMaxEnergy = 1.;
+export const bacteriumEnergyRestoreTimeInSec = 5;
 
 
   export interface Player {

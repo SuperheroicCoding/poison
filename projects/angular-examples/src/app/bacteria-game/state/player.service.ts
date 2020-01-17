@@ -2,12 +2,18 @@ import {Injectable} from '@angular/core';
 import {ID, transaction} from '@datorama/akita';
 import {GameStateQuery} from './game-state.query';
 import {GameState} from './game-state.store';
-import {Bacteria, bacteriumMaxEnergy, createPlayerWithBacterias, Player, PlayerColorArray} from './player.model';
+import {
+  Bacteria,
+  bacteriumEnergyRestoreTimeInSec,
+  bacteriumMaxEnergy,
+  createPlayerWithBacterias,
+  Player,
+  PlayerColorArray
+} from './player.model';
 import {PlayerQuery} from './player.query';
 import {PlayerStore} from './player.store';
 
-const energyLossPerOtherBacterium = 0.2;
-
+const energyLossPerOtherBacterium = 0.8;
 
 @Injectable({providedIn: 'root'})
 export class PlayerService {
@@ -168,7 +174,8 @@ export class PlayerService {
     const players = this.playerQuery.getAll().sort(a => Math.random() - 0.5);
     const colorToPlayer: { [key: string]: Player } = {};
     for (const player of players) {
-      colorToPlayer[player.color.toString()] = player;
+      const rgb = player.color.slice(0, 3);
+      colorToPlayer[rgb.toString()] = player;
     }
 
     for (const player of players) {
@@ -213,8 +220,7 @@ export class PlayerService {
             if (bacToAddToWinner[winner.id] == null) {
               bacToAddToWinner[winner.id] = [];
             }
-            // half energy for winner bacteria
-            bacterium.energy = bacteriumMaxEnergy / 2.;
+            bacterium.energy = bacteriumMaxEnergy * .75; //  1.;
             bacToAddToWinner[winner.id].push(bacterium);
             const index = (x + (y * width)) * 4;
             imageData[index] = winner.color[0];
@@ -222,6 +228,8 @@ export class PlayerService {
             imageData[index + 2] = winner.color[2];
             imageData[index + 3] = winner.color[3];
           }
+        } else {
+          bacs[i] = {...bacterium, energy: Math.min(bacteriumMaxEnergy, bacterium.energy + deltaTimeSec / bacteriumEnergyRestoreTimeInSec)};
         }
       }
       for (const entry of Object.entries(bacToAddToWinner)) {
@@ -338,7 +346,6 @@ export class PlayerService {
       imageData[testIndex],
       imageData[testIndex + 1],
       imageData[testIndex + 2],
-      imageData[testIndex + 3]
     ].toString();
     return colorToPlayer[currentGridColor];
   }

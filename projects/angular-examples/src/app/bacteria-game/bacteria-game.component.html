@@ -14,9 +14,12 @@
       <div *ngFor="let player of (players$ | async); ">Player {{player.id + 1}}: {{player.bacterias.length}}bacterias
       </div>
     </div>
-    <div>
-      <canvas scThanos #canvasElement id="canvasElement" width="{{width}}" height="{{height}}">
-      </canvas>
+    <div class="canvas-container" [ngStyle]="{width: scaledWidth + 'px', height: scaledHeight + 'px'}">
+      <div scThanos class="thanos-container">
+        <canvas [style.transform]="'scale(' +scale + ')'" #canvasElement id="canvasElement" width="{{width}}"
+                height="{{height}}">
+        </canvas>
+      </div>
     </div>
   </mat-card-content>
   <mat-card-actions>

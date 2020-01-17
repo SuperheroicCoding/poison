@@ -1,4 +1,16 @@
 #canvasElement {
   image-rendering: optimizeSpeed;
+
 }
-canvas.sc-thanos {background-color: red;}
+
+.canvas-container {
+  .thanos-container {
+    height: 100%;
+  }
+
+  canvas {
+    transform-origin: top left;
+
+  }
+
+}

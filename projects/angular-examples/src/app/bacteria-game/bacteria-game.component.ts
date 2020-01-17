@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {untilDestroyed} from 'ngx-take-until-destroy';
-import {Observable, Subject} from 'rxjs';
+import {Observable} from 'rxjs';
 import {distinctUntilChanged, filter, map, take} from 'rxjs/operators';
 import {ScThanosDirective} from '../../../../sc-thanos/src/public-api';
 import {GameStateQuery} from './state/game-state.query';
@@ -29,12 +29,14 @@ export function createImageDataFromBacterias(
   bacterias: Bacteria[]
 ): Uint8ClampedArray {
   for (let i = 0; i < bacterias.length; i++) {
-    const {x, y} = bacterias[i];
+    const bacterium = bacterias[i];
+    const {x, y, energy} = bacterium;
     const data8index = (y * width + x) * 4;
-    data8[data8index] = color[0];   // r
-    data8[data8index + 1] = color[1];   // g
-    data8[data8index + 2] = color[2];   // b
-    data8[data8index + 3] = 255;   // alpha
+    const [r, g, b] = color;
+    data8[data8index] = r;   // r
+    data8[data8index + 1] = g;   // g
+    data8[data8index + 2] = b;   // b
+    data8[data8index + 3] = Math.min(energy * energy * 255, 255);   // alpha
   }
   return data8;
 }
@@ -53,15 +55,17 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
   @ViewChild(ScThanosDirective, {static: true})
   private thanos: ScThanosDirective;
   private cx: CanvasRenderingContext2D;
-  width = 640;
-  height = 480;
+  scale = 4;
+  width = 320;
+  height = 140;
+
+  scaledWidth = this.width * this.scale;
+  scaledHeight = this.height * this.scale;
 
   state$: Observable<GameStateState>;
   fps$: Observable<string>;
   players$: Observable<Player[]>;
   isRunning$: Observable<boolean>;
-
-  private thanosCompletedSubject = new Subject<void>();
 
   constructor(private query: GameStateQuery,
               private gameStateService: GameStateService,
@@ -130,14 +134,13 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
     }
 
     this._ngZone.runOutsideAngular(() => {
-      this.cx.fillStyle = 'rgba(0,0,0,0.5)';
+      this.cx.fillStyle = 'rgba(0,0,0,1)';
       this.cx.fillRect(0, 0, this.width, this.height);
       this.cx.fillStyle = 'rgb(200,200,200)';
       this.cx.fillRect(this.width / 2 - 50, 0, 20, this.height / 2 - 50);
       this.cx.fillRect(this.width / 2 - 50, this.height / 2 - 30, 20, this.height / 2 + 30);
       this.cx.fillRect(this.width / 2 + 30, 0, 20, this.height / 2 + 30);
       this.cx.fillRect(this.width / 2 + 30, this.height / 2 + 50, 20, this.height / 2 - 50);
-
 
       const image = this.cx.getImageData(0, 0, this.width, this.height);
       const data = new Uint8ClampedArray(image.data.buffer);
