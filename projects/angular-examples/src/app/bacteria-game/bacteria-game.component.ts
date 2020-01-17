@@ -9,10 +9,10 @@ import {
   OnDestroy,
   ViewChild
 } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {untilDestroyed} from 'ngx-take-until-destroy';
-import {Observable} from 'rxjs';
-import {distinctUntilChanged, filter, map} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {distinctUntilChanged, filter, map, take} from 'rxjs/operators';
 import {ScThanosDirective} from '../../../../sc-thanos/src/public-api';
 import {GameStateQuery} from './state/game-state.query';
 import {GameStateService} from './state/game-state.service';
@@ -48,9 +48,9 @@ export function createImageDataFromBacterias(
 })
 export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
 
-  @ViewChild('canvasElement', { static: true })
+  @ViewChild('canvasElement', {static: true})
   private canvasRef: ElementRef;
-  @ViewChild(ScThanosDirective, { static: true })
+  @ViewChild(ScThanosDirective, {static: true})
   private thanos: ScThanosDirective;
   private cx: CanvasRenderingContext2D;
   width = 640;
@@ -60,7 +60,8 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
   fps$: Observable<string>;
   players$: Observable<Player[]>;
   isRunning$: Observable<boolean>;
-  private keysPressed: string[] = [];
+
+  private thanosCompletedSubject = new Subject<void>();
 
   constructor(private query: GameStateQuery,
               private gameStateService: GameStateService,
@@ -95,6 +96,7 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
       );
   }
 
+
   ngAfterViewInit(): void {
     const canvasEl: HTMLCanvasElement = this.canvasRef.nativeElement;
     this.cx = canvasEl.getContext('2d');
@@ -112,11 +114,14 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
     this.gameStateService.start();
   }
 
-
   resetGame() {
-    this.thanos.vaporize(false);
-    this.gameStateService.reset();
-    this.draw(1. / 1000.);
+    this.gameStateService.pause();
+    this.thanos.vaporize(false)
+      .pipe(take(1))
+      .subscribe(() => {
+        this.gameStateService.reset();
+        this.draw(1. / 1000.);
+      });
   }
 
   private draw(deltaTimeInSec: number) {
@@ -136,19 +141,19 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
 
       const image = this.cx.getImageData(0, 0, this.width, this.height);
       const data = new Uint8ClampedArray(image.data.buffer);
-      this.playerQuery.getAll().forEach(
-        player => createImageDataFromBacterias(data, this.width, player.color, player.bacterias)
-      );
+      for (const player of this.playerQuery.getAll()) {
+        createImageDataFromBacterias(data, this.width, player.color, player.bacterias);
+      }
       this.playerService.gameLoop(data, this.width, this.height, deltaTimeInSec);
       this.cx.putImageData(image, 0, 0);
 
-      this.playerQuery.getAll().forEach(player => {
+      for (const player of this.playerQuery.getAll()) {
         this.cx.strokeStyle = `rgba(${player.color.join(',')})`;
         this.cx.fillRect(player.x - 6, player.y - 0.5, 13, 2);
         this.cx.fillRect(player.x - .5, player.y - 6, 2, 13);
         this.cx.strokeRect(player.x - 6, player.y - 0.5, 13, 2);
         this.cx.strokeRect(player.x - .5, player.y - 6, 2, 13);
-      });
+      }
 
     });
   }

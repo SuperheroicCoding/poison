@@ -133,4 +133,8 @@ export class GameStateService {
   cleanupKeysPressed(): void {
     this.gameStateStore.update({keysPressed: []});
   }
+
+  pause() {
+    this.gameStateStore.update({currentState: GameState.PAUSED});
+  }
 }

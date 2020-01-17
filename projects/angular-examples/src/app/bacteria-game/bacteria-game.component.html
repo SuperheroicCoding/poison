@@ -1,17 +1,23 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>Bacteria Game</mat-card-title>
-    <mat-card-subtitle>Try to eat the other players bacteria. Orange use WASD and Blue use arrow keys to direct your bacteria</mat-card-subtitle>
+    <mat-card-subtitle>Try to eat the other players bacteria. Orange use WASD and Blue use arrow keys to direct your
+      bacteria
+    </mat-card-subtitle>
   </mat-card-header>
-  <mat-card-content scThanos>
+</mat-card>
+<mat-card>
+  <mat-card-content>
     <div *ngIf="state$ | async; let state" class="statistics">
       <span>{{'Game time: ' + state.timePassed}}</span>
       <span>{{'FPS: ' + (fps$ | async)}}</span>
       <div *ngFor="let player of (players$ | async); ">Player {{player.id + 1}}: {{player.bacterias.length}}bacterias
       </div>
     </div>
-    <canvas #canvasElement id="canvasElement" width="{{width}}" height="{{height}}">
-    </canvas>
+    <div>
+      <canvas scThanos #canvasElement id="canvasElement" width="{{width}}" height="{{height}}">
+      </canvas>
+    </div>
   </mat-card-content>
   <mat-card-actions>
     <button mat-raised-button

@@ -103,12 +103,12 @@ export class PlayerService {
 
     const players = this.playerQuery.getAll().sort(a => Math.random() - 0.5);
 
-    players.forEach(player => {
+    for (const player of players) {
       const bacs = [].concat(player.bacterias);
       const mx = player.x;
       const my = player.y;
       if (isNaN(mx) && isNaN(my)) {
-        return;
+        continue;
       }
       for (let i = bacs.length - 1; i > -1; i--) {
         const {x, y} = bacs[i];
@@ -160,16 +160,18 @@ export class PlayerService {
       }
 
       this.update(player.id, {bacterias: bacs});
-    });
+    }
   }
 
   @transaction()
   private handleBacEating(width: number, height: number, imageData: Uint8ClampedArray, deltaTimeSec: number) {
     const players = this.playerQuery.getAll().sort(a => Math.random() - 0.5);
     const colorToPlayer: { [key: string]: Player } = {};
-    players.forEach(player => colorToPlayer[player.color.toString()] = player);
+    for (const player of players) {
+      colorToPlayer[player.color.toString()] = player;
+    }
 
-    players.forEach(player => {
+    for (const player of players) {
       const bacs = [...player.bacterias];
       const bacToAddToWinner: { [key: number]: Bacteria[] } = {};
 
@@ -185,18 +187,18 @@ export class PlayerService {
         let ownPlayers = 0;
         let maxAmount = 0;
         let winner: Player = null;
-        Object.keys(surroundingPlayers).forEach(pId => {
+        for (const pId of Object.keys(surroundingPlayers)) {
           const sPlayer = surroundingPlayers[pId].player;
           if (sPlayer.id === player.id) {
             ownPlayers += surroundingPlayers[pId].amount;
-            return;
+            continue;
           }
           if (maxAmount < surroundingPlayers[pId].amount) {
             maxAmount = surroundingPlayers[pId].amount;
             winner = sPlayer;
           }
           otherPlayers += surroundingPlayers[pId].amount;
-        });
+        }
 
         if (otherPlayers > ownPlayers) {
 
@@ -222,11 +224,11 @@ export class PlayerService {
           }
         }
       }
-      Object.entries(bacToAddToWinner).forEach(entry => {
-        return this.addBacterias(entry[0], entry[1]);
-      });
+      for (const entry of Object.entries(bacToAddToWinner)) {
+        this.addBacterias(entry[0], entry[1]);
+      }
       this.update(player.id, {bacterias: bacs});
-    });
+    }
   }
 
   moveToIfFree(xStep: number, yStep: number, x: number, y: number,

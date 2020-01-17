@@ -1,5 +1,5 @@
 import {Directive, ElementRef, EventEmitter, Inject, NgZone, OnDestroy, Output} from '@angular/core';
-import {Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {ScThanosService} from './sc-thanos.service';
 
 @Directive({
@@ -17,26 +17,28 @@ export class ScThanosDirective implements OnDestroy {
               @Inject(NgZone) private _ngZone: NgZone) {
   }
 
-  vaporize(removeElem: boolean = true): void {
+  vaporize(removeElem: boolean = true): Observable<void> {
     const elem = this.vaporizeDomElem.nativeElement;
-    this.subscription = this.thanosService.vaporize(elem).subscribe({
-      complete: () => {
-        this._ngZone.run(() => {
-          if (removeElem) {
-            elem.remove();
-          } else {
-            elem.style.transition = 'opacity 700ms';
-            elem.style.opacity = '1';
-          }
+    this.subscription = this.thanosService.vaporize(elem)
+      .subscribe({
+        complete: () => {
+          this._ngZone.run(() => {
+            if (removeElem) {
+              elem.remove();
+            } else {
+              elem.style.transition = 'opacity 700ms';
+              elem.style.opacity = '1';
+            }
+            this.scThanosComplete.emit();
+          });
+        },
+        error: (error) => {
+          console.log('error emitted by vaporize', error);
           this.scThanosComplete.emit();
-        });
-      },
-      error: (error) => {
-        console.log('error emitted by vaporize', error);
-        this.scThanosComplete.emit();
-        throw error;
-      }
-    });
+          throw error;
+        }
+      });
+    return this.scThanosComplete.asObservable();
   }
 
   ngOnDestroy(): void {
