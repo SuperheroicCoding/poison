@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {ModuleWithProviders, NgModule} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {MatButtonModule} from '@angular/material/button';
@@ -23,7 +23,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {Angulartics2Module} from 'angulartics2';
 import 'hammerjs';
 import {AceEditorModule} from 'ng2-ace-editor';
-import {ScThanosModule} from 'sc-thanos';
+import {ScThanosModule} from '../../../../sc-thanos/src/lib/sc-thanos.module';
 import {CodeEditorComponent} from './code-editor/code-editor.component';
 import {RaiseCardDirective} from './raise-card.directive';
 import {RenderShaderComponent} from './render-shader/render-shader.component';
@@ -64,10 +64,4 @@ import {SafeHtmlPipe} from './safe-html.pipe';
   declarations: [RaiseCardDirective, SafeHtmlPipe, CodeEditorComponent, RenderShaderComponent]
 })
 export class SharedModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: SharedModule,
-      providers: [],
-    };
-  }
 }

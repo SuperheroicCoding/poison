@@ -19,15 +19,16 @@ script:
 - npm run test-thanos -- --watch=false --progress=false --browsers=ChromeHeadlessCI
 - npm run build-deps
 - npm run test -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
-- npm run buildS3
 after_success:
 - codecov
+before_deploy:
+- npm run buildS3
 deploy:
   skip_cleanup: true
   provider: s3
-  access_key_id: AKIARJIXB7N7U5V2NTNH
+  access_key_id: AKIARJIXB7N7V2AUUGU2
   secret_access_key:
-    secure: RLtXH9a4Cd9EAUKKGglMIFhFvEHGHSiL0CC6HSkeCijuKQUgHsJNf+/RzlJEMFP/wFUK06PqpNAb0GQZLryixIuj1Eq8B541SlE6N4edY971UeXjeOvTV2sKdBCEmRHFXslZiL/Ihf/7/0caWSumvpqEyw90bPDUBGMfgh7OvRuSRZPXIH2SLprf/MFzRCec0kxANyfCY8ij7tsnylcE93BfdNTFadiZovsr8db4ofLYLquNLZ0xvydfzCVtbz86T9zrVziPBgBwKj8uM48fXW4GZA5UxcXje9Vs6arSKZFyDEMJnsT65OQ8uyDPjy39QnJusBkobqC6gBdLeyy2PRiZ5a+tbMCjd4WVgSm3Aa56r/DKXjBdkaLbsx9gu2PiuJl8G7OmtqOCXSgE46iYS2Co6Xza0dRQ1mYQJEFmuP7zDY004NDICsMLxlgTLHlgTOxJ6qvUF+nD9Upow9LWgg4rvW4XsC9IwXpyukFI3irs7/biI0SwqJjKWt9PmtvstrNLxdY/hjwVfNuVTBb0QSXxifEfYljInSxqb/u+Da6tspAAjWJuv0ULtrpXlnB1JKFF8o0cabcyHRNJPBAd1NTvhj6FFXEdbOdKeZ8HS8Wx0/RT7qMC6ImPvRsf+tcplAkBcei1QsVmCuh89dplUOWS9RWrZ5t0J+6norIKBfk=
+    secure: CV5OT8q6gMoDolBgEq0YAcx3qJ7SqGhbahyRAcbHp4G7DKHV+6OYCIxngrkmmFpB5z4Yw/2+0iAhXDg3WqSyCPU6r+Fcfq7H4vF38hySBc0I2SmraQi8Dh94mRyjlwDMD7jCXgNJ2dH3sY5Z58nlUvxaAc/SAtT8oGCCUdAyPPpRmmhZi7ZjX6fJp8UM6ofvmbQCqhcDGutdbtWf8C5W5FSerW2EhrLT6uJV4QFgMLVUTRRFdQjjcwgCo4Ng9MAcWkkQ02E9TnKebIqnilkB+ArtuCf0r8yWhJ9x9RSvcyznOhR4dRIthkTdtBaNjcEUnQiHHWMf3Vae4syNIhE6qMzp+65lPQt4UksLXBP3GMESl4idiOzrR5fyTfLcR0s4jbtOgT0dRwn/oSDvl818omeNgzqKomAcrq9IMMAmOe7hrzFOyBMdnKjEnp0B+/i9vzoFBTqhjl0yVakudA23kszWo0Fg10Vie1x9DiPvLf/6XQZrl/+ErPxE9PG+aKGRDC5YuNa85fuSqVewqJTTxEiEvEPk20xEoPFvCzu/sDq/Y1jawRmaHoyJTuU/z/+JTCD8Ejq0FroKphZTBZn/+HG+oRlGis9SHIssepcrE58EMSxWp2JO1Gwd1lgsb65k7twYmvPiq5zzhNxfP1PRbFL88b86s5n2gRc6RzGNG7A=
   bucket: superheroiccoding.de
   local-dir: distS3
   upload-dir: angularExamples

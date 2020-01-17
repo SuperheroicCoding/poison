@@ -13,7 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import {untilDestroyed} from 'ngx-take-until-destroy';
 import {Observable} from 'rxjs';
 import {distinctUntilChanged, filter, map} from 'rxjs/operators';
-import {ScThanosDirective} from 'sc-thanos';
+import {ScThanosDirective} from '../../../../sc-thanos/src/public-api';
 import {GameStateQuery} from './state/game-state.query';
 import {GameStateService} from './state/game-state.service';
 import {GameState, GameStateState} from './state/game-state.store';

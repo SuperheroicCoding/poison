@@ -1,5 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {ScThanosDirective} from 'sc-thanos';
+import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-technology',
@@ -11,9 +10,6 @@ export class TechnologyComponent implements OnInit {
   @Input() title;
   @Input() link;
   @Input() image;
-
-  @ViewChild(ScThanosDirective, {static: true})
-  private thanos: ScThanosDirective;
 
   constructor() {
   }
