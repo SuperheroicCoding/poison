@@ -134,7 +134,7 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
     }
 
     this._ngZone.runOutsideAngular(() => {
-      this.cx.fillStyle = 'rgba(0,0,0,1)';
+      this.cx.fillStyle = 'rgba(0,0,0,0.7)';
       this.cx.fillRect(0, 0, this.width, this.height);
       this.cx.fillStyle = 'rgb(200,200,200)';
       this.cx.fillRect(this.width / 2 - 50, 0, 20, this.height / 2 - 50);
