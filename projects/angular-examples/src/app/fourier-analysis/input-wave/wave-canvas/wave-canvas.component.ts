@@ -11,7 +11,7 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import * as P5 from 'p5';
+import P5 from 'p5';
 import {InputWave} from '../../state/input-wave.model';
 
 interface WaveCanvasChanges extends SimpleChanges {
@@ -34,7 +34,7 @@ export class WaveCanvasComponent implements OnChanges, AfterViewInit, OnDestroy 
   @Input() waveHeight: number;
   @Input() wave: InputWave;
 
-  private sketch: p5;
+  private sketch: P5;
   private wavePartsToDraw: number;
 
   constructor(@Inject(NgZone) private zone: NgZone) {
@@ -61,7 +61,7 @@ export class WaveCanvasComponent implements OnChanges, AfterViewInit, OnDestroy 
     this.zone.runOutsideAngular(() => new P5(this.initSketch.bind(this), this.canvasContainer));
   }
 
-  initSketch(sketch: p5) {
+  initSketch(sketch: P5) {
     this.sketch = sketch;
 
     const leftPadding = 20;

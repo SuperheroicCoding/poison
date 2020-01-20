@@ -1,6 +1,7 @@
 import {Point} from '../point';
 import {Perceptron} from '../perceptron';
 import {BrainService} from '../brain.service';
+import P5 from 'p5';
 
 export class DataP5Scetch {
 
@@ -8,7 +9,7 @@ export class DataP5Scetch {
   public perceptron: Perceptron;
   private separationImg: any;
 
-  constructor(private p: p5,
+  constructor(private p: P5,
               private width: number = 400,
               private height: number = 400,
               private brainService: BrainService,

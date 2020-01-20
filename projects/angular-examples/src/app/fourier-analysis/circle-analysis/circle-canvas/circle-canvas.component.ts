@@ -10,8 +10,9 @@ import {
   ViewChild
 } from '@angular/core';
 import * as math from 'mathjs';
-import * as P5 from 'p5';
+import P5 from 'p5';
 import {InputWave} from '../../state/input-wave.model';
+import { Graphics } from 'p5';
 
 const NEG_TWO_PI = -2 * Math.PI;
 
@@ -41,7 +42,7 @@ export class CircleCanvasComponent implements OnChanges, AfterViewInit, OnDestro
   @Input() waveHeight: number;
   @Input() wave: InputWave;
 
-  private sketch: p5;
+  private sketch: P5;
   private frequencyToTest: number;
   private centersOfFrequencies: { [key: number]: CenterData } = {};
   private centers: number[];
@@ -84,7 +85,7 @@ export class CircleCanvasComponent implements OnChanges, AfterViewInit, OnDestro
     this._ngZone.runOutsideAngular(() => new P5(this.initSketch.bind(this), this.canvasContainer));
   }
 
-  initSketch(sketch: p5) {
+  initSketch(sketch: P5) {
     this.sketch = sketch;
 
     const padding = 30;
@@ -94,7 +95,7 @@ export class CircleCanvasComponent implements OnChanges, AfterViewInit, OnDestro
     const frequencyStepWidth = 1.;
     const frequencySteps = (maxFrequencyToTest - minFrequencyToTest) * frequencyStepWidth;
     let calcNextGenerator;
-    let fourierCircleImg: p5 & p5.Graphics;
+    let fourierCircleImg: Graphics;
     const samplesToTake = 3000;
 
 
@@ -259,7 +260,7 @@ export class CircleCanvasComponent implements OnChanges, AfterViewInit, OnDestro
 
     function drawCircleToBuffer(this: CircleCanvasComponent) {
       const radius = (sketch.height - (padding * 2)) / 2;
-      fourierCircleImg = sketch.createGraphics(2 * (radius + padding), 2 * (radius + padding)) as (p5 & p5.Graphics);
+      fourierCircleImg = sketch.createGraphics(2 * (radius + padding), 2 * (radius + padding));
       const drawSamples = this.wave.points.length;
       fourierCircleImg.background(66);
       fourierCircleImg.stroke(255, 255, 255);

@@ -22,7 +22,7 @@ import {ShaderCode, ShaderCodeQuery, ShaderExamplesService, ShaderExamplesUIQuer
 })
 export class ShaderExamplesComponent implements AfterContentInit {
 
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   isLoadingShaders: Observable<boolean>;
   isLoading: Observable<boolean>;
   private animationEnded$: BehaviorSubject<boolean>;

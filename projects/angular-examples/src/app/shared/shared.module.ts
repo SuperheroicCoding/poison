@@ -22,6 +22,8 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {Angulartics2Module} from 'angulartics2';
 import 'hammerjs';
+
+import 'brace/theme/monokai';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {ScThanosModule} from '../../../../sc-thanos/src/lib/sc-thanos.module';
 import {CodeEditorComponent} from './code-editor/code-editor.component';

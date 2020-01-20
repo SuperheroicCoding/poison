@@ -9,7 +9,7 @@ import {ScThanosService} from './sc-thanos.service';
   exports: [ScThanosDirective]
 })
 export class ScThanosModule {
-  static forRoot(options?: Partial<ScThanosOptions>): ModuleWithProviders {
+  static forRoot(options?: Partial<ScThanosOptions>): ModuleWithProviders<ScThanosModule> {
     return {
       ngModule: ScThanosModule,
       providers: [
