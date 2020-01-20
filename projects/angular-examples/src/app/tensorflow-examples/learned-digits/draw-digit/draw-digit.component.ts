@@ -40,7 +40,7 @@ export class DrawDigitComponent implements AfterViewChecked {
 
   private path: Path[] = [];
 
-  constructor(@ViewChild('drawCanvas') private drawCanvas: ElementRef) {
+  constructor(@ViewChild('drawCanvas', {static: true}) private drawCanvas: ElementRef) {
   }
 
   reset() {
