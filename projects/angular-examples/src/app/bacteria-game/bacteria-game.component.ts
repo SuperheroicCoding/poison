@@ -12,7 +12,7 @@ import {
 import {MatDialog} from '@angular/material/dialog';
 import {untilDestroyed} from 'ngx-take-until-destroy';
 import {Observable} from 'rxjs';
-import {distinctUntilChanged, filter, map, take} from 'rxjs/operators';
+import {concatMap, concatMapTo, distinctUntilChanged, filter, map, switchMap, take} from 'rxjs/operators';
 import {ScThanosDirective} from '../../../../sc-thanos/src/public-api';
 import {GameStateQuery} from './state/game-state.query';
 import {GameStateService} from './state/game-state.service';
@@ -92,12 +92,9 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
     this.query.selectWinnerId().pipe(
       filter(value => value != null),
       distinctUntilChanged(),
-      untilDestroyed(this)
-    )
-      .subscribe(value => {
-          this.matDialog.open(WinnerComponent);
-        }
-      );
+      untilDestroyed(this),
+      switchMap(() => this.matDialog.open(WinnerComponent).afterClosed())
+    ).subscribe(() => this.resetGame());
   }
 
 
@@ -118,14 +115,21 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
     this.gameStateService.start();
   }
 
+  private vaporize(): Observable<void> {
+    return this.thanos.vaporize(false)
+      .pipe(take(1));
+  }
+
   resetGame() {
-    this.gameStateService.pause();
-    this.thanos.vaporize(false)
-      .pipe(take(1))
+    this.query.selectCurrentGameState(GameState.PAUSED)
+      .pipe(
+        take(1),
+        switchMap(() => this.vaporize()))
       .subscribe(() => {
         this.gameStateService.reset();
         this.draw(1. / 1000.);
       });
+    this.gameStateService.pause();
   }
 
   private draw(deltaTimeInSec: number) {
@@ -137,10 +141,11 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
       this.cx.fillStyle = 'rgba(0,0,0,0.7)';
       this.cx.fillRect(0, 0, this.width, this.height);
       this.cx.fillStyle = 'rgb(200,200,200)';
-      this.cx.fillRect(this.width / 2 - 50, 0, 20, this.height / 2 - 50);
-      this.cx.fillRect(this.width / 2 - 50, this.height / 2 - 30, 20, this.height / 2 + 30);
-      this.cx.fillRect(this.width / 2 + 30, 0, 20, this.height / 2 + 30);
-      this.cx.fillRect(this.width / 2 + 30, this.height / 2 + 50, 20, this.height / 2 - 50);
+      const wallWidth = 10;
+      this.cx.fillRect(this.width / 2 - 50, 0, wallWidth, this.height / 2 - 50);
+      this.cx.fillRect(this.width / 2 - 50, this.height / 2 - 30, wallWidth, this.height / 2 + 30);
+      this.cx.fillRect(this.width / 2 + 30, 0, wallWidth, this.height / 2 + 30);
+      this.cx.fillRect(this.width / 2 + 30, this.height / 2 + 50, wallWidth, this.height / 2 - 50);
 
       const image = this.cx.getImageData(0, 0, this.width, this.height);
       const data = new Uint8ClampedArray(image.data.buffer);

@@ -171,12 +171,9 @@ export class PlayerService {
 
   @transaction()
   private handleBacEating(width: number, height: number, imageData: Uint8ClampedArray, deltaTimeSec: number) {
-    const players = this.playerQuery.getAll().sort(a => Math.random() - 0.5);
-    const colorToPlayer: { [key: string]: Player } = {};
-    for (const player of players) {
-      const rgb = player.color.slice(0, 3);
-      colorToPlayer[rgb.toString()] = player;
-    }
+
+    const players = this.getPLayerInRandomOrderToEqualifyChances();
+    const colorToPlayer = this.getColorMapOfPlayers(players);
 
     for (const player of players) {
       const bacs = [...player.bacterias];
@@ -191,25 +188,31 @@ export class PlayerService {
         }
 
         let otherPlayers = 0;
+        let otherEnergy = 0;
         let ownPlayers = 0;
+        let ownEnergy = 0;
         let maxAmount = 0;
         let winner: Player = null;
         for (const pId of Object.keys(surroundingPlayers)) {
-          const sPlayer = surroundingPlayers[pId].player;
+          const surroundingPlayer = surroundingPlayers[pId];
+          const sPlayer = surroundingPlayer.player;
           if (sPlayer.id === player.id) {
-            ownPlayers += surroundingPlayers[pId].amount;
+            ownPlayers += surroundingPlayer.amount;
+            ownEnergy += surroundingPlayer.energy;
             continue;
           }
-          if (maxAmount < surroundingPlayers[pId].amount) {
-            maxAmount = surroundingPlayers[pId].amount;
+          if (maxAmount < surroundingPlayer.amount) {
+            maxAmount = surroundingPlayer.amount;
+            otherEnergy += surroundingPlayer.energy;
             winner = sPlayer;
           }
-          otherPlayers += surroundingPlayers[pId].amount;
+          otherPlayers += surroundingPlayer.amount;
         }
+        if (otherEnergy > ownEnergy) {
+          // if (otherPlayers > ownPlayers) {
 
-        if (otherPlayers > ownPlayers) {
-
-          let energyLoss = otherPlayers * energyLossPerOtherBacterium;
+          // let energyLoss = otherPlayers * energyLossPerOtherBacterium;
+          let energyLoss = otherEnergy - ownEnergy;
           if (ownPlayers > 0) {
             energyLoss = energyLoss / ownPlayers;
           }
@@ -229,6 +232,7 @@ export class PlayerService {
             imageData[index + 3] = winner.color[3];
           }
         } else {
+          // gainEnergy
           bacs[i] = {...bacterium, energy: Math.min(bacteriumMaxEnergy, bacterium.energy + deltaTimeSec / bacteriumEnergyRestoreTimeInSec)};
         }
       }
@@ -237,6 +241,19 @@ export class PlayerService {
       }
       this.update(player.id, {bacterias: bacs});
     }
+  }
+
+  private getColorMapOfPlayers(players: Player[]) {
+    const colorToPlayer: { [key: string]: Player } = {};
+    for (const player of players) {
+      const rgb = player.color.slice(0, 3);
+      colorToPlayer[rgb.toString()] = player;
+    }
+    return colorToPlayer;
+  }
+
+  private getPLayerInRandomOrderToEqualifyChances() {
+    return this.playerQuery.getAll().sort(a => Math.random() - 0.5);
   }
 
   moveToIfFree(xStep: number, yStep: number, x: number, y: number,
@@ -268,85 +285,40 @@ export class PlayerService {
                                 imageData: Uint8ClampedArray): { [p: number]: { amount: number, player: Player } } {
     // check if min 3 but more then own colors of N NE E SE S SW W NW are opponent colors
     const result: { [p: number]: { amount: number, player: Player } } = {};
-    if (y > 1) {
-      // check N;
-      const otherPlayer = this.playerOnCell(x, y - 1, imageData, colorToPlayer, width);
-      if (otherPlayer != null) {
-        this.increaseSurroundedByCount(result, otherPlayer);
-      }
-    }
-    if (y > 1 && x < width - 2) {
-      // check NE;
-      const otherPlayer = this.playerOnCell(x + 1, y - 1, imageData, colorToPlayer, width);
-      if (otherPlayer != null) {
-        this.increaseSurroundedByCount(result, otherPlayer);
-      }
-    }
-    if (x < width - 2) {
-      // check E;
-      const otherPlayer = this.playerOnCell(x + 1, y, imageData, colorToPlayer, width);
-      if (otherPlayer != null) {
-        this.increaseSurroundedByCount(result, otherPlayer);
-      }
-    }
 
-    if (x < width - 2 && y < height - 2) {
-      // check SE;
-      const otherPlayer = this.playerOnCell(x + 1, y + 1, imageData, colorToPlayer, width);
-      if (otherPlayer != null) {
-        this.increaseSurroundedByCount(result, otherPlayer);
-      }
-    }
+    const rangeToTest = 2;
 
-    if (y < height - 2) {
-      // check S;
-      const otherPlayer = this.playerOnCell(x, y + 1, imageData, colorToPlayer, width);
-      if (otherPlayer != null) {
-        this.increaseSurroundedByCount(result, otherPlayer);
-      }
-    }
+    const xMin = Math.max(x - rangeToTest, 0);
+    const xMax = Math.min(x + rangeToTest, width);
+    const yMin = Math.max(y - rangeToTest, 0);
+    const yMax = Math.min(y + rangeToTest, height);
 
-    if (x > 1 && y < height - 2) {
-      // check SW;
-      const otherPlayer = this.playerOnCell(x - 1, y + 1, imageData, colorToPlayer, width);
-      if (otherPlayer != null) {
-        this.increaseSurroundedByCount(result, otherPlayer);
-      }
-    }
-
-    if (x > 1) {
-      // check W;
-      const otherPlayer = this.playerOnCell(x - 1, y, imageData, colorToPlayer, width);
-      if (otherPlayer != null) {
-        this.increaseSurroundedByCount(result, otherPlayer);
-      }
-    }
-
-    if (x > 1 && y > 1) {
-      // check NW;
-      const otherPlayer = this.playerOnCell(x - 1, y - 1, imageData, colorToPlayer, width);
-      if (otherPlayer != null) {
-        this.increaseSurroundedByCount(result, otherPlayer);
+    for (let xi = xMin; xi <= xMax; xi++) {
+      for (let yi = yMin; yi <= yMax; yi++) {
+        if (xi !== x && yi !== y) {
+          const [otherPlayer, energy] = this.playerOnCell(xi, yi, imageData, colorToPlayer, width);
+          if (otherPlayer != null) {
+            if (result[otherPlayer.id] == null) {
+              result[otherPlayer.id] = {amount: 0, player: otherPlayer, energy: 0.};
+            }
+            result[otherPlayer.id].amount++;
+            result[otherPlayer.id].energy += energy;
+          }
+        }
       }
     }
 
     return result;
   }
 
-  private increaseSurroundedByCount(result: { [p: number]: { amount: number, player: Player } }, player): void {
-    if (result[player.id] == null) {
-      result[player.id] = {amount: 0, player: player};
-    }
-    result[player.id].amount++;
-  }
-
-  private playerOnCell(x: number, y: number, imageData: Uint8ClampedArray, colorToPlayer: { [p: string]: Player }, width: number) {
+  private playerOnCell(x: number, y: number, imageData: Uint8ClampedArray, colorToPlayer: { [p: string]: Player }, width: number): [Player, number] {
     const testIndex = (x + (y * width)) * 4;
     const currentGridColor = [
       imageData[testIndex],
       imageData[testIndex + 1],
       imageData[testIndex + 2],
     ].toString();
-    return colorToPlayer[currentGridColor];
+    const alphaAsEnergy = imageData[testIndex + 3];
+    return [colorToPlayer[currentGridColor], alphaAsEnergy / 255.];
   }
 }

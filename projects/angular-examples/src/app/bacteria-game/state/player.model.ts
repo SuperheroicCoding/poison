@@ -30,7 +30,7 @@ let playerId = 0;
 export function createPlayer(params: Partial<Player>): Player {
   return {
     id: playerId++,
-    maxSpeed: 200,
+    maxSpeed: 100,
     ...params
   } as Player;
 }
