@@ -311,7 +311,8 @@ export class PlayerService {
     return result;
   }
 
-  private playerOnCell(x: number, y: number, imageData: Uint8ClampedArray, colorToPlayer: { [p: string]: Player }, width: number): [Player, number] {
+  private playerOnCell(x: number, y: number, imageData: Uint8ClampedArray, colorToPlayer: { [p: string]: Player }, width: number):
+    [Player, number] {
     const testIndex = (x + (y * width)) * 4;
     const currentGridColor = [
       imageData[testIndex],

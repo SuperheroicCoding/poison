@@ -12,7 +12,6 @@ export class ShaderExamplesOptionsComponent implements OnInit {
   showFps: Observable<boolean>;
   showCodeEditor: Observable<boolean>;
 
-
   constructor(private shaderExamplesQuery: ShaderExamplesUIQuery, private shaderExamplesService: ShaderExamplesService) {
   }
 

@@ -5,7 +5,7 @@ describe('ScThanosService', () => {
   beforeEach(() => TestBed.configureTestingModule({providers: [ScThanosService]}));
 
   it('should be created', () => {
-    const service: ScThanosService = TestBed.get(ScThanosService);
+    const service: ScThanosService = TestBed.inject(ScThanosService);
     expect(service).toBeTruthy();
   });
 });
