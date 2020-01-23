@@ -8,6 +8,7 @@
     "start-prod": "cross-env NODE_OPTIONS=--max_old_space_size=12000 ng serve --prod --port=4300",
     "build-deps": "npm run asbuild && npm run build-thanos",
     "build-thanos": "ng build sc-thanos",
+    "build-thanos-prod": "ng build sc-thanos --prod",
     "test-thanos": "ng test sc-thanos",
     "test": "ng test angular-examples",
     "lint": "ng lint",
