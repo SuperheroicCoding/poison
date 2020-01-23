@@ -35,9 +35,6 @@
               "projects/angular-examples/src/styles.scss"
             ],
             "scripts": [
-              "node_modules/ace-builds/src-min/theme-monokai.js",
-              "node_modules/ace-builds/src-min/ace.js",
-              "node_modules/ace-builds/src-min/mode-glsl.js",
               "node_modules/vega-lite/build/vega-lite.js"
             ],
             "es5BrowserSupport": true,

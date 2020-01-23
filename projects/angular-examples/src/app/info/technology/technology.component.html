@@ -1,11 +1,11 @@
 <div scThanos #thanos="thanos">
   <mat-card
-    (click)="thanos.vaporize(false);"
-    class="technologyCard"
-    appRaiseCard>
+            (click)="thanos.vaporize(false);"
+            class="technologyCard"
+            appRaiseCard>
     <mat-card-title>
       <a mat-button target="_blank" [href]="link">{{title}}</a>
     </mat-card-title>
-    <img mat-card-image [src]="image">
+    <div class="tech-image" mat-card-image [style.backgroundImage]="'url(' + image + ')'"></div>
   </mat-card>
 </div>

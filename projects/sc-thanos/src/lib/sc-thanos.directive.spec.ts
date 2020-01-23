@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {Component, ViewChild} from '@angular/core';
+import {Component, QueryList, ViewChildren} from '@angular/core';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 import image from '../assets/how-to-be-funny.png';
@@ -16,20 +16,23 @@ describe('ScThanosDirective', () => {
         <img alt="funny-face" style="height: 400px" src="${image}">
       </div>
       <div class="grid-test">
-        <div class="div-without-remove"
-        scThanos
-        #myThanos="thanos">
-          This div should be vaporized when clicked on button and then become visible again!
-            <div class="inner">
+        <sc-thanos class="div-without-remove"
+          #myThanos="thanos">
+            This div should be vaporized when clicked on button and then become visible again!
+        <div class="inner">
+            Inner container
         </div>
-        </div>
+        </sc-thanos>
         <button (click)="myThanos.vaporize(false)">Vaporize div above</button>
       </div>
     `,
     styles: [`
+      * {
+        box-sizing: border-box;
+      }
+
       .div-without-remove {
         display: grid;
-        box-sizing: border-box;
         grid-template-rows: 1fr 1fr 1fr;
         grid-template-columns: 1fr 1fr 1fr;
         place-content: center;
@@ -41,15 +44,15 @@ describe('ScThanosDirective', () => {
       }
 
       .inner {
-        opacity: 0.5;
         border-radius: 50%;
         grid-column: 2;
         grid-row: 1;
         background-image: linear-gradient(to right, azure, darkorchid);
+        text-align: center;
+        padding-top: 1rem;
       }
 
       .grid-test {
-        box-sizing: border-box;
         display: grid;
         grid-template-columns: 1fr;
         grid-template-rows: 1fr auto;
@@ -63,9 +66,9 @@ describe('ScThanosDirective', () => {
     private scThanosDirective: ScThanosDirective;
     showComplete = false;
 
-    @ViewChild(ScThanosDirective)
-    set thanos(thanos: ScThanosDirective) {
-      this.scThanosDirective = thanos;
+    @ViewChildren(ScThanosDirective)
+    set thanos(thanos: QueryList<ScThanosDirective>) {
+      this.scThanosDirective = thanos.first;
     }
 
     startThanos() {
@@ -84,7 +87,7 @@ describe('ScThanosDirective', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ScThanosModule.forRoot({maxParticleCount: 10000, animationLength: 1000}), CommonModule],
+      imports: [ScThanosModule.forRoot({maxParticleCount: 20000, animationLength: 4000}), CommonModule],
       declarations: [HostComponent]
     })
       .compileComponents();
@@ -107,7 +110,7 @@ describe('ScThanosDirective', () => {
     let completedResult: boolean;
 
     beforeEach(() => {
-      thanosService = TestBed.get(ScThanosService);
+      thanosService = TestBed.inject(ScThanosService);
       completedResult = false;
       spyOn(thanosService, 'vaporize').and.callThrough();
     });
@@ -116,7 +119,6 @@ describe('ScThanosDirective', () => {
       whenVaporizeIsCalled();
       thenThanosServiceVaporizeWasCalled();
     });
-
 
     it('should emit when vaporize is complete', async () => {
       await whenVaporizeIsCalled();

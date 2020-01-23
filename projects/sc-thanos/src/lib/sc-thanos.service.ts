@@ -1,17 +1,15 @@
 import {Inject, Injectable, NgZone} from '@angular/core';
-import * as _html2canvas from 'html2canvas';
+
+import html2canvas from 'html2canvas';
 import {animationFrameScheduler, from, interval, Observable} from 'rxjs';
 import {map, switchMap, takeWhile, tap, timeInterval} from 'rxjs/operators';
 import {SC_THANOS_OPTIONS_TOKEN, ScThanosOptions} from './sc-thanos.options';
 import {SimplexNoise} from './simplex-noise';
 
-const html2canvas: Html2CanvasStatic = (_html2canvas as any);
-
 const PARTICLE_BYTE_LENGTH = 10;
 const MIN_PARTICLE_ALPHA = ~~(255 * 0.01);
 const HEIGHT_SCALE = 5;
 const WIDTH_SCALE = 2;
-const DRAW_FLOW_FIELD = true;
 const FLOW_FIELD_RES = 1. / 20.;
 
 interface ParticlesData {
@@ -77,17 +75,15 @@ export class ScThanosService {
     return {r: red, g: red + 1, b: red + 2, a: red + 3};
   }
 
-  private static updateParticles(params: UpdateParticleParams): void {
-    const seed = params.seed;
-    const noise: SimplexNoise = params.noise;
+  private static updateParticles({seed, noise, particlesData, thanosOptions, animationState}: UpdateParticleParams): void {
     const {
       deltaTSec,
       animationT,
       maxWidth,
       maxHeight
-    } = params.animationState;
-    const {animationLength, particleAcceleration} = params.thanosOptions;
-    const {particles, maxParticleX, minParticleY} = params.particlesData;
+    } = animationState;
+    const {particleAcceleration} = thanosOptions;
+    const {particles, maxParticleX, minParticleY} = particlesData;
 
     // the time is used to calculate the vaporization front.
     const time = Math.sin(animationT * (Math.PI / 2)) * 1.1;
@@ -257,8 +253,16 @@ export class ScThanosService {
     elem.style.transition = `opacity ${~~(this.thanosOptions.animationLength * .8)}ms ease-out`;
     const noise = new SimplexNoise({frequency: 0.01, min: 0});
     const seed = (new Date().getDate() * Math.random());
-    const html2CanvasPromise: Html2CanvasPromise<HTMLCanvasElement> =
-      html2canvas(elem, {backgroundColor: null, scale: 1, logging: false, svgRendering: true});
+    const html2CanvasPromise: Promise<HTMLCanvasElement> =
+      html2canvas(elem, {
+        backgroundColor: null,
+        scale: 1,
+        allowTaint: true,
+        windowHeight: window.innerHeight,
+        windowWidth: window.innerWidth,
+        scrollY:  -window.scrollY,
+      });
+
     return from(html2CanvasPromise).pipe(
       map(canvasFromHtmlElem => {
         const canvasAndParticles = ScThanosService.prepareCanvasForVaporize(canvasFromHtmlElem, this.thanosOptions.maxParticleCount);

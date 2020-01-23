@@ -22,12 +22,9 @@
     "rxjs"
   ],
   "peerDependencies": {
-    "html2canvas": "^1.0.0-rc.1",
-    "@angular/common": "^8.0.0-rc.3",
-    "@angular/core": "^8.0.0-rc.3",
-    "rxjs": "^6.5.2"
-  },
-  "devDependencies": {
-    "@types/html2canvas": "^0.0.35"
+    "html2canvas": "^1.0.0-rc.5",
+    "@angular/common": "^9.0.0-rc.10",
+    "@angular/core": "^9.0.0-rc.10",
+    "rxjs": "^6.5.4"
   }
 }

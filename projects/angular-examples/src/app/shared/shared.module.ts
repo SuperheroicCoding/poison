@@ -23,16 +23,19 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {Angulartics2Module} from 'angulartics2';
 import 'hammerjs';
 
-import 'brace/theme/monokai';
-import {AceEditorModule} from 'ng2-ace-editor';
+// import 'brace/theme/monokai';
+// import {AceEditorModule} from 'ng2-ace-editor';
 import {ScThanosModule} from '../../../../sc-thanos/src/lib/sc-thanos.module';
-import {CodeEditorComponent} from './code-editor/code-editor.component';
+// import {CodeEditorComponent} from './code-editor/code-editor.component';
 import {RaiseCardDirective} from './raise-card.directive';
 import {RenderShaderComponent} from './render-shader/render-shader.component';
 import {SafeHtmlPipe} from './safe-html.pipe';
 
 @NgModule({
-  imports: [CommonModule, AceEditorModule],
+  imports: [
+    CommonModule,
+    // AceEditorModule
+  ],
   exports: [
     CommonModule,
     FormsModule,
@@ -57,13 +60,17 @@ import {SafeHtmlPipe} from './safe-html.pipe';
     MatProgressSpinnerModule,
     RaiseCardDirective,
     SafeHtmlPipe,
-    AceEditorModule,
-    CodeEditorComponent,
+    // AceEditorModule,
+    // CodeEditorComponent,
     RenderShaderComponent,
     Angulartics2Module,
     ScThanosModule
   ],
-  declarations: [RaiseCardDirective, SafeHtmlPipe, CodeEditorComponent, RenderShaderComponent]
+  declarations: [
+    RaiseCardDirective,
+    SafeHtmlPipe,
+    // CodeEditorComponent,
+    RenderShaderComponent]
 })
 export class SharedModule {
 }

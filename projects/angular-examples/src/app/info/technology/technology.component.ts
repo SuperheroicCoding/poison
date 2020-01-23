@@ -7,9 +7,9 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class TechnologyComponent implements OnInit {
 
-  @Input() title;
-  @Input() link;
-  @Input() image;
+  @Input() title: string;
+  @Input() link: string ;
+  @Input() image: string;
 
   constructor() {
   }
