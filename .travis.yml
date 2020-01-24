@@ -13,12 +13,17 @@ addons:
 install:
 - npm ci
 - npm install codecov -g
-script:
 - node -p "v8.getHeapStatistics().total_available_size / (1024 * 1024)"
-- npm run lint
-- npm run test-thanos -- --watch=false --progress=false --browsers=ChromeHeadlessCI
-- npm run build-deps
-- npm run test -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
+jobs:
+  include:
+    - stage: lint
+      script: npm run lint
+    - stage: test-thanos
+      script: npm run test-thanos -- --watch=false --progress=false --browsers=ChromeHeadlessCI
+    - stage: test-angular-examples
+      script:
+        - npm run build-deps
+        - npm run test -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
 after_success:
 - codecov
 before_deploy:
