@@ -14,6 +14,7 @@ install:
   - npm ci
   - npm install codecov -g
   - node -p "v8.getHeapStatistics().total_available_size / (1024 * 1024)"
+script: true
 jobs:
   include:
     - stage: test
