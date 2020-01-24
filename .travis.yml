@@ -1,6 +1,6 @@
 dist: trusty
-sudo: false
 language: node_js
+os: linux
 node_js:
 - '10'
 env:
@@ -30,14 +30,14 @@ after_success:
 before_deploy:
 - npm run buildS3
 deploy:
-  skip_cleanup: true
+  cleanup: false
   provider: s3
   access_key_id: AKIARJIXB7N7V2AUUGU2
   secret_access_key:
     secure: co1yOsQGtLcGxMRTvUrLHzpFQmriFIDldfkVBOy5mAWCed6G9J8auVHhMj4yuQbwKHoMeA78lNTGmlPyoOgsj4jXl0/e/DhSZCWyiUzG0oWdQwDJIQ3H0z010kyEIwxL7A7eMJg9ZgjZQyiAg7WVWZ293el5MjKbagX+hMAe22yE5uE5HnJFKMWZGpdyCk4cvtJRtGEwwz3v29rTVxr5dUgodwE2bHgEKxfMkTx/7ID+ZwYEqYQg+xVszNedAVUXH3xt6YuH4do68tUUKnj0zSoYa7mX8dQ4oqDYZGkICITjKY5zBSoTMWSZL7XC/TTS5Gx9AiCZCWYhAkkohO3B8VhRl8FtCnKKP3KUcLjziV41tigBSADws8/CL0SSSWwUOm7ZlBkF920R83M4tH4kI1Z5eMALqdBktffhc8hkTBVLB+zfKmzF58N8LaKeL3sCH90OkWNdGg76fmbvw+KBTdoBrtkBeMD243hSgq6k7t9PBGZS0d23wPdMdCQ4fN80Qwc1KfJ7Ro957gffTBQ/ugnngUgy6wiOEIciTEJw/9NhONYVd6+s6vHm1EyLrXYywJiOJ1RBwkJsDBjcNWIzXpA2zIsGaw0EyPlnUe/366KVlnHapmsEz9dkK2kbPOIJ064W0gHKJJsJ2agynAfumN4L1NudhBNLhRL+mfTkOec=
   bucket: superheroiccoding.de
-  local-dir: distS3
-  upload-dir: angularExamples
+  local_dir: distS3
+  upload_dir: angularExamples
   region: eu-central-1
   acl: public_read
   detect_encoding: true
