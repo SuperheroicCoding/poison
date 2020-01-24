@@ -10,12 +10,14 @@ cache:
 - npm
 addons:
   chrome: stable
-install:
-- npm ci
-- npm install codecov -g
-- node -p "v8.getHeapStatistics().total_available_size / (1024 * 1024)"
+
 jobs:
   include:
+    - stage: install
+    - script:
+      - npm ci
+      - npm install codecov -g
+      - node -p "v8.getHeapStatistics().total_available_size / (1024 * 1024)"
     - stage: test
     - script: npm run lint
       name: lint
@@ -24,9 +26,10 @@ jobs:
     - script:
         - npm run build-deps
         - npm run test -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
-        - codecov
-      name: test angular examples
 
+      name: test angular examples
+after_success:
+- codecov
 before_deploy:
 - npm run buildS3
 deploy:
