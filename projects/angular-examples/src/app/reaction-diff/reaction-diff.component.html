@@ -94,10 +94,9 @@
              [(ngModel)]="numberWebWorkers"
              (change)="updateNumberOfWebWorkers()">
     </mat-form-field>
-    <mat-checkbox disabled="disabled" [(ngModel)]="useGpu" (change)="updateUseGpu()" [matTooltip]="'Currently under development'">
+    <mat-checkbox [(ngModel)]="useGpu" (change)="updateUseGpu()">
       Use gpu.js
     </mat-checkbox>
-11
     <div *ngIf="showFps">Calculation needs: {{calculationTime$ | async}}ms</div>
   </mat-card>
 
@@ -152,7 +151,8 @@
       >
     </mat-form-field>
     <br>
-    <mat-select placeholder="Example parameter config" [(ngModel)]="selectedExample " (selectionChange)="setSelection($event)">
+    <mat-select placeholder="Example parameter config" [(ngModel)]="selectedExample "
+                (selectionChange)="setSelection($event)">
       <mat-option *ngFor="let example of examples" [value]="example">
         {{ example }}
       </mat-option>

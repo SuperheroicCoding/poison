@@ -1,9 +1,10 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {IKernelRunShortcut} from 'gpu.js';
 
 import {animationFrameScheduler, combineLatest, interval, Observable, of, Subscription, TimeInterval} from 'rxjs';
 import {map, mergeMap, scan, startWith, switchMap, timeInterval} from 'rxjs/operators';
-import {GpuJsService, GraphicalKernelFunction} from '../core/gpujs.service';
+import {GpuJsService} from '../core/gpujs.service';
 
 @Component({
   selector: 'app-some-gpu-calculation',
@@ -13,12 +14,12 @@ import {GpuJsService, GraphicalKernelFunction} from '../core/gpujs.service';
 export class SomeGpuCalculationComponent implements AfterViewInit, OnDestroy {
 
 
-  @ViewChild('gpuResult', { static: true }) gpuResult: ElementRef;
+  @ViewChild('gpuResult', {static: true}) gpuResult: ElementRef;
 
   additionForm: FormGroup;
   calculationTime$: Observable<string>;
 
-  private gpuColorizer: GraphicalKernelFunction;
+  private gpuColorizer: IKernelRunShortcut;
   private subscription: Subscription;
 
   constructor(private fb: FormBuilder, private gpu: GpuJsService) {
@@ -83,8 +84,7 @@ export class SomeGpuCalculationComponent implements AfterViewInit, OnDestroy {
   private createGPUColorizer(useGPU: boolean = true) {
     this.gpu.setUseGPU(useGPU);
     this.gpuColorizer = this.gpu.createKernel(
-      function (frameTime, r, g, b, sinDiv, speed) {
-
+      function (frameTime: number, r: number, g: number, b: number, sinDiv: number, speed: number) {
         const framedSpeed = frameTime * speed;
         const x = this.thread.x;
         const y = this.thread.y;
@@ -98,10 +98,12 @@ export class SomeGpuCalculationComponent implements AfterViewInit, OnDestroy {
           b * Math.tan(waveParam2),
           1
         );
-      }).setGraphical(true);
+      })
+      .setGraphical(true)
+      .setDynamicOutput(true);
   }
 
-  createCanvasWithGPU(frameTime: number, r: number, g: number, b: number, sinDivider: number, speed: number) {
+  createCanvasWithGPU(frameTime: number, r: number, g: number, b: number, sinDivider: number, speed: number): void {
     const canvas: HTMLCanvasElement = this.gpuResult.nativeElement;
     const ctx = canvas.getContext('2d');
     const width = canvas.clientWidth;
@@ -115,8 +117,8 @@ export class SomeGpuCalculationComponent implements AfterViewInit, OnDestroy {
       b / 255,
       sinDivider,
       speed);
+    const gpuCanvas: HTMLCanvasElement = this.gpuColorizer.canvas;
 
-    const gpuCanvas: HTMLCanvasElement = this.gpuColorizer.getCanvas();
     ctx.drawImage(gpuCanvas, 0, 0);
     performance.mark('createCanvasWithGPU-end');
     performance.measure('createCanvasWithGPU', 'createCanvasWithGPU-start', 'createCanvasWithGPU-end');

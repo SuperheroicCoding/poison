@@ -4,7 +4,7 @@
     return (value1 * (1.0 - ratio)) + (value2 * ratio);
   }
 
-  const usedFunctions = {mixValues};
+  const usedFunctions = [mixValues];
 
   function imageKernel(grid) {
 
@@ -22,16 +22,16 @@
     const ba = 0.8;
 
     // b color
-    const rb = 0;
-    const gb = 0;
+    const rb = 0.;
+    const gb = 0.;
     const bb = bVal * 0.4;
 
-    if (aVal === 0) {
+    if (aVal === 0.) {
       this.color(
         mixValues(rbg, rb, bVal),
         mixValues(gbg, gb, bVal),
         mixValues(bbg, bb, bVal));
-    } else if (bVal === 0) {
+    } else if (bVal === 0.) {
       this.color(
         mixValues(rbg, ra, 0.5),
         mixValues(gbg, ga, 0.5),

@@ -1,96 +1,23 @@
 import {Injectable} from '@angular/core';
-import * as GpuJs from 'gpu.js';
-
-export interface BuildKernelSettings {
-  mode?: 'gpu' | 'cpu';
-  output?: number[];
-  debug?: boolean;
-}
-
-
-export interface KernelFunction<T> {
-  (arg?: any): T;
-
-  (...argArray: any[]): T;
-
-  setGraphical(on: boolean): GraphicalKernelFunction;
-
-  setOutput(outputDef: number[]): this;
-
-  setFloatTextures(activate: boolean): this;
-
-  setFloatOutput(activate: boolean): this;
-
-  setOutputToTexture(outputToTexture: boolean): TextureKernelFunction;
-
-  setFunctions(functions: Function[] | { [key: string]: (...argArray: any[]) => number }): this;
-
-  setConstants(constants: { [key: string]: number }): this;
-
-  setHardcodeConstants(hardcode: boolean): this;
-}
-
-
-export interface GraphicalKernelFunction extends KernelFunction<void> {
-  getCanvas(): HTMLCanvasElement;
-}
-
-export interface TextureKernelFunction extends KernelFunction<GpuJsTexture> {
-  detachTextureCache(): void;
-}
-
-
-export interface GPUJS {
-  createKernel(kernelFunction: Function, parameters?: { mode: 'gpu' | 'cpu', debug?: boolean }): KernelFunction<ArrayLike<number>>;
-
-  createKernelMap(kernels: { [key: string]: Function }, megaKernel: Function): KernelFunction<{ [key: string]: ArrayLike<number> }>;
-
-  combineKernels(kernel1: KernelFunction<GpuJsTexture>, kernel2: KernelFunction<GpuJsTexture>, megaKernel: Function):
-    KernelFunction<ArrayLike<number>>;
-
-  addFunction(func: Function): void;
-}
-
-export interface GpuJsTexture {
-  delete();
-
-  toArray(gpuJs: GPUJS): ArrayLike<number>;
-}
-
-
-export const inp: (array: ArrayLike<number> | GpuJsTexture, dimensions: number[] | { x: number, y?: number, z?: number }) => any =
-  (GpuJs as any).input;
+import {GPU, IGPUKernelSettings, IKernelRunShortcut, KernelFunction} from 'gpu.js';
 
 @Injectable()
-export class GpuJsService implements GPUJS {
+export class GpuJsService {
 
-  private delegateGPU;
+  private delegateGPU: GPU;
 
   constructor() {
     const mode = 'gpu';
-    this.delegateGPU = new GpuJs({mode});
+    this.delegateGPU = new GPU({mode});
   }
 
-  createKernel(kernelFunction: Function | string, settings?: BuildKernelSettings): KernelFunction<ArrayLike<number>> {
+  createKernel(kernelFunction: KernelFunction, settings?: IGPUKernelSettings): IKernelRunShortcut {
     return this.delegateGPU.createKernel(kernelFunction, settings);
   }
 
-  createKernelMap(kernels: { [key: string]: Function }, megaKernelFunc: Function): KernelFunction<{ [key: string]: ArrayLike<number> }> {
-    return this.delegateGPU.createKernelMap(kernels, megaKernelFunc);
-  }
-
-  combineKernels(kernel1: KernelFunction<ArrayLike<number> | GpuJsTexture>,
-                 kernel2: KernelFunction<ArrayLike<number> | GpuJsTexture>,
-                 megaKernel: Function): KernelFunction<ArrayLike<number>> {
-    return this.delegateGPU.combineKernels(kernel1, kernel2, megaKernel);
-  }
-
-  setUseGPU(useGPU: boolean = true): GPUJS {
-    return this.delegateGPU = new GpuJs({mode: useGPU ? 'gpu' : 'cpu'}) as GPUJS;
-  }
-
-  addFunction(func: Function) {
-    return this.delegateGPU.addFunction(func);
+  setUseGPU(useGPU: boolean = true): GpuJsService {
+    this.delegateGPU = new GPU({mode: useGPU ? 'gpu' : 'cpu'});
+    return this;
   }
 
 }

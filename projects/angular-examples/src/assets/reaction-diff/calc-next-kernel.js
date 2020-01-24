@@ -49,20 +49,20 @@
   function calcWeightedSum(grid, fluid, weights) {
     return cellValue(grid, fluid, -1.0, 1.0) * weights[0] +
       cellValue(grid, fluid, 0.0, 1.0) * weights[1] +
-      cellValue(grid, fluid, 1, 1.0) * weights[2] +
+      cellValue(grid, fluid, 1., 1.0) * weights[2] +
       cellValue(grid, fluid, -1.0, 0.0) * weights[3] +
       cellValue(grid, fluid, 0.0, 0.0) * weights[4] +
-      cellValue(grid, fluid, 1, 0.0) * weights[5] +
-      cellValue(grid, fluid, -1.0, -1) * weights[6] +
-      cellValue(grid, fluid, 0.0, -1) * weights[7] +
-      cellValue(grid, fluid, 1, -1) * weights[8];
+      cellValue(grid, fluid, 1., 0.0) * weights[5] +
+      cellValue(grid, fluid, -1.0, -1.) * weights[6] +
+      cellValue(grid, fluid, 0.0, -1.) * weights[7] +
+      cellValue(grid, fluid, 1., -1.) * weights[8];
   }
 
   function calcNextA(a, dA, laplaceA, abb, f) {
     return a +
       (dA * laplaceA) -
       abb +
-      (f * (1 - a));
+      (f * (1. - a));
   }
 
   function calcFluidBToAdd(grid, x, y, radius) {
@@ -73,11 +73,11 @@
     const radPos = (i * i) + (j * j);
 
     // we only want to change values for fluid B (oddEvenMod = 1) and when radius² >= radPos.
-    const fluidBToAdd = isFluidB * smoothy(radius * radius, 0, radPos);
+    const fluidBToAdd = isFluidB * smoothy(radius * radius, 0., radPos);
     return limit(fluidBToAdd, 0.0, 1.0);
   }
 
-  const usedFunctions = {
+  const usedFunctions = [
     whenLe,
     whenGe,
     whenLt,
@@ -91,7 +91,7 @@
     calcWeightedSum,
     calcFluidBToAdd,
     calcNextA
-  };
+  ];
 
   function calcNextKernel(grid, weights, calcParams, addChemicalsParams) {
     const dA = calcParams[0];
@@ -120,10 +120,10 @@
     const fluidB = grid[1][this.thread.y][this.thread.x] + (addChems * calcFluidBToAdd(grid, x, y, radius));
     const abb = fluidA * fluidB * fluidB;
 
-    const fluid = (this.thread.z - 1) * -calcNextA(fluidA, dA, laplaceA, abb, fT)
+    const fluid = (this.thread.z - 1.) * -calcNextA(fluidA, dA, laplaceA, abb, fT)
       + (this.thread.z * (fluidB + (dB * laplaceB) + abb - ((kT + fT) * fluidB)));
 
-    return limit(fluid, 0, 1);
+    return limit(fluid, 0., 1.);
   }
   return {usedFunctions, calcNextKernel};
 })();
