@@ -83,7 +83,7 @@
     "akita-schematics": "^2.0.1",
     "assemblyscript": "^0.8.1",
     "aws-sdk": "^2.608.0",
-    "axios": "^0.19.2",
+    "axios": "^0.18.1",
     "codelyzer": "^5.1.2",
     "cross-env": "^5.2.0",
     "firebase-admin": "^8.9.1",
