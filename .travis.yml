@@ -16,16 +16,17 @@ install:
 - node -p "v8.getHeapStatistics().total_available_size / (1024 * 1024)"
 jobs:
   include:
-    - stage: lint
-      script: npm run lint
-    - stage: test-thanos
-      script: npm run test-thanos -- --watch=false --progress=false --browsers=ChromeHeadlessCI
-    - stage: test-angular-examples
-      script:
+    - stage: test
+    - script: npm run lint
+      name: lint
+    - script: npm run test-thanos -- --watch=false --progress=false --browsers=ChromeHeadlessCI
+      name: test-thanos
+    - script:
         - npm run build-deps
         - npm run test -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
-after_success:
-- codecov
+        - codecov
+      name: test angular examples
+
 before_deploy:
 - npm run buildS3
 deploy:
