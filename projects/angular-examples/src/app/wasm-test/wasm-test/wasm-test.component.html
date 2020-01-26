@@ -36,20 +36,22 @@
         </h3>
       </div>
     </div>
-
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button color="accent" [disabled]="(fibRunning$ | async) || !fibOptionsForm.valid"
+    <button mat-raised-button color="accent"
+            [disabled]="(fibError$ | async) || (fibRunning$ | async) || !fibOptionsForm.valid"
             (click)="calcFib()">
       <span>Calc fibonacci!</span>
     </button>
-    <button mat-raised-button color="accent" [disabled]="(fibRunning$ | async) || !fibOptionsForm.valid"
+    <button mat-raised-button color="accent"
+            [disabled]="(fibError$ | async) || (fibRunning$ | async) || !fibOptionsForm.valid"
             (click)="calcFibMem()">
       <span>Fibonacci with memoize!</span>
     </button>
     <div class="calc-spinner">
       <mat-spinner color="accent" *ngIf="(fibRunning$ | async)" [diameter]="30"></mat-spinner>
     </div>
+    <mat-error *ngIf="fibError$ | async as error">{{error}}</mat-error>
   </mat-card-actions>
 </mat-card>
 

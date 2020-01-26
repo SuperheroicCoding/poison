@@ -19,6 +19,7 @@ export class WasmTestComponent implements OnInit, OnDestroy {
   fibOptionsForm: FormGroup;
   private persistForm: PersistNgFormPlugin<any>;
   private subscription: Subscription;
+  fibError$: Observable<any>;
 
   constructor(private wasmTestQuery: WasmTestQuery,
               private wasmTestService: WasmTestService,
@@ -31,6 +32,7 @@ export class WasmTestComponent implements OnInit, OnDestroy {
     this.fibN$ = this.wasmTestQuery.selectFibN();
     this.fibResult$ = this.wasmTestQuery.selectFibResult();
     this.isLoading$ = this.wasmTestQuery.selectLoading();
+    this.fibError$ = this.wasmTestQuery.selectError();
 
     this.fibOptionsForm = this.builder.group({
       fibN: this.builder.control(

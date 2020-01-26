@@ -1,11 +1,13 @@
 import {Injectable} from '@angular/core';
-import {delay, filter, switchMapTo, take, tap} from 'rxjs/operators';
+import {from} from 'rxjs';
+import {delay, filter, switchMap, switchMapTo, take, tap} from 'rxjs/operators';
+import {mapWorker} from '../../rx/operator/map-worker';
 import {WasmTestQuery} from './wasm-test.query';
 import {WasmTestStore} from './wasm-test.store';
+import loader from 'assemblyscript/lib/loader';
+import {default as FibModule} from '@fib-wasm';
 
-declare var WebAssembly;
-
-function fibJS(n: number) {
+function fibJS(n: number): any | number {
   if (n < 2) {
     return n;
   }
@@ -14,12 +16,12 @@ function fibJS(n: number) {
 
 const memoize = Array<number>(50);
 
-function fibMemJS(nth: number) {
+function fibMemJS(nth: number): any | number {
   memoize.fill(-1, 0, 50);
   return fibMemRec(nth);
 }
 
-function fibMemRec(n: number) {
+function fibMemRec(n: number): any | number {
   if (n < 2) {
     return n;
   }
@@ -40,26 +42,36 @@ export class WasmTestService {
 
   constructor(private wasmTestStore: WasmTestStore,
               private wasmTestQuery: WasmTestQuery) {
-    this.instantiateWasm('assets/wasm/fib.wasm').then(result => {
-      this.fib = result['fib'];
-      this.fibMem = result['fibMem'];
-      this.wasmTestStore.setLoading(false);
-    });
+    this.instantiateWasm()
+      .then(result => {
+        this.fib = result.fib;
+        this.fibMem = result.fibMem;
+      })
+      .catch(e => {
+        console.error(e);
+        this.wasmTestStore.setError('Error loading WASM module!');
+      })
+      .finally(() => this.wasmTestStore.setLoading(false));
   }
 
-  private async instantiateWasm(url: string) {
-    // fetch the wasm file
-    const wasmFile = await fetch(url);
-
-    // convert it into a binary array
-    const buffer = await wasmFile.arrayBuffer();
-    const results = await WebAssembly.instantiate(buffer,
-      {env: {logRecCalls: (x: number) => console.log('wasm fibonacci recursive calls:', x)}}
-    );
-    return results.instance.exports;
+  private async instantiateWasm(): Promise<typeof FibModule> {
+    const fibImports = {
+      index: {
+        logRecCalls(recCalls) {
+          console.log('Reccalls: ', recCalls);
+        }
+      },
+      env: {
+        abort(_msg, _file, line, column) {
+          console.error('abort called at index.ts:' + line + ':' + column);
+        },
+        memory: new WebAssembly.Memory({initial: 256}),
+      }
+    };
+    return loader.instantiateStreaming<typeof FibModule>(fetch('build/untouched.wasm'), fibImports);
   }
 
-  startFibCalc() {
+  startFibCalc(): void {
     this.wasmTestQuery.selectLoading().pipe(
       filter(loading => !loading),
       switchMapTo(this.wasmTestQuery.selectFibN()),
@@ -79,10 +91,16 @@ export class WasmTestService {
           fibRunning: false, fibResult: {fibOfN: wasmFib, fibWasmTime, fibJSTime, n}
         });
       })
-    ).subscribe();
+    ).subscribe({error: (error) => this.handleCalculationError(error)});
   }
 
-  startFibMemCalc() {
+  private handleCalculationError(error: any): void {
+    console.error(error);
+    this.wasmTestStore.setError('Error calculating Fibonacci number');
+    this.wasmTestStore.setLoading(false);
+  }
+
+  startFibMemCalc(): void {
     this.wasmTestQuery.selectLoading().pipe(
       filter(loading => !loading),
       switchMapTo(this.wasmTestQuery.selectFibN()),
@@ -99,10 +117,16 @@ export class WasmTestService {
         const fibJSTime = window.performance.now() - startTime;
 
         this.wasmTestStore.update({
-          fibRunning: false, fibResult: {fibOfN: wasmFib, fibWasmTime, fibJSTime, n}
+          fibRunning: false,
+          fibResult: {
+            n,
+            fibOfN: wasmFib,
+            fibWasmTime,
+            fibJSTime,
+          }
         });
       })
-    ).subscribe();
+    ).subscribe({error: err => this.handleCalculationError(err)});
   }
 }
 

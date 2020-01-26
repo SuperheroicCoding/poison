@@ -1,7 +1,4 @@
-import 'assemblyscript/assembly';
-import 'allocator/arena';
-
-declare function logRecCalls(v: i32): void;
+export declare function logRecCalls(v: i32): void;
 
 let recCalls: i32 = 0;
 
@@ -15,12 +12,12 @@ function fibRec(n: i32): i32 {
 
 export function fib(n: i32): i32 {
   recCalls = 0;
-  const result: i32 = fibRec(n);
+  let result: i32 = fibRec(n);
   logRecCalls(recCalls);
   return result;
 }
 
-const memoize: Array<i32> = new Array<i32>(50);
+let memoize: Array<i32> = new Array<i32>(50);
 
 export function fibMem(n: i32): i32 {
   recCalls = 0;
@@ -31,7 +28,7 @@ export function fibMem(n: i32): i32 {
     i++;
   }
 
-  const result: i32 = fibRecMem(n);
+  let result: i32 = fibRecMem(n);
   logRecCalls(recCalls);
   return result;
 }
@@ -44,7 +41,7 @@ function fibRecMem(n: i32): i32 {
     return n;
   }
   recCalls++;
-  const result: i32 = fibRecMem(n - 1) + fibRecMem(n - 2);
+  let result: i32 = fibRecMem(n - 1) + fibRecMem(n - 2);
   memoize[n] = result;
   return result;
 }
