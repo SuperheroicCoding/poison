@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {GPU, IGPUKernelSettings, IKernelRunShortcut, KernelFunction} from 'gpu.js';
+import {GPU, IGPUKernelSettings, IGPUSettings, IKernelRunShortcut, KernelFunction} from 'gpu.js';
 
 @Injectable()
 export class GpuJsService {
@@ -15,8 +15,8 @@ export class GpuJsService {
     return this.delegateGPU.createKernel(kernelFunction, settings);
   }
 
-  setUseGPU(useGPU: boolean = true): GpuJsService {
-    this.delegateGPU = new GPU({mode: useGPU ? 'gpu' : 'cpu'});
+  setUseGPU(useGPU: boolean = true, settings?: Partial<IGPUSettings>): GpuJsService {
+    this.delegateGPU = new GPU({mode: useGPU ? 'gpu' : 'cpu', ...settings});
     return this;
   }
 

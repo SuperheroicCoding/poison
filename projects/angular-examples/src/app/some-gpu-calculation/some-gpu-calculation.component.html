@@ -4,8 +4,11 @@
     <mat-card-title>An example utilizing gpu.js</mat-card-title>
     <mat-card-subtitle>No friggeling shader code needed for this</mat-card-subtitle>
   </mat-card-title>
-  <canvas class="mat-card-image full-height" #gpuResult></canvas>
-  <div>Calculation time with {{additionForm.get('useGPU').value ? 'GPU': 'CPU'}} : {{(calculationTime$ | async)}}ms
+  <div class="canvas-container">
+    <canvas class="full-height" [style.oppacitiy]="additionForm.get('useGPU').value ? 1: 0" #gpuCanvas></canvas>
+    <canvas class="full-height" [style.oppacity]="additionForm.get('useGPU').value ? 0: 1" #gpu2dCanvas></canvas>
+  </div>
+  <div>Calculation time with {{additionForm.get('useGPU').value ? 'GPU' : 'CPU'}} : {{(calculationTime$ | async)}}ms
   </div>
   <mat-card-content>
     <form class="gpu-form" [formGroup]="additionForm" novalidate>
@@ -43,15 +46,14 @@
         <mat-chip color="warn">{{additionForm.get('b').value}}</mat-chip>
       </div>
       <div class="full-width">
-        <span>Repeativness</span>
+        <span>Repeatition</span>
         <mat-slider
           thumb-label="true"
-          invert="true"
           min="1"
-          max="200"
-          formControlName="sinDivider">
+          max="100"
+          formControlName="repetition">
         </mat-slider>
-        <mat-chip color="accent">{{additionForm.get('sinDivider').value}}</mat-chip>
+        <mat-chip color="accent">{{additionForm.get('repetition').value}}</mat-chip>
       </div>
       <div class="full-width">
         <span>Speed</span>

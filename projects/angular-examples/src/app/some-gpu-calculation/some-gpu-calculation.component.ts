@@ -2,9 +2,19 @@ import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angul
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {IKernelRunShortcut} from 'gpu.js';
 
-import {animationFrameScheduler, combineLatest, interval, Observable, of, Subscription, TimeInterval} from 'rxjs';
-import {map, mergeMap, scan, startWith, switchMap, timeInterval} from 'rxjs/operators';
+import {animationFrameScheduler, combineLatest, concat, interval, Observable, of, scheduled, Subscription, TimeInterval} from 'rxjs';
+import {concatAll, debounceTime, distinctUntilChanged, map, mergeMap, scan, startWith, tap, timeInterval} from 'rxjs/operators';
 import {GpuJsService} from '../core/gpujs.service';
+
+interface Configuration {
+  r: number;
+  g: number;
+  b: number;
+  repetition: number;
+  speed: number;
+  useGPU: boolean;
+}
+
 
 @Component({
   selector: 'app-some-gpu-calculation',
@@ -13,8 +23,8 @@ import {GpuJsService} from '../core/gpujs.service';
 })
 export class SomeGpuCalculationComponent implements AfterViewInit, OnDestroy {
 
-
-  @ViewChild('gpuResult', {static: true}) gpuResult: ElementRef;
+  @ViewChild('gpuCanvas') gpuCanvas: ElementRef;
+  @ViewChild('gpu2dCanvas') gpu2dCanvas: ElementRef;
 
   additionForm: FormGroup;
   calculationTime$: Observable<string>;
@@ -25,7 +35,6 @@ export class SomeGpuCalculationComponent implements AfterViewInit, OnDestroy {
   constructor(private fb: FormBuilder, private gpu: GpuJsService) {
     this.createForm();
 
-    this.createGPUColorizer();
     this.calculationTime$ = interval(500).pipe(
       mergeMap(ignored => of(performance.getEntriesByName('createCanvasWithGPU'))),
       map((measures: PerformanceMeasure[]) => {
@@ -49,27 +58,36 @@ export class SomeGpuCalculationComponent implements AfterViewInit, OnDestroy {
       r: [255, [Validators.required, Validators.min(0), Validators.max(255)]],
       g: [255, [Validators.required, Validators.min(0), Validators.max(255)]],
       b: [255, [Validators.required, Validators.min(0), Validators.max(255)]],
-      sinDivider: [100, [Validators.required, Validators.min(1), Validators.max(200)]],
+      repetition: [1, [Validators.required, Validators.min(1), Validators.max(100)]],
       speed: [20, [Validators.required, Validators.min(1), Validators.max(100)]],
       useGPU: [true, [Validators.required]]
     });
   }
 
   ngAfterViewInit(): void {
-    const gpuColorizerOptions$ = interval(Math.floor(1000 / 120), animationFrameScheduler).pipe(
-      timeInterval<number>(),
-      scan<TimeInterval<number>, number>((acc, value) => acc + value.interval, 0),
-      switchMap((frameTime) => combineLatest(
-        of(frameTime),
-        this.additionForm.get('r').valueChanges.pipe(startWith(255)),
-        this.additionForm.get('g').valueChanges.pipe(startWith(255)),
-        this.additionForm.get('b').valueChanges.pipe(startWith(255)),
-        this.additionForm.get('sinDivider').valueChanges.pipe(startWith(100)),
-        this.additionForm.get('speed').valueChanges.pipe(startWith(20), map((speed) => speed / 100))
-      ))
-    );
-    this.subscription = gpuColorizerOptions$.subscribe(([frameTime, r, g, b, sinDivider, speed]) =>
-      this.createCanvasWithGPU(frameTime, r, g, b, sinDivider, speed));
+    this.createGPUColorizer(this.additionForm.get('useGPU').value);
+    const config$: Observable<Partial<Configuration>> =
+      (this.additionForm.valueChanges as Observable<Configuration>).pipe(
+        startWith(this.additionForm.value as Configuration),
+        map(({r, g, b, repetition, speed}) => (
+            {r, g, b, repetition, speed}
+          )
+        ),
+        distinctUntilChanged(),
+        debounceTime(300)
+      );
+
+    const gpuColorizerFrames$ =
+      interval(Math.floor(1000 / 120), animationFrameScheduler).pipe(
+        timeInterval<number>(),
+        scan<TimeInterval<number>, number>((acc, value) => acc + value.interval, 0),
+      );
+
+    const calculateNextFrame$ = combineLatest([gpuColorizerFrames$, config$]).pipe(
+      map(([frameTime, {r, g, b, repetition, speed}]) => ({frameTime, r, g, b, repetition, speed})));
+
+    this.subscription = calculateNextFrame$.subscribe(config =>
+      this.calculateNextFrame(config));
 
     this.subscription.add(
       this.additionForm.get('useGPU').valueChanges
@@ -81,45 +99,48 @@ export class SomeGpuCalculationComponent implements AfterViewInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  private createGPUColorizer(useGPU: boolean = true) {
-    this.gpu.setUseGPU(useGPU);
-    this.gpuColorizer = this.gpu.createKernel(
-      function (frameTime: number, r: number, g: number, b: number, sinDiv: number, speed: number) {
+  private createGPUColorizer(useGPU: boolean): void {
+    const canvas = this.getCanvas(useGPU);
+    if (useGPU) {
+      const context = canvas.getContext('webgl2', {premultipliedAlpha: false});
+      this.gpu.setUseGPU(useGPU, {canvas, context});
+    } else {
+      this.gpu.setUseGPU(false, {canvas});
+    }
+
+    const colorFn: any = new Function(`
+     return function colorFn(frameTime, red, green, blue, repetition, speed, width, height) {
         const framedSpeed = frameTime * speed;
-        const x = this.thread.x;
-        const y = this.thread.y;
-        const waveParam0 = (framedSpeed + x + 0.5 * y) / sinDiv;
-        const waveParam1 = (framedSpeed + y) / sinDiv;
-        const waveParam2 = (framedSpeed + y + x) / sinDiv;
+        const aspectRatio = width / height;
+        let nX = this.thread.x / width * repetition;
+        let nY = this.thread.y / height * repetition;
+        let x = nX - Math.floor(nX);
+        let y = nY - Math.floor(nY);
+        const waveParam0 = (framedSpeed + x + 0.5 * y);
+        const waveParam1 = (framedSpeed + y);
+        const waveParam2 = (framedSpeed + y / (x + 0.1));
 
         this.color(
-          r * Math.sin(waveParam0),
-          g * Math.cos(waveParam1),
-          b * Math.tan(waveParam2),
-          1
+          red * Math.sin(waveParam0),
+          green * Math.cos(waveParam1),
+          blue * Math.tan(waveParam2),
+          Math.random() / 2. + 0.5
         );
-      })
+      }`)();
+    this.gpuColorizer = this.gpu.createKernel(colorFn)
       .setGraphical(true)
       .setDynamicOutput(true);
   }
 
-  createCanvasWithGPU(frameTime: number, r: number, g: number, b: number, sinDivider: number, speed: number): void {
-    const canvas: HTMLCanvasElement = this.gpuResult.nativeElement;
-    const ctx = canvas.getContext('2d');
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
+  private getCanvas(useGPU: boolean): HTMLCanvasElement {
+    return useGPU ? this.gpuCanvas.nativeElement : this.gpu2dCanvas.nativeElement;
+  }
+
+  calculateNextFrame({frameTime, r, g, b, repetition, speed}): void {
+    const {clientWidth: width = 500, clientHeight: height = 500} = this.gpuCanvas.nativeElement as HTMLCanvasElement;
     performance.mark('createCanvasWithGPU-start');
     this.gpuColorizer.setOutput([width, height]);
-    this.gpuColorizer(
-      frameTime,
-      r / 255,
-      g / 255,
-      b / 255,
-      sinDivider,
-      speed);
-    const gpuCanvas: HTMLCanvasElement = this.gpuColorizer.canvas;
-
-    ctx.drawImage(gpuCanvas, 0, 0);
+    this.gpuColorizer(frameTime / 1000., r / 255., g / 255., b / 255., repetition, speed / 20, width, height);
     performance.mark('createCanvasWithGPU-end');
     performance.measure('createCanvasWithGPU', 'createCanvasWithGPU-start', 'createCanvasWithGPU-end');
   }
