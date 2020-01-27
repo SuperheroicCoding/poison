@@ -68,7 +68,7 @@ export class WasmTestService {
         memory: new WebAssembly.Memory({initial: 256}),
       }
     };
-    return loader.instantiateStreaming<typeof FibModule>(fetch('build/untouched.wasm'), fibImports);
+    return loader.instantiateStreaming<typeof FibModule>(fetch('build/optimized.wasm'), fibImports);
   }
 
   startFibCalc(): void {
