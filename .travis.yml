@@ -26,7 +26,7 @@ deploy:
    on:
      repo: SuperheroicCoding/AngularExamples
      branch: master
-   cleanup: false
+   skip_cleanup: true
    provider: s3
    access_key_id: AKIARJIXB7N7V2AUUGU2
    secret_access_key:
