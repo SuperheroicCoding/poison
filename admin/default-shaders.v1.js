@@ -3,7 +3,7 @@ const defaultShadersV1 = [{
     #ifdef GL_ES
     precision highp float;
     #endif
-     
+
     void main() {
       gl_FragColor = vec4(1.0,0.0,1.0,1.0);
     }`,
@@ -42,23 +42,23 @@ const defaultShadersV1 = [{
     #ifdef GL_ES
     precision highp float;
     #endif
-    
+
     uniform vec2 resolution;
     uniform float time;
-    
+
     vec3 colorA = vec3(0.149,0.141,0.912);
     vec3 colorB = vec3(1.000,0.833,0.224);
-    
+
     void main() {
       vec3 color = vec3(0.0);
-  
+
       float pct = abs(sin(time));
-  
+
       // Mix uses pct (a value from 0-1) to
       // mix the two colors
       color = mix(colorA, colorB, pct);
-  
-      gl_FragColor = vec4(color,1.0); 
+
+      gl_FragColor = vec4(color,1.0);
     }`,
     description: 'Mixing colors'
   },
@@ -137,7 +137,7 @@ void main(){
     // Map the angle (-PI to PI) to the Hue (from 0 to 1)
     // and the Saturation to the radius
     color = hsb2rgb(vec3((angle/TWO_PI)+0.5 + mouse.y,radius,1.0));
-    
+
 
     gl_FragColor = vec4(color,1.0);
 }`,
@@ -269,7 +269,7 @@ uniform float time;
 
 float circle(in vec2 _st, in float _radius, in vec2 center){
     vec2 dist = _st - center;
-    dist = dist * vec2(resolution.x / resolution.y, 1.0); 
+    dist = dist * vec2(resolution.x / resolution.y, 1.0);
 	return 1.-smoothstep(_radius-(_radius*0.01),
                          _radius+(_radius*0.01),
                          dot(dist,dist)*4.0);
@@ -341,7 +341,7 @@ void main() {
     color += 1.-step(.02, m_dist);
 
     // Draw grid
-    color.r += step(.98, f_st.x) + step(.98, f_st.y);
+    // color.r += step(.98, f_st.x) + step(.98, f_st.y);
 
     // Show isolines
     // color -= step(.7,abs(sin(27.0*m_dist)))*.5;
@@ -412,7 +412,7 @@ void main() {
     vec2 r = vec2(0.);
     r.x = fbm( st + 1.0*q + vec2(1.7,9.2)+ 0.15*time );
     r.y = fbm( st + 1.0*q + vec2(8.3,2.8)+ 0.126*time);
-    
+
     r = r * mouse;
 
     float f = fbm(st+r);
@@ -437,13 +437,13 @@ void main() {
   #ifdef GL_ES
   precision highp float;
   #endif
-  
+
   #define TWO_PI 6.28318530718
-  
+
   uniform vec2 resolution;
   uniform vec2 mouse;
   uniform float time;
-  
+
   //  Function from Iñigo Quiles
   //  https://www.shadertoy.com/view/MsS3Wc
   vec3 hsb2rgb( in vec3 c ){
@@ -454,7 +454,7 @@ void main() {
       rgb = rgb*rgb*(3.0-2.0*rgb);
       return c.z * mix( vec3(1.0), rgb, c.y);
   }
-  
+
   void main(){
       vec2 st = gl_FragCoord.xy/resolution.xy;
       // repeat it
@@ -463,10 +463,10 @@ void main() {
       float radius = mouse.y;
       vec3 color = hsb2rgb(vec3(angle, radius, 1.0));
       float distToCenter = length(fract(st) - mouse) + sin(time * 4.) * 0.03;
-  
-      float distanceCircle = smoothstep(distToCenter - 0.05, distToCenter, length(mouse - 0.5)) + 
-      smoothstep( distToCenter, distToCenter + 0.05, length(mouse - 0.5)); 
-      
+
+      float distanceCircle = smoothstep(distToCenter - 0.05, distToCenter, length(mouse - 0.5)) +
+      smoothstep( distToCenter, distToCenter + 0.05, length(mouse - 0.5));
+
       color =  mix(color, vec3(distanceCircle), distToCenter);
       gl_FragColor = vec4(color, 1.0);
   }
