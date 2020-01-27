@@ -14,22 +14,12 @@ install:
   - npm ci
   - npm install codecov -g
   - node -p "v8.getHeapStatistics().total_available_size / (1024 * 1024)"
-script: true
-jobs:
-  include:
-    - stage: test
-    - script: npm run lint
-      name: lint
-    - script:
-      - npm run test-thanos -- --watch=false --progress=false --browsers=ChromeHeadlessCI
-      - codecov
-      name: test-thanos
-    - script:
-      - npm run build-deps
-      - npm run test -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
-      - codecov
-      name: test angular examples
-
+script:
+    - npm run lint
+    - npm run test-thanos -- --watch=false --progress=false --browsers=ChromeHeadlessCI
+    - npm run build-deps
+    - npm run test -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage
+after_success: codecov
 before_deploy: npm run buildS3
 deploy:
    on:
