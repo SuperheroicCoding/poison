@@ -12,7 +12,7 @@ import {shader} from '../title-shader';
   templateUrl: './main-toolbar.component.html',
   styleUrls: ['./main-toolbar.component.scss']
 })
-export class MainToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
+export class MainToolbarComponent implements OnInit, OnDestroy {
 
   @Output() clickSideNav = new EventEmitter<Event>();
   shaderCode: string;
@@ -31,36 +31,11 @@ export class MainToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
     )
       .subscribe(() => headlineAnimations.startAnimation());
     this.isHandset$ = breakpointObserver.observe(Breakpoints.Handset).pipe(map(value => value.matches));
+    this.runAnimation$ = headlineAnimations.runAnimation$;
   }
 
   ngOnInit() {
     setTimeout(() => this.shaderCode = shader, 500);
-  }
-
-  ngAfterViewInit() {
-
-    const isVisible$ = new Observable<boolean>(subscriber => {
-
-      const intersectionCallback: IntersectionObserverCallback = (entries: IntersectionObserverEntry[]) => {
-        entries.forEach(entry => {
-          subscriber.next(entry.isIntersecting);
-        });
-      };
-      const observer = new IntersectionObserver(intersectionCallback);
-
-      observer.observe(this.elRef.nativeElement);
-      return () => {
-        observer.disconnect();
-      };
-    });
-
-    this.runAnimation$ = combineLatest([
-      this.headlineAnimations.runAnimation$,
-      isVisible$]).pipe(
-      map(([animate, isVisible]) => animate && isVisible),
-      distinctUntilChanged(),
-      tap(console.log)
-    );
   }
 
   ngOnDestroy(): void {
