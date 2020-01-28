@@ -18,7 +18,6 @@ const energyLossPerOtherBacterium = 0.8;
 @Injectable({providedIn: 'root'})
 export class PlayerService {
 
-
   constructor(private playerStore: PlayerStore, private gameStateQuery: GameStateQuery, private playerQuery: PlayerQuery) {
 
     this.gameStateQuery.selectKeysPressed()

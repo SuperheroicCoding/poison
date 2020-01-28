@@ -1,16 +1,10 @@
-#canvasElement {
-  image-rendering: optimizeSpeed;
-
-}
-
 .canvas-container {
   .thanos-container {
     height: 100%;
   }
 
   canvas {
-    transform-origin: top left;
-
+    width: 100%;
+    image-rendering: pixelated;
   }
-
 }

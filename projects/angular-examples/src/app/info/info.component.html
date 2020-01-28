@@ -1,5 +1,5 @@
 <app-about></app-about>
-<mat-card>
+<mat-card class="technology-info-card">
   <mat-card-title>
     Technologies used:
   </mat-card-title>
@@ -10,7 +10,7 @@
     </a>
   </mat-card-subtitle>
   <mat-card-content>
-    <div class="technologyCards">
+    <div class="technology-cards">
       <app-technology
         *ngFor="let tech of technologies"
         [title]="tech.title"

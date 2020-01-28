@@ -14,7 +14,7 @@ export class GameStateQuery extends Query<GameStateState> {
   selectCurrentGameState(gameStateFilter?: GameState): Observable<GameState> {
     return this.select(store => store.currentState).pipe(
       distinctUntilChanged(),
-      filter(state => gameStateFilter == null ? true : state === gameStateFilter)
+      filter(state => gameStateFilter == null ? true : state === gameStateFilter),
     );
   }
 

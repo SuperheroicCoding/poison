@@ -12,7 +12,7 @@ import {
 import {MatDialog} from '@angular/material/dialog';
 import {untilDestroyed} from 'ngx-take-until-destroy';
 import {Observable} from 'rxjs';
-import {concatMap, concatMapTo, distinctUntilChanged, filter, map, switchMap, take} from 'rxjs/operators';
+import {distinctUntilChanged, filter, map, switchMap, take} from 'rxjs/operators';
 import {ScThanosDirective} from '../../../../sc-thanos/src/public-api';
 import {GameStateQuery} from './state/game-state.query';
 import {GameStateService} from './state/game-state.service';
@@ -55,12 +55,8 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
   @ViewChild(ScThanosDirective, {static: true})
   private thanos: ScThanosDirective;
   private cx: CanvasRenderingContext2D;
-  scale = 4;
   width = 320;
   height = 140;
-
-  scaledWidth = this.width * this.scale;
-  scaledHeight = this.height * this.scale;
 
   state$: Observable<GameStateState>;
   fps$: Observable<string>;
@@ -81,7 +77,6 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
     this.isRunning$ = this.query.selectCurrentGameState().pipe(map(state => state === GameState.RUNNING || state === GameState.PAUSED));
 
     this.query.selectTimeDelta().pipe(
-      filter(value => query.getValue().currentState === GameState.RUNNING),
       untilDestroyed(this)
     ).subscribe(deltaTimeMs => {
         const dTSec = deltaTimeMs / 1000;
@@ -92,8 +87,8 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
     this.query.selectWinnerId().pipe(
       filter(value => value != null),
       distinctUntilChanged(),
-      untilDestroyed(this),
-      switchMap(() => this.matDialog.open(WinnerComponent).afterClosed())
+      switchMap(() => this.matDialog.open(WinnerComponent).afterClosed()),
+      untilDestroyed(this)
     ).subscribe(() => this.resetGame());
   }
 
@@ -111,6 +106,7 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
   startGame() {
     this.cx.fillStyle = 'rgb(0,0,0)';
     this.cx.fillRect(0, 0, this.width, this.height);
+    this.gameStateService.cleanup();
     this.gameStateService.init(this.width, this.height);
     this.gameStateService.start();
   }
@@ -138,36 +134,38 @@ export class BacteriaGameComponent implements AfterViewInit, OnDestroy {
     }
 
     this._ngZone.runOutsideAngular(() => {
-      this.cx.fillStyle = 'rgba(0,0,0,0.7)';
-      this.cx.fillRect(0, 0, this.width, this.height);
-      this.cx.fillStyle = 'rgb(200,200,200)';
-      const wallWidth = 10;
-      this.cx.fillRect(this.width / 2 - 50, 0, wallWidth, this.height / 2 - 50);
-      this.cx.fillRect(this.width / 2 - 50, this.height / 2 - 30, wallWidth, this.height / 2 + 30);
-      this.cx.fillRect(this.width / 2 + 30, 0, wallWidth, this.height / 2 + 30);
-      this.cx.fillRect(this.width / 2 + 30, this.height / 2 + 50, wallWidth, this.height / 2 - 50);
+      requestAnimationFrame(() => {
+        this.cx.fillStyle = 'rgba(0,0,0,0.7)';
+        this.cx.fillRect(0, 0, this.width, this.height);
+        this.cx.fillStyle = 'rgb(200,200,200)';
+        const wallWidth = 10;
+        this.cx.fillRect(this.width / 2 - 50, 0, wallWidth, this.height / 2 - 50);
+        this.cx.fillRect(this.width / 2 - 50, this.height / 2 - 30, wallWidth, this.height / 2 + 30);
+        this.cx.fillRect(this.width / 2 + 30, 0, wallWidth, this.height / 2 + 30);
+        this.cx.fillRect(this.width / 2 + 30, this.height / 2 + 50, wallWidth, this.height / 2 - 50);
 
-      const image = this.cx.getImageData(0, 0, this.width, this.height);
-      const data = new Uint8ClampedArray(image.data.buffer);
-      for (const player of this.playerQuery.getAll()) {
-        createImageDataFromBacterias(data, this.width, player.color, player.bacterias);
-      }
-      this.playerService.gameLoop(data, this.width, this.height, deltaTimeInSec);
-      this.cx.putImageData(image, 0, 0);
+        const image = this.cx.getImageData(0, 0, this.width, this.height);
+        const data = new Uint8ClampedArray(image.data.buffer);
+        for (const player of this.playerQuery.getAll()) {
+          createImageDataFromBacterias(data, this.width, player.color, player.bacterias);
+        }
+        this.playerService.gameLoop(data, this.width, this.height, deltaTimeInSec);
+        this.cx.putImageData(image, 0, 0);
 
-      for (const player of this.playerQuery.getAll()) {
-        this.cx.strokeStyle = `rgba(${player.color.join(',')})`;
-        this.cx.fillRect(player.x - 6, player.y - 0.5, 13, 2);
-        this.cx.fillRect(player.x - .5, player.y - 6, 2, 13);
-        this.cx.strokeRect(player.x - 6, player.y - 0.5, 13, 2);
-        this.cx.strokeRect(player.x - .5, player.y - 6, 2, 13);
-      }
+        for (const player of this.playerQuery.getAll()) {
+          this.cx.strokeStyle = `rgba(${player.color.join(',')})`;
+          this.cx.fillRect(player.x - 6, player.y - 0.5, 13, 2);
+          this.cx.fillRect(player.x - .5, player.y - 6, 2, 13);
+          this.cx.strokeRect(player.x - 6, player.y - 0.5, 13, 2);
+          this.cx.strokeRect(player.x - .5, player.y - 6, 2, 13);
+        }
 
+      });
     });
   }
 
   ngOnDestroy(): void {
-    this.gameStateService.cleanupKeysPressed();
+    this.gameStateService.cleanup();
   }
 
   @HostListener('document:keydown', ['$event'])

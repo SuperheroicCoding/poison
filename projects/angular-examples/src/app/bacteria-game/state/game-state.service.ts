@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {applyTransaction} from '@datorama/akita';
-import {animationFrameScheduler, interval, Observable} from 'rxjs';
+import {animationFrameScheduler, interval, Observable, Subscription} from 'rxjs';
 import {filter, map, pairwise, switchMapTo, takeUntil, tap, timestamp} from 'rxjs/operators';
 import {HeadlineAnimationService} from '../../core/headline-animation.service';
 import {GameStateQuery} from './game-state.query';
@@ -14,6 +14,7 @@ const FPS = 30;
 @Injectable({providedIn: 'root'})
 export class GameStateService {
   private gameLoop$: Observable<number>;
+  private subscriptions: Subscription;
 
   constructor(private gameStateStore: GameStateStore,
               private gameStateQuery: GameStateQuery,
@@ -25,14 +26,19 @@ export class GameStateService {
       pairwise(),
       map(([value1, value2]) => value2.timestamp - value1.timestamp),
     );
+  }
 
+  init(width: number, height: number) {
+    this.gameStateStore.update({width, height, winner: null});
     // subscribe update time passed when game running
-    this.gameStateQuery.selectCurrentGameState(GameState.RUNNING).pipe(
-      tap(x => this.headlineAnimation.stopAnimation()),
+    const running$ = this.gameStateQuery.selectCurrentGameState(GameState.RUNNING);
+    const notRunning$ = this.gameStateQuery.selectCurrentGameState().pipe(
+      filter(value => value !== GameState.RUNNING));
+
+    this.subscriptions = running$.pipe(
       switchMapTo(this.gameLoop$.pipe(
         takeUntil(
-          this.gameStateQuery.selectCurrentGameState().pipe(
-            filter(value => value !== GameState.RUNNING))
+          notRunning$
         )))
     ).subscribe(timeDelta =>
         this.gameStateStore.update(state => (
@@ -41,14 +47,22 @@ export class GameStateService {
             timeDelta
           })),
       error => {
-        headlineAnimation.startAnimation();
         console.error('error in gameLoop', error);
-      },
-      () => headlineAnimation.startAnimation()
+      }
+    );
+    this.subscriptions.add(
+      this.gameStateQuery.selectCurrentGameState()
+        .pipe(tap(x => {
+          if (x === GameState.RUNNING || x === GameState.PAUSED) {
+            this.headlineAnimation.stopAnimation();
+          } else {
+            this.headlineAnimation.startAnimation();
+          }
+        })).subscribe()
     );
 
     // subscribe determine Winner
-    this.gameStateQuery.selectCurrentGameState(GameState.RUNNING).pipe(
+    this.subscriptions.add(running$.pipe(
       switchMapTo(this.playerQuery.selectAll().pipe(
         takeUntil(
           this.gameStateQuery.selectCurrentGameState().pipe(
@@ -57,16 +71,11 @@ export class GameStateService {
       map(players => this.determineWinner(players)),
       filter(winner => winner != null)
     ).subscribe(winner =>
-
       applyTransaction(() => {
           this.gameStateStore.update({currentState: GameState.END});
           this.gameStateStore.update({winner: winner});
         }
-      ));
-  }
-
-  init(width: number, height: number) {
-    this.gameStateStore.update({width, height, winner: null});
+      )));
   }
 
   private initPlayers() {
@@ -105,7 +114,6 @@ export class GameStateService {
     return null;
   }
 
-
   private togglePause() {
     this.gameStateStore.update(state => {
       if (state.currentState === GameState.RUNNING) {
@@ -125,13 +133,15 @@ export class GameStateService {
     this.gameStateStore.update(state => ({keysPressed: [...state.keysPressed.filter((keys) => keyToAdd !== keys), keyToAdd]}));
   }
 
-
   removeKeyPress(key: string): void {
     this.gameStateStore.update(state => ({keysPressed: [...state.keysPressed.filter((keys) => key !== keys)]}));
   }
 
-  cleanupKeysPressed(): void {
+  cleanup(): void {
+    console.log('cleanup');
+    this.pause();
     this.gameStateStore.update({keysPressed: []});
+    this.subscriptions?.unsubscribe();
   }
 
   pause() {
