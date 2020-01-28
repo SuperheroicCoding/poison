@@ -12,17 +12,23 @@
     flex: 1 1 auto;
   }
 
-  .sidenav-icon,
-  app-login,
-  app-service-worker-update,
-  .page-title {
+
+
+  .on-top {
     position: relative;
     z-index: 1;
-    pointer-events: all;
   }
 
   app-service-worker-update {
     margin-right: 0.5rem;
+  }
+
+  .sidenav-icon,
+  app-login,
+  app-service-worker-update,
+  .page-title {
+    @extend .on-top;
+    pointer-events: all;
   }
 
   .page-title {
