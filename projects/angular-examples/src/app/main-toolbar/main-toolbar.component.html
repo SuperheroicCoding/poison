@@ -1,4 +1,4 @@
-<mat-toolbar role="toolbar" class="page-title">
+<mat-toolbar role="toolbar" id="main-toolbar" class="page-title">
   <button class="sidenav-icon" mat-icon-button (click)="clickSideNav.emit($event)">
     <mat-icon>menu</mat-icon>
   </button>
@@ -12,7 +12,7 @@
     [shaderCode]="shaderCode"
     [canvasWidth]="shaderContainer.clientWidth"
     [canvasHeight]="shaderContainer.clientHeight"
-    [runAnimation]="runAnimation | async"
+    [runAnimation]="runAnimation$ | async"
   >
   </app-render-shader>
 </div>

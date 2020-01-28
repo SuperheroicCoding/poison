@@ -2,6 +2,7 @@
 
 :host {
   height: 100%;
+  display: block;
 }
 
 .navigationSidenav {
@@ -40,6 +41,7 @@ app-main-toolbar {
     padding: 0;
   }
 }
+
 .mat-drawer-content {
   overflow: hidden;
 }

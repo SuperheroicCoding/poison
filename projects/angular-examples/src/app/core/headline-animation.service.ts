@@ -4,21 +4,21 @@ import {BehaviorSubject} from 'rxjs';
 @Injectable()
 export class HeadlineAnimationService {
 
-  private _runAnimation = new BehaviorSubject<boolean>(true);
+  private _runAnimation$ = new BehaviorSubject<boolean>(true);
 
   constructor() {
   }
 
-  get runAnimation() {
-    return this._runAnimation.asObservable();
+  get runAnimation$() {
+    return this._runAnimation$.asObservable();
   }
 
   stopAnimation() {
-    this._runAnimation.next(false);
+    this._runAnimation$.next(false);
   }
 
   startAnimation() {
-    this._runAnimation.next(true);
+    this._runAnimation$.next(true);
   }
 
   runWithoutAnimations<T>(runnable: () => T): T {

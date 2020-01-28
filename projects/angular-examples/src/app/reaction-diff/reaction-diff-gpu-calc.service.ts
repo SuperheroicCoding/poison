@@ -20,7 +20,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   private nextImage: HTMLCanvasElement;
   private initGridKernel: IKernelRunShortcut;
   private initialized = false;
-  private grid: KernelOutput;
+  private grid: Texture;
 
   constructor(private width: number,
               private height: number,
@@ -110,7 +110,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
         .setOutput([this.width, this.height, 2])
         .setPipeline(true);
     }
-    this.grid = this.initGridKernel();
+    this.grid = this.initGridKernel() as Texture;
   }
 
   private setWeights(weights: CellWeights) {
