@@ -1,9 +1,53 @@
+<mat-card appRaiseCard class="training-progress">
+  <mat-card-title>
+    Deep Neural Network for digit recognition.
+  </mat-card-title>
+  <mat-card-subtitle>
+    The MNIST digits are used to train a deep neural network on your device.
+  </mat-card-subtitle>
+  <mat-card-content>
+    <div *ngIf="isLoading">
+      <mat-spinner color="accent">
+      </mat-spinner>
+      <div>
+        Fetching MNIST images...
+      </div>
+    </div>
+    <div *ngIf="errorLoadingData" class="mat-error">There was an error loading the data. Try again later.</div>
+    <app-draw-predictions
+      *ngIf="!isLoading && !errorLoadingData"
+      [batch]="batch"
+      [labels]="labels"
+      [predictions]="predictions"
+      [lossValues]="lossValues"
+      [accuracyValues]="accuracyValues">
+    </app-draw-predictions>
+  </mat-card-content>
+  <mat-card-actions>
+    <button color="accent"
+            [disabled]="isLoading || isTraining || errorLoadingData"
+            mat-raised-button
+            (click)="train()">
+      Train Deep Neural Network on MNIST digits
+    </button>
+    <button color="accent"
+            [disabled]="isLoading || errorLoadingData"
+            mat-raised-button
+            (click)="predict()">
+      Predict MNIST digits
+    </button>
+  </mat-card-actions>
+</mat-card>
 <mat-card appRaiseCard class="learnImagesCard">
   <mat-card-title>
     Recognize handwritten digits!
   </mat-card-title>
+  <mat-card-subtitle>
+    Draw a digit on the canvas to test the trained neural network.
+    Click on the prediction to enter the number you drew.
+  </mat-card-subtitle>
   <mat-card-content>
-    <app-draw-digit #drawer (change)="testDigit($event)"></app-draw-digit>
+    <app-draw-digit #drawer (change)="nextDrawnImage($event)"></app-draw-digit>
     <div class="mat-subheading-1">{{drawingPredictions ?
       'Prediction: '+drawingPredictions[0] :
       'Draw to predict image!'}}
@@ -18,49 +62,10 @@
     </button>
   </mat-card-actions>
   <div class="drawing-result">
-    <app-ui [batch]="drawingBatch"
-            [predictions]="drawingPredictions"
-            [labels]="drawingLabels">
-    </app-ui>
+    <app-draw-predictions [batch]="drawingBatch"
+                          [predictions]="drawingPredictions"
+                          [labels]="drawingLabels"
+                          (onImageClicked)="askForLabel($event)">
+    </app-draw-predictions>
   </div>
-</mat-card>
-<mat-card appRaiseCard class="training-progress">
-  <mat-card-title>
-    Training progress and result
-  </mat-card-title>
-  <mat-card-subtitle>
-    Using the mnist digist.
-  </mat-card-subtitle>
-  <mat-card-content>
-    <div *ngIf="isLoading">
-      <mat-spinner color="accent">
-      </mat-spinner>
-      <div>
-        Fetching MNIST images...
-      </div>
-    </div>
-    <div *ngIf="errorLoadingData" class="mat-error">There was an error loading the data. Try again later.</div>
-    <app-ui
-      *ngIf="!isLoading && !errorLoadingData"
-      [batch]="batch"
-      [labels]="labels"
-      [predictions]="predictions"
-      [lossValues]="lossValues"
-      [accuracyValues]="accuracyValues">
-    </app-ui>
-  </mat-card-content>
-  <mat-card-actions>
-    <button color="accent"
-            [disabled]="isLoading || isTraining || errorLoadingData"
-            mat-raised-button
-            (click)="train()">
-      Train
-    </button>
-    <button color="accent"
-            [disabled]="isLoading || errorLoadingData"
-            mat-raised-button
-            (click)="predict()">
-      Predict
-    </button>
-  </mat-card-actions>
 </mat-card>

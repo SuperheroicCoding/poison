@@ -1,25 +1,38 @@
-import {Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import embed from 'vega-embed';
 
 @Component({
-  selector: 'app-ui',
-  templateUrl: './ui.component.html',
-  styleUrls: ['./ui.component.less']
+  selector: 'app-draw-predictions',
+  templateUrl: './draw-predictions.component.html',
+  styleUrls: ['./draw-predictions.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UiComponent implements OnChanges {
+export class DrawPredictionsComponent implements OnChanges {
 
-  @ViewChild('lossCanvas', { static: true }) lossCanvas: ElementRef;
-  @ViewChild('accuracyCanvas', { static: true }) accuracyCanvas: ElementRef;
-  @ViewChild('images', { static: true }) images: ElementRef;
+  @ViewChild('lossCanvas', {static: true}) lossCanvas: ElementRef;
+  @ViewChild('accuracyCanvas', {static: true}) accuracyCanvas: ElementRef;
+  @ViewChild('images', {static: true}) images: ElementRef;
 
   lossLabel: string;
   accuracyLabel: string;
 
   @Input() batch: any;
-  @Input() predictions: any;
-  @Input() labels: any;
+  @Input() predictions: number[];
+  @Input() labels: number[];
   @Input() lossValues: any;
   @Input() accuracyValues: any;
+
+  @Output() onImageClicked: EventEmitter<number> = new EventEmitter<number>();
 
   totalCorrect: number;
   totalPredictions: number;
@@ -37,6 +50,12 @@ export class UiComponent implements OnChanges {
     }
     if (changes.lossValues && changes.lossValues.currentValue) {
       this.plotLosses(this.lossValues);
+    }
+    if (changes.labels && changes.labels.currentValue) {
+      if (this.batch == null) {
+        return;
+      }
+      this.showTestResults(this.batch, this.predictions, this.labels);
     }
   }
 
@@ -67,6 +86,12 @@ export class UiComponent implements OnChanges {
 
       div.appendChild(pred);
       div.appendChild(canvas);
+      div.addEventListener('click', (event) => {
+          event.stopPropagation();
+          event.stopImmediatePropagation();
+          this.imageClicked(i);
+        }
+      );
 
       this.images.nativeElement.appendChild(div);
     }
@@ -129,4 +154,8 @@ export class UiComponent implements OnChanges {
     ctx.putImageData(imageData, 0, 0);
   }
 
+  private imageClicked(index: number) {
+    this.onImageClicked.emit(index);
+    return false;
+  }
 }

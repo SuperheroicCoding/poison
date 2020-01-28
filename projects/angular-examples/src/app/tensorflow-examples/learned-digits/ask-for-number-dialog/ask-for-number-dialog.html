@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Which number did you draw?</h1>
+  <p mat-subheader> Predicted was {{data.prediction}}?</p>
+<div mat-dialog-content>
+  <mat-form-field>
+    <label for="numberDrawn">What did you draw?</label>
+    <input cdkFocusInitial min="0" max="0" id="numberDrawn" matInput type="number"
+           [(ngModel)]="data.numberDrawn">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Don't know</button>
+  <button mat-button
+          [disabled]="data.numberDrawn == null"
+          [mat-dialog-close]="data">
+    Ok
+  </button>
+</div>

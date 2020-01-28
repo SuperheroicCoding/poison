@@ -1,20 +1,25 @@
 :host {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 2fr 1fr;
   grid-gap: 1rem;
+  padding: 1rem;
   @media only screen and (max-width: 1000px) {
     grid-template-columns: 1fr;
   }
+  align-items: start;
+
+
+  .drawing-result {
+    width: 100%;
+  }
+
+  ::ng-deep {
+    .learnImagesCard {
+      .pred-container {
+        cursor: pointer
+      }
+    }
+  }
 }
 
-.drawing-result {
-  width: 100%;
-}
-
-.learnImagesCard {
-  grid-column: ~"1 / 2";
-}
-
-.training-progress {
-}
 

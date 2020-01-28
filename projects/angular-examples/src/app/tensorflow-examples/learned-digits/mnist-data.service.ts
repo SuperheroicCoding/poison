@@ -131,7 +131,6 @@ export class MnistDataService {
     return tensor2d(batchImagesArray, [this.customImages, IMAGE_SIZE]);
   }
 
-
   nextBatch(batchSize, data: [Float32Array, Uint8Array], index) {
     const batchImagesArray = new Float32Array(batchSize * IMAGE_SIZE);
     const batchLabelsArray = new Uint8Array(batchSize * NUM_CLASSES);
