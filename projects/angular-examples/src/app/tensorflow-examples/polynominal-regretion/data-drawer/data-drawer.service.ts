@@ -19,7 +19,7 @@ export class DataDrawerService {
     });
 
     const spec: any = {
-      '$schema': 'https://vega.github.io/schema/vega-lite/v2.json',
+      '$schema': 'https://vega.github.io/schema/vega-lite/v3.2.1.json',
       'width': 300,
       'height': 300,
       'data': {'values': values},
@@ -43,7 +43,7 @@ export class DataDrawerService {
     });
 
     const spec: any = {
-      '$schema': 'https://vega.github.io/schema/vega-lite/v2.json',
+      '$schema': 'https://vega.github.io/schema/vega-lite/v3.2.1.json',
       'width': 300,
       'height': 300,
       'data': {'values': values},

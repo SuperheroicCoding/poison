@@ -75,7 +75,7 @@ export class UiComponent implements OnChanges {
   plotLosses(lossValues) {
     embed(
       this.lossCanvas.nativeElement, {
-        '$schema': 'https://vega.github.io/schema/vega-lite/v2.json',
+        '$schema': 'https://vega.github.io/schema/vega-lite/v3.2.1.json',
         'data': {'values': lossValues},
         'mark': {
           'type': 'line',
@@ -96,7 +96,7 @@ export class UiComponent implements OnChanges {
   plotAccuracies(accuracyValues) {
     embed(
       this.accuracyCanvas.nativeElement, {
-        '$schema': 'https://vega.github.io/schema/vega-lite/v2.json',
+        '$schema': 'https://vega.github.io/schema/vega-lite/v3.2.1.json',
         'data': {'values': accuracyValues},
         'width': 260,
         'mark': {'type': 'line', 'orient': 'vertical', 'legend': null},
