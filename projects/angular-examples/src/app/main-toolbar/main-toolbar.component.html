@@ -7,13 +7,13 @@
   <span class="toolbar-spacer"></span>
   <app-service-worker-update [class.hide]="isHandset$ | async"></app-service-worker-update>
   <app-login></app-login>
-  <div class="shader-background" #shaderContainer *ngIf="shaderCode">
-    <app-render-shader
-      [shaderCode]="shaderCode"
-      [canvasWidth]="shaderContainer.clientWidth"
-      [canvasHeight]="shaderContainer.clientHeight"
-      [runAnimation]="runAnimation | async"
-    >
-    </app-render-shader>
-  </div>
+<div class="shader-background" #shaderContainer *ngIf="shaderCode">
+  <app-render-shader
+    [shaderCode]="shaderCode"
+    [canvasWidth]="shaderContainer.clientWidth"
+    [canvasHeight]="shaderContainer.clientHeight"
+    [runAnimation]="runAnimation | async"
+  >
+  </app-render-shader>
+</div>
 </mat-toolbar>

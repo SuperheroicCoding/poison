@@ -13,8 +13,6 @@ float random (in vec2 _st) {
         43758.5453123);
 }
 
-// Based on Morgan McGuire @morgan3d
-// https://www.shadertoy.com/view/4dS3Wd
 float noise (in vec2 _st) {
     vec2 i = floor(_st);
     vec2 f = fract(_st);
@@ -51,7 +49,7 @@ float fbm ( in vec2 _st) {
 
 void main() {
     vec2 dim = gl_FragCoord.xy/resolution.xy;
-    vec2 st = dim*vec2(3., resolution.y / resolution.x);
+    vec2 st = dim*vec2(3., 3. * resolution.y / resolution.x);
      st += st * abs(sin(time*0.1)*3.0);
     vec3 color = vec3(0.0);
 
@@ -63,12 +61,12 @@ void main() {
     r.x = fbm( st + 1.0*q + vec2(1.7,9.2)+ 0.15*time );
     r.y = fbm( st + 1.0*q + vec2(8.3,2.8)+ 0.126*time);
 
-    r = r * (vec2(1.) - mouse);
+    r = r * (mouse.xy - 0.5) * vec2(4., 0.5);
 
     float f = fbm(st+r);
 
     color = mix(vec3(0.101961,0.619608,0.666667),
-                vec3(0.226667,0.666667,0.228039),
+                vec3(0.666667 * abs(r.x),0.666667,0.498039),
                 clamp((f*f)*4.0,0.0,1.0));
 
     color = mix(color,
@@ -76,14 +74,8 @@ void main() {
                 clamp(length(q),0.0,1.0));
 
     color = mix(color,
-                vec3(0.666667,1,1),
+                vec3(0.666667,1,0.666 * r.x),
                 clamp(length(r.x),0.0,1.0));
 
-
-    float corner = smoothstep(0.0, 0.03 , dim.x) * smoothstep(1., 0.90 , dim.x) *
-    smoothstep(0.0, 0.1 , dim.y) * smoothstep(1., 0.9 , dim.y);
-
-    vec4 color4 = vec4(((f*f*f+.6*f*f+.5*f)*color) * corner,1.0);
-
-    gl_FragColor = color4;
+    gl_FragColor = vec4((f*f*f+.6*f*f+.5*f)*color,1.);
 }`;
