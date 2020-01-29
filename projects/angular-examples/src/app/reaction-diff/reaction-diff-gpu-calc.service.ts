@@ -1,5 +1,5 @@
 import {IKernelRunShortcut, KernelOutput, Texture} from 'gpu.js';
-import p5, { Graphics } from 'p5';
+import p5, {Graphics} from 'p5';
 import {ReactionDiffCalcParams} from './reaction-diff-calc-params';
 import {CellWeights, weightsToArray} from './cell-weights';
 import {ReactionDiffCalculator} from './reaction-diff-calculator';
@@ -15,7 +15,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   private addChemicalRadius: number;
   private calcNextKernels: { first: IKernelRunShortcut, second: IKernelRunShortcut };
   private speed: number;
-  private imageKernel;
+  private imageKernel: IKernelRunShortcut;
   private calcParams: ReactionDiffCalcParams;
   private nextAddChemicals: (number | number | number | number)[] = [0, 0, 0, 0];
   private nextImage: HTMLCanvasElement;
@@ -53,13 +53,12 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   private init() {
     this.initGrid();
 
-    const first = this.createCalcNextGpuKernel();
-    const second = this.createCalcNextGpuKernel();
+    const first: IKernelRunShortcut = this.createCalcNextGpuKernel();
+    const second: IKernelRunShortcut = this.createCalcNextGpuKernel();
     this.calcNextKernels = {
       first,
       second
     };
-
     this.imageKernel = this.createImageKernel();
     this.addChemical(this.width / 2, this.height / 2);
     this.initialized = true;
@@ -103,9 +102,6 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
       this.lastNextCalc = (this.lastNextCalc + 1) % 2;
       this.nextAddChemicals = [0., 0., 0., 0.];
     }
-
-    this.imageKernel(this.grid);
-    this.nextImage = this.imageKernel.canvas;
   }
 
   initGrid() {
@@ -127,13 +123,15 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
     this.calcParams = calcParams;
   }
 
-  drawImage(p: {canvas: HTMLCanvasElement}) {
+  drawImage(p: { canvas: HTMLCanvasElement }) {
     if (!this.initialized) {
       return;
     }
     if (!this.nextImage) {
       this.calcNext(1);
     }
+    this.imageKernel(this.grid);
+    this.nextImage = this.imageKernel.canvas;
     const context = p.canvas.getContext('2d');
     context.drawImage(this.nextImage, 0, this.nextImage.height - this.height, this.width, this.height, 0, 0, this.width, this.height);
   }
@@ -160,7 +158,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
       .setConstants({width: this.width, height: this.height});
   }
 
-  private createImageKernel() {
+  private createImageKernel(): IKernelRunShortcut {
     const kernelModule = this.kernels.imageKernelModule;
     return this.gpuJs.createKernel(kernelModule.imageKernel)
       .setOutput([this.width, this.height])

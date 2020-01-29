@@ -37,7 +37,7 @@ export class ReactionDiffComponent implements OnInit, OnDestroy {
   public selectedExample: string;
   public addChemicalRadius: number;
   public speed = 1;
-  public useGpu = false;
+  public useGpu = true;
   dimensions$: Observable<Dimensions>;
   calculationTime$: Observable<string>;
   drawImageTime$: Observable<number>;

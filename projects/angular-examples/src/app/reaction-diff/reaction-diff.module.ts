@@ -15,7 +15,7 @@ import {LoadGpuKernelsResolver} from './load-gpu-kernels.resolver';
   imports: [
     ReactionDiffRoutingModule,
     SharedModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   declarations: [ReactionDiffComponent, P5ViewComponent, WeightsConfigComponent],
   exports: [ReactionDiffComponent],

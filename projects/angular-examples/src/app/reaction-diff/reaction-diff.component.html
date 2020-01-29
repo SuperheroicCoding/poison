@@ -4,7 +4,8 @@
   </mat-toolbar-row>
   <mat-toolbar-row>
     <p class="mat-caption description">
-      A simulation of two virtual chemicals reacting and diffusing on a 2D grid using the Gray-Scott model
+      A simulation of two virtual chemicals reacting and diffusing on a 2D grid using the Gray-Scott model.
+      It uses gpu.js to calculate. Therefore it's quite fast. Use toggle to compare to CPU calculation.
     </p>
   </mat-toolbar-row>
 </mat-toolbar>
@@ -94,9 +95,9 @@
              [(ngModel)]="numberWebWorkers"
              (change)="updateNumberOfWebWorkers()">
     </mat-form-field>
-    <mat-checkbox [(ngModel)]="useGpu" (change)="updateUseGpu()">
+    <mat-slide-toggle [(ngModel)]="useGpu" (change)="updateUseGpu()">
       Use gpu.js
-    </mat-checkbox>
+    </mat-slide-toggle>
     <div *ngIf="showFps">Calculation needs: {{calculationTime$ | async}}ms</div>
   </mat-card>
 
