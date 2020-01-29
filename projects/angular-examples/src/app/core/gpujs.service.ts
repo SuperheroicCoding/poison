@@ -1,5 +1,14 @@
 import {Injectable} from '@angular/core';
-import {GPU, IGPUKernelSettings, IGPUSettings, IKernelRunShortcut, KernelFunction} from 'gpu.js';
+import {
+  GPU,
+  GPUFunction, IFunction,
+  IGPUFunctionSettings,
+  IGPUKernelSettings,
+  IGPUSettings,
+  IKernelRunShortcut,
+  KernelFunction, ThreadFunction,
+  ThreadKernelVariable
+} from 'gpu.js';
 
 @Injectable()
 export class GpuJsService {
@@ -20,5 +29,9 @@ export class GpuJsService {
     return this;
   }
 
+  addFunction(kernelFunction: ThreadFunction, settings?: IGPUFunctionSettings): GpuJsService {
+    this.delegateGPU.addFunction(kernelFunction as any, settings);
+    return this;
+  }
 }
 

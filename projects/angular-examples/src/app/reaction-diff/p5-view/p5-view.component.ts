@@ -4,7 +4,8 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  OnChanges, OnDestroy,
+  OnChanges,
+  OnDestroy,
   Output,
   SimpleChanges,
   ViewChild
@@ -30,7 +31,6 @@ export class P5ViewComponent implements OnChanges, OnDestroy {
 
   private sketch: p5;
   private frameRate = 1;
-  private offBuff: p5.Graphics;
   private drawOnce = true;
 
   constructor() {
@@ -40,8 +40,6 @@ export class P5ViewComponent implements OnChanges, OnDestroy {
     if (changes.simWidth || changes.simHeight) {
       if (this.sketch) {
         this.sketch.resizeCanvas(this.simWidth, this.simHeight);
-        this.offBuff.remove();
-        this.offBuff = this.sketch.createGraphics(this.simWidth, this.simHeight);
       } else {
         this.sketch = new p5(p => this.initP5(p), this.drawArea.nativeElement);
       }
@@ -53,7 +51,6 @@ export class P5ViewComponent implements OnChanges, OnDestroy {
     p.setup = () => {
       p.pixelDensity(1);
       p.createCanvas(this.simWidth, this.simHeight);
-      this.offBuff = p.createGraphics(this.simWidth, this.simHeight);
     };
 
     p.draw = () => {
@@ -61,16 +58,14 @@ export class P5ViewComponent implements OnChanges, OnDestroy {
         p.background(51);
         performance.mark('calcNext-start');
         this.calcService.calcNext();
-        this.calcService.drawImage(this.offBuff);
-        p.image(this.offBuff, 0, 0);
+        this.calcService.drawImage(p);
         performance.mark('calcNext-end');
         performance.measure('calcNext', 'calcNext-start', 'calcNext-end');
       }
 
       if (this.drawOnce && !this.run) {
-        this.calcService.drawImage(this.offBuff);
+        this.calcService.drawImage(p);
         this.drawOnce = false;
-        p.image(this.offBuff, 0, 0);
       }
 
       if (this.showFps) {
@@ -100,7 +95,6 @@ export class P5ViewComponent implements OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.offBuff.remove();
     this.sketch.remove();
   }
 }

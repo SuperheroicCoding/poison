@@ -1,3 +1,4 @@
+import * as p5 from 'p5';
 import {CellWeights} from './cell-weights';
 import {Observable, range, Subject, Subscription} from 'rxjs';
 import {addChemicals, calcNextDiffStep} from './worker-calculation';
@@ -200,19 +201,17 @@ export class ReactionDiffWorkerCalcService implements ReactionDiffCalculator {
     this.initCalcWorkers$();
   }
 
-  drawImage(graphics: any) {
-    const img = graphics.createImage(this.width, this.height);
-    img.loadPixels();
+  drawImage(graphics: p5) {
+    graphics.loadPixels();
     for (let x = 0; x < this.grid.length - 1; x = x + 2) {
       const pix = (x * 2);
       const cellColor = this.colorMapper.calcColorFor({a: this.grid[x], b: this.grid[x + 1]}, graphics);
-      img.pixels[pix] = cellColor.r;
-      img.pixels[pix + 1] = cellColor.b;
-      img.pixels[pix + 2] = cellColor.g;
-      img.pixels[pix + 3] = 255;
+      graphics.pixels[pix] = cellColor.r;
+      graphics.pixels[pix + 1] = cellColor.b;
+      graphics.pixels[pix + 2] = cellColor.g;
+      graphics.pixels[pix + 3] = 255;
     }
-    img.updatePixels();
-    graphics.image(img, 0, 0);
+    graphics.updatePixels();
   }
 
   cleanup(): void {

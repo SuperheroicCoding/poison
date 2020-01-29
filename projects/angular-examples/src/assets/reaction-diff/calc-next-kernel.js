@@ -1,129 +1,133 @@
 (function () {
 
-  function whenGt(value, value2) {
-    return Math.max(Math.sign(value - value2), 0.0);
-  }
+  const usedFunctions = [];
 
-  function whenLt(value, value2) {
-    return Math.max(Math.sign(value2 - value), 0.0);
-  }
-
-  function whenGe(value, value2) {
-    return 1.0 - Math.max(Math.sign(value2 - value), 0.0);
-  }
-
-  function whenLe(value, value2) {
-    return 1.0 - Math.max(Math.sign(value - value2), 0.0);
-  }
-
-  function and(a, b) {
-    return a * b;
-  }
+  const usedFunctionTypes = [];
 
   function limit(value, lowLim, highLim) {
     return Math.max(Math.min(value, highLim), lowLim);
   }
+
+  usedFunctions.push(limit);
+  usedFunctionTypes.push({argumentTypes: {value: 'Number', lowLim: 'Number', highLim: 'Number'}, returnType: 'Number'});
 
   function smoothy(lowLim, highLim, value) {
     const smoothedValue = (value - lowLim) / (highLim - lowLim);
     return limit(smoothedValue, 0.0, 1.0);
   }
 
-  function mixValues(value, value2, ratio) {
-    return (value * (1.0 - ratio)) + (value2 * ratio);
+  usedFunctions.push(smoothy);
+  usedFunctionTypes.push({argumentTypes: {lowLim: 'Number', highLim: 'Number', value: 'Number'}, returnType: 'Number'});
+
+  function wrapAround(index, limit) {
+    if (index >= limit) {
+      return index - limit;
+    }
+    if (index < 0) {
+      return limit + index;
+    }
+    return index;
   }
 
-  function wrapAround(value, value2) {
-    const greater = whenGe(value, value2);
-    const smallerZero = whenLt(value, 0.0);
-    const inBetween = and(whenGe(value, 0.0), whenLt(value, value2));
-    return (greater * (value - value2)) + (smallerZero * (value2 + value)) + (inBetween * value);
-  }
+  usedFunctions.push(wrapAround);
+  usedFunctionTypes.push({argumentTypes: {index: 'Number', limit: 'Number'}, returnType: 'Number'});
 
-  function cellValue(grid, fluid, columnOffset, rowOffset) {
-    const yIndex = wrapAround(this.thread.y + rowOffset, this.constants.height);
-    const xIndex = wrapAround(this.thread.x + columnOffset, this.constants.width);
+  function cellVal(grid, fluid, columnOffset, rowOffset, x, y, width, height) {
+    const indexX = x + columnOffset;
+    const indexY = y + rowOffset;
+    const xIndex = wrapAround(indexX, width);
+    const yIndex = wrapAround(indexY, height);
     return grid[fluid][yIndex][xIndex];
   }
 
-  function calcWeightedSum(grid, fluid, weights) {
-    return cellValue(grid, fluid, -1.0, 1.0) * weights[0] +
-      cellValue(grid, fluid, 0.0, 1.0) * weights[1] +
-      cellValue(grid, fluid, 1., 1.0) * weights[2] +
-      cellValue(grid, fluid, -1.0, 0.0) * weights[3] +
-      cellValue(grid, fluid, 0.0, 0.0) * weights[4] +
-      cellValue(grid, fluid, 1., 0.0) * weights[5] +
-      cellValue(grid, fluid, -1.0, -1.) * weights[6] +
-      cellValue(grid, fluid, 0.0, -1.) * weights[7] +
-      cellValue(grid, fluid, 1., -1.) * weights[8];
+  usedFunctions.push(cellVal);
+  usedFunctionTypes.push({
+    argumentTypes: {grid: 'ArrayTexture(1)', fluid: 'Number', columnOffset: 'Integer', rowOffset: 'Integer', x: 'Integer', y: 'Integer', width: 'Integer', height: 'Integer'},
+    returnType: 'Number'
+  });
+
+  function calcWeightedSum(grid, fluid, weights, x, y, width, height) {
+    let result = 0.0;
+    let wIndex = 0;
+    for (let dX = 1; dX > -2; dX--) {
+      for (let dY = -1; dY < 2; dY++) {
+        result += cellVal(grid, fluid, dX, dY, x, y, width, height) * weights[wIndex];
+        wIndex++;
+      }
+    }
+    return result;
   }
+
+  usedFunctions.push(calcWeightedSum);
+  usedFunctionTypes.push({
+    argumentTypes: {grid: 'ArrayTexture(1)', fluid: 'Number', weights: 'Array', x: 'Integer', y: 'Integer', width: 'Integer', height: 'Integer'},
+    returnType: 'Number'
+  });
 
   function calcNextA(a, dA, laplaceA, abb, f) {
     return a +
       (dA * laplaceA) -
       abb +
-      (f * (1. - a));
+      (f * (1.0 - a));
   }
 
-  function calcFluidBToAdd(grid, x, y, radius) {
-    // even cells are for fluid A. Odd cells are fluid B.
-    const isFluidB = this.thread.z % 2.0;
-    const i = Math.abs(x - this.thread.x);
-    const j = Math.abs(y - (this.constants.height - this.thread.y));
+  usedFunctions.push(calcNextA);
+  usedFunctionTypes.push({
+    argumentTypes: {a: 'Number', dA: 'Number', laplaceA: 'Number', abb: 'Number', f: 'Number'},
+    returnType: 'Number'
+  });
+
+  function calcFluidBToAdd(grid, x, y, radius, threadX, threadY, height) {
+    const i = Math.abs(x - threadX);
+    const j = Math.abs(y - (height - threadY));
     const radPos = (i * i) + (j * j);
 
-    // we only want to change values for fluid B (oddEvenMod = 1) and when radius² >= radPos.
-    const fluidBToAdd = isFluidB * smoothy(radius * radius, 0., radPos);
+    // radius² >= radPos.
+    const fluidBToAdd = smoothy(radius * radius, 0., radPos);
     return limit(fluidBToAdd, 0.0, 1.0);
   }
 
-  const usedFunctions = [
-    whenLe,
-    whenGe,
-    whenLt,
-    whenGt,
-    and,
-    limit,
-    smoothy,
-    mixValues,
-    wrapAround,
-    cellValue,
-    calcWeightedSum,
-    calcFluidBToAdd,
-    calcNextA
-  ];
+  usedFunctions.push(calcFluidBToAdd);
+  usedFunctionTypes.push({
+    argumentTypes: {grid: 'ArrayTexture(1)', x: 'Number', y: 'Number', radius: 'Number', threadX: 'Number', threadY: 'Number', height: 'Number'},
+    returnType: 'Number'
+  });
 
   function calcNextKernel(grid, weights, calcParams, addChemicalsParams) {
-    const dA = calcParams[0];
-    const dB = calcParams[1];
-    const f = calcParams[2];
-    const k = calcParams[3];
-    const dynkillfeed = calcParams[4];
+    const [dA, dB, f, k, dynkillfeed] = calcParams;
+    const [xAdd, yAdd, radius, addChems] = addChemicalsParams;
 
-    const xNormed = this.thread.x / this.constants.width;
-    const yNormed = this.thread.y / this.constants.height;
+    const {x: tX, y: tY, z: fluid} = this.thread;
+    const {width, height} = this.constants;
 
+    const xNormed = tX / width;
+    const yNormed = tY / height;
 
-    const x = addChemicalsParams[0];
-    const y = addChemicalsParams[1];
-    const radius = addChemicalsParams[2];
-    const addChems = addChemicalsParams[3];
+    const fluidA = grid[0][tY][tX];
+    let fluidB = grid[1][tY][tX];
+    let isFluidA = 1.0 - fluid;
+    let isFluidB = fluid;
 
-    // we calculate k and f deepending on x, y when dynkillfeed = 1
-    const kT = mixValues(k, k + (xNormed * 0.025), dynkillfeed);
-    const fT = mixValues(f, (f + 0.09) + (yNormed * -0.09), dynkillfeed);
+    if (addChems > 0 && isFluidB > 0.0) {
+      fluidB += calcFluidBToAdd(grid, xAdd, yAdd, radius, tX, tY, height);
+    }
 
-    const laplaceA = calcWeightedSum(grid, 0.0, weights);
-    const laplaceB = calcWeightedSum(grid, 1.0, weights);
+    // we calculate k and f depending on x, y when dynkillfeed = 1
+    const kT = (k * (1.0 - dynkillfeed)) + ((k + (xNormed * 0.025)) * dynkillfeed);
+    const fT = (f * (1.0 - dynkillfeed)) + (((f + 0.09) + (yNormed * -0.09)) * dynkillfeed);
 
-    const fluidA = grid[0][this.thread.y][this.thread.x];
-    const fluidB = grid[1][this.thread.y][this.thread.x] + (addChems * calcFluidBToAdd(grid, x, y, radius));
     const abb = fluidA * fluidB * fluidB;
 
-    const fluid = (this.thread.z - 1.) * -calcNextA(fluidA, dA, laplaceA, abb, fT)
-      + (this.thread.z * (fluidB + (dB * laplaceB) + abb - ((kT + fT) * fluidB)));
-
-    return limit(fluid, 0., 1.);
+    if (isFluidA > 0.0) {
+      const laplaceA = calcWeightedSum(grid, 0, weights, tX, tY, width, height);
+      return limit(calcNextA(fluidA, dA, laplaceA, abb, fT), 0.0,1.0);
+    }
+    if (isFluidB > 0.0) {
+      const laplaceB = calcWeightedSum(grid, 1, weights, tX, tY, width, height);
+      const fB =  (fluidB + (dB * laplaceB) + abb - ((kT + fT) * fluidB));
+      return limit(fB, 0.0,1.0)
+    }
   }
-  return {usedFunctions, calcNextKernel};
+
+  return {usedFunctions, usedFunctionTypes, calcNextKernel};
 })();

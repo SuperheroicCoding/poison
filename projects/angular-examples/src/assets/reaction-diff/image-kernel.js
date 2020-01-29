@@ -1,10 +1,11 @@
 (function () {
 
-  function mixValues(value1, value2, ratio) {
+
+  function mixVal(value1, value2, ratio) {
     return (value1 * (1.0 - ratio)) + (value2 * ratio);
   }
 
-  const usedFunctions = [mixValues];
+  const usedFunctions = [mixVal];
 
   function imageKernel(grid) {
 
@@ -22,36 +23,37 @@
     const ba = 0.8;
 
     // b color
-    const rb = 0.;
-    const gb = 0.;
+    const rb = 0.0;
+    const gb = 0.0;
     const bb = bVal * 0.4;
 
-    if (aVal === 0.) {
+    if (Math.abs(aVal) < 0.001) {
       this.color(
-        mixValues(rbg, rb, bVal),
-        mixValues(gbg, gb, bVal),
-        mixValues(bbg, bb, bVal));
-    } else if (bVal === 0.) {
+        mixVal(rbg, rb, bVal),
+        mixVal(gbg, gb, bVal),
+        mixVal(bbg, bb, bVal)
+      );
+    } else if (Math.abs(bVal) < 0.001) {
       this.color(
-        mixValues(rbg, ra, 0.5),
-        mixValues(gbg, ga, 0.5),
-        mixValues(bbg, ba, 0.5));
+        mixVal(rbg, ra, 0.5),
+        mixVal(gbg, ga, 0.5),
+        mixVal(bbg, ba, 0.5)
+      );
     } else if (aVal < bVal) {
       const rel = aVal / bVal;
       this.color(
-        mixValues(rb, ra, rel),
-        mixValues(gb, ga, rel),
-        mixValues(bb, ba, rel)
+        mixVal(rb, ra, rel),
+        mixVal(gb, ga, rel),
+        mixVal(bb, ba, rel)
       );
     } else {
       const rel2 = bVal / aVal;
       this.color(
-        mixValues(ra, rb, rel2),
-        mixValues(ga, gb, rel2),
-        mixValues(ba, bb, rel2)
+        mixVal(ra, rb, rel2),
+        mixVal(ga, gb, rel2),
+        mixVal(ba, bb, rel2)
       );
     }
-
   }
 
   return {usedFunctions, imageKernel};

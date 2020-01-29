@@ -1,3 +1,5 @@
+import { Graphics } from 'p5';
+
 export interface ReactionDiffCalculator {
   numberThreads: number;
 

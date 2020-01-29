@@ -1,4 +1,5 @@
 import {IKernelRunShortcut, KernelOutput, Texture} from 'gpu.js';
+import p5, { Graphics } from 'p5';
 import {ReactionDiffCalcParams} from './reaction-diff-calc-params';
 import {CellWeights, weightsToArray} from './cell-weights';
 import {ReactionDiffCalculator} from './reaction-diff-calculator';
@@ -12,7 +13,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
   private lastNextCalc = 0;
   private weights: number[];
   private addChemicalRadius: number;
-  private calcNextKernels: { first, second };
+  private calcNextKernels: { first: IKernelRunShortcut, second: IKernelRunShortcut };
   private speed: number;
   private imageKernel;
   private calcParams: ReactionDiffCalcParams;
@@ -37,6 +38,10 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
     calcCellWeights$.subscribe((weights) => this.setWeights(weights));
     addChemicalRadius$.subscribe((radius) => this.addChemicalRadius = radius);
     speed$.subscribe((speed) => this.speed = speed);
+    const calcNextModule = this.kernels.calcNextKernelModule;
+    calcNextModule.usedFunctions.forEach((usedFunction, index) => {
+      this.gpuJs.addFunction(usedFunction, calcNextModule.usedFunctionTypes[index]);
+    });
     this.init();
   }
 
@@ -86,26 +91,27 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
 
     for (let i = 0; i < repeat; i++) {
       // using texture swap to prevent input texture == output texture webGl error;
-
       const calcKernel = this.lastNextCalc === 0 ? this.calcNextKernels.first : this.calcNextKernels.second;
-      this.grid = calcKernel(
+      const nextCalcResult = calcKernel(
         this.grid,
         this.weights,
         calcParams,
         this.nextAddChemicals
-      );
+      ) as Texture;
+      this.grid.delete();
+      this.grid = nextCalcResult;
       this.lastNextCalc = (this.lastNextCalc + 1) % 2;
-      this.nextAddChemicals = [0, 0, 0, 0];
+      this.nextAddChemicals = [0., 0., 0., 0.];
     }
+
     this.imageKernel(this.grid);
     this.nextImage = this.imageKernel.canvas;
   }
 
   initGrid() {
-
     if (!this.initGridKernel) {
       this.initGridKernel = this.gpuJs.createKernel(function initGrid() {
-        return 1.0 - (this.thread.z % 2.0);
+        return 1.0 - (this.thread.z % 2);
       })
         .setOutput([this.width, this.height, 2])
         .setPipeline(true);
@@ -121,34 +127,37 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
     this.calcParams = calcParams;
   }
 
-  drawImage(p: any) {
+  drawImage(p: {canvas: HTMLCanvasElement}) {
     if (!this.initialized) {
       return;
     }
     if (!this.nextImage) {
       this.calcNext(1);
     }
-    const context = (p.canvas as HTMLCanvasElement).getContext('2d');
+    const context = p.canvas.getContext('2d');
     context.drawImage(this.nextImage, 0, this.nextImage.height - this.height, this.width, this.height, 0, 0, this.width, this.height);
   }
 
   cleanup() {
     this.initialized = false;
+    this.grid?.delete();
+    this.calcNextKernels?.first?.destroy();
+    this.calcNextKernels?.second?.destroy();
     this.calcNextKernels = null;
+    this.initGridKernel?.destroy();
     this.initGridKernel = null;
+    this.imageKernel?.destroy();
     this.imageKernel = null;
     this.lastNextCalc = 0;
     this.nextImage = null;
-    (this.grid as Texture).delete();
   }
 
-  private createCalcNextGpuKernel() {
+  private createCalcNextGpuKernel(): IKernelRunShortcut {
     const calcNextModule = this.kernels.calcNextKernelModule;
     return this.gpuJs.createKernel(calcNextModule.calcNextKernel,
       {output: [this.width, this.height, 2]})
       .setPipeline(true)
-      .setConstants({width: this.width, height: this.height})
-      .setFunctions(calcNextModule.usedFunctions);
+      .setConstants({width: this.width, height: this.height});
   }
 
   private createImageKernel() {

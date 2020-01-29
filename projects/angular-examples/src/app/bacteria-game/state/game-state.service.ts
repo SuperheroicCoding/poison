@@ -138,7 +138,6 @@ export class GameStateService {
   }
 
   cleanup(): void {
-    console.log('cleanup');
     this.pause();
     this.gameStateStore.update({keysPressed: []});
     this.subscriptions?.unsubscribe();
