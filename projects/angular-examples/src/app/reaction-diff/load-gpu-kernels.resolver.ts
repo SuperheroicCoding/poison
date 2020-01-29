@@ -13,7 +13,7 @@ export class LoadGpuKernelsResolver implements Resolve<ReactionDiffKernelModules
   private kernels: ReactionDiffKernelModules;
 
   constructor(private httpClient: HttpClient) {
-    this.calcNextKernel$ = httpClient.get('./assets/reaction-diff/calc-next-kernel.js', {responseType: 'text'});
+    this.calcNextKernel$ = httpClient.get('./assets/reaction-diff/calc-next-grid-kernel.js', {responseType: 'text'});
     this.imageKernelModule$ = httpClient.get('./assets/reaction-diff/image-kernel.js', {responseType: 'text'});
   }
 
