@@ -18,7 +18,7 @@ export class ReactionDiffCalcServiceFactory {
 
   public createCalcService(width: number,
                            height: number,
-                           useGpuJs: boolean = false,
+                           useGpuJs: boolean = true,
                            kernels: ReactionDiffKernelModules) {
     if (useGpuJs) {
       this.lastCalcService = new ReactionDiffGpuCalcService(
