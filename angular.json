@@ -27,7 +27,11 @@
             "polyfills": "projects/angular-examples/src/polyfills.ts",
             "tsConfig": "projects/angular-examples/tsconfig.app.json",
             "assets": [
-              { "glob": "*.*", "input": "./projects/fib-wasm/build", "output": "build" },
+              {
+                "glob": "*.*",
+                "input": "./projects/fib-wasm/build",
+                "output": "build"
+              },
               "projects/angular-examples/src/favicon.ico",
               "projects/angular-examples/src/manifest.json",
               "projects/angular-examples/src/assets"
@@ -36,7 +40,10 @@
               "projects/angular-examples/src/styles.scss"
             ],
             "scripts": [
-              "node_modules/vega-lite/build/vega-lite.js"
+              "node_modules/vega-lite/build/vega-lite.js",
+              {
+                "input": "node_modules/document-register-element/build/document-register-element.js"
+              }
             ],
             "es5BrowserSupport": true,
             "preserveSymlinks": true
