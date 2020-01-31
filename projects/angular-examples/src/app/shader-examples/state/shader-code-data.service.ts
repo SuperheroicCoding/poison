@@ -71,6 +71,6 @@ export class ShaderCodeDataService {
   }
 
   private userUid() {
-    return this.authQuery.profile.uid;
+    return this.authQuery.profile?.uid;
   }
 }

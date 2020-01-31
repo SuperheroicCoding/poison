@@ -20,6 +20,7 @@ describe('ShaderExamplesOptionsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ShaderExamplesOptionsComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
   });
 
