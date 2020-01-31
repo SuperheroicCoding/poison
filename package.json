@@ -87,7 +87,7 @@
     "@types/three": "0.103.2",
     "@types/webassembly-js-api": "^0.0.3",
     "assemblyscript": "^0.8.1",
-    "aws-sdk": "^2.608.0",
+    "aws-sdk": "^2.610.0",
     "axios": "^0.19.2",
     "codelyzer": "^5.2.1",
     "cross-env": "^7.0.0",
