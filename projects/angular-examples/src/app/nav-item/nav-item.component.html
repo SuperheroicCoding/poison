@@ -1,6 +1,6 @@
-<mat-list-item>
+<mat-list-item [routerLink]="path" routerLinkActive="active">
   <mat-icon mdListIcon>play_arrow</mat-icon>
-  <a [routerLink]="path" routerLinkActive="active">
+  <a>
     {{linkText}}
   </a>
 </mat-list-item>

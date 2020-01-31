@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 import {combineLatest, Observable} from 'rxjs';
 import {map, shareReplay, take, tap} from 'rxjs/operators';
-import {AuthenticationService} from '../../core/authentication.service';
+import {AuthenticationService, AuthQuery} from '../../core';
 import {ShaderCode} from './shader-code.model';
 
 @Injectable({
@@ -14,16 +14,15 @@ export class ShaderCodeDataService {
   private userShadersCol: AngularFirestoreCollection<ShaderCode>;
   private defaultShadersCol: AngularFirestoreCollection<ShaderCode>;
 
-  constructor(private afs: AngularFirestore, private authentication: AuthenticationService) {
+  constructor(private afs: AngularFirestore, private authentication: AuthenticationService, private authQuery: AuthQuery) {
     const orderByIdQuery = ref => ref.orderBy('id');
     this.defaultShadersCol = this.afs.collection<ShaderCode>(
       '/angularExamples/shaderExamples/defaultShaders',
       orderByIdQuery
     );
 
-    const uid = this.authentication.uid; // must be logged in
     this.userShadersCol = this.afs.collection<ShaderCode>(
-      `angularExamples/shaderExamples/${uid}`,
+      `angularExamples/shaderExamples/${(this.userUid())}`,
       orderByIdQuery
     );
   }
@@ -41,7 +40,7 @@ export class ShaderCodeDataService {
           return shaderCode != null ? shaderCode : defaultShader;
         })
       );
-      this.shaders = combineLatest(defaultShaders, userShaders).pipe(
+      this.shaders = combineLatest([defaultShaders, userShaders]).pipe(
         mapDefaultAndUserShaders,
         shareReplay(1));
     }
@@ -50,7 +49,7 @@ export class ShaderCodeDataService {
 
   async updateShader(shader: ShaderCode, newCode: string) {
     const shaderByIdQuery = this.afs.collection<ShaderCode>(
-      `angularExamples/shaderExamples/${this.authentication.uid}`,
+      `angularExamples/shaderExamples/${(this.userUid())}`,
       ref => ref.where('id', '==', shader.id)
     );
     const batch = this.afs.firestore.batch();
@@ -62,12 +61,16 @@ export class ShaderCodeDataService {
       tap(ignored => {
         const newUid = this.afs.createId();
         const firestoreDocument = this.afs.doc(
-          `angularExamples/shaderExamples/${this.authentication.uid}/${newUid}`
+          `angularExamples/shaderExamples/${this.userUid()}/${newUid}`
         );
         firestoreDocument.ref.set(newShader);
       }),
     );
 
     return deleteOldShadersAndUpdateInBatch.toPromise();
+  }
+
+  private userUid() {
+    return this.authQuery.profile.uid;
   }
 }

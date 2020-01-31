@@ -1,0 +1,17 @@
+:host-context(.mat-drawer-container-has-open) .active {
+  animation: active-color ;
+  animation-duration: 250ms;
+  animation-timing-function: ease-in;
+  animation-fill-mode: both;
+
+  @keyframes active-color {
+    0% {
+      color: white;
+    }
+    100% {
+      color: #69f0ae;
+    }
+  }
+
+}
+

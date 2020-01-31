@@ -1,17 +1,18 @@
-.logged-in {
+.logged-in, .log-in {
   display: flex;
   align-items: center;
 
-  .caption,
-  mat-chip-list {
-    margin-right: 1rem;
+  .please-log-in, .profile-img {
+    margin-right: .7rem;
   }
 
-  img {
-    height: 2.5em;
+  .profile-img {
+    height: 40px;
+    width: 40px;
     border-radius: 50%;
+    background-position: center;
+    background-size: 45px 45px;
   }
-
 }
 
 

@@ -1,8 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {untilDestroyed} from 'ngx-take-until-destroy';
 import {Subscription} from 'rxjs';
-import {AuthenticationService} from '../core/authentication.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import {AuthUser} from '../core/auth-user';
+import {AuthenticationService, AuthQuery, Profile} from '../core';
+import UserCredential = firebase.auth.UserCredential;
 
 @Component({
   selector: 'app-login',
@@ -10,36 +11,23 @@ import {AuthUser} from '../core/auth-user';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  user: AuthUser;
+  user: Profile;
 
   private subscription: Subscription;
 
-  constructor(public authenticationService: AuthenticationService, private snackBar: MatSnackBar) {
+  constructor(private authQuery: AuthQuery, private authService: AuthenticationService, private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
-    this.subscription = this.authenticationService.user.subscribe(user => this.user = user);
+    this.authQuery.profile$.pipe(untilDestroyed(this)).subscribe(user => this.user = user);
   }
 
-  login() {
-    this.authenticationService.signIn().catch(error => {
-      console.log('Error sign in: ', error);
-      const matSnackBarRef = this.snackBar.open('Upps, there was an error while signing in. Try again later.',
-        'Retry now!', {
-          duration: 6000, horizontalPosition: 'right', verticalPosition: 'top'
-        });
-      matSnackBarRef.onAction().subscribe(() => this.login());
-    });
+  async login(): Promise<UserCredential> {
+    return await this.authService.signIn();
   }
 
-  logout() {
-    this.authenticationService.signOut()
-      .catch(error => {
-        console.log('Error sign out: ', error);
-        this.snackBar.open('Error signing out', null, {
-          duration: 6000, horizontalPosition: 'right', verticalPosition: 'top'
-        });
-      });
+  async logout() {
+    await this.authService.signOut();
   }
 
   ngOnDestroy() {

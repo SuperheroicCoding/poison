@@ -2,6 +2,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {AkitaNgRouterStoreModule} from '@datorama/akita-ng-router-store';
 import {AkitaNgDevtools} from '@datorama/akita-ngdevtools';
 import {ScThanosModule} from '../../../sc-thanos/src/public-api';
 import {environment} from '../environments/environment';
@@ -30,6 +31,7 @@ import {SharedModule} from './shared/shared.module';
   ],
   imports: [
     environment.production ? [] : AkitaNgDevtools.forRoot(),
+    AkitaNgRouterStoreModule,
     BrowserModule,
     BrowserAnimationsModule,
     CoreModule,

@@ -1,15 +1,15 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, CanLoad, Route, RouterStateSnapshot} from '@angular/router';
 import {from, Observable, of} from 'rxjs';
-import {AuthenticationService} from '../authentication.service';
-import {switchMap, switchMapTo, take, tap} from 'rxjs/operators';
+import {distinctUntilChanged, switchMap, switchMapTo, take, tap} from 'rxjs/operators';
+import {AuthenticationService, AuthQuery} from '../index';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IsAuthenticatedGuard implements CanActivate, CanLoad {
 
-  constructor(private authService: AuthenticationService) {
+  constructor(private authQuery: AuthQuery, private authService: AuthenticationService) {
   }
 
   canActivate(
@@ -19,14 +19,12 @@ export class IsAuthenticatedGuard implements CanActivate, CanLoad {
   }
 
   private loginIfNotAuthenticated() {
-    return this.authService.authenticated.pipe(
-      tap(auth => console.log('AuthGuard', auth)),
+    return this.authQuery.authenticated$.pipe(
+      take(1),
       switchMap(isAuthenticated =>
         isAuthenticated ? of(isAuthenticated) :
-          from(this.authService.signIn())
-            .pipe(switchMapTo(this.authService.authenticated))
-      ),
-      take(1)
+          from(this.authService.signIn().then(() => true, error => false))
+      )
     );
   }
 

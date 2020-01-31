@@ -8,7 +8,7 @@ const routes: Routes = [{
   path: '', component: TensorflowExamplesComponent, children: [
     {path: 'polynominalregretion', component: PolynominalRegretionComponent},
     {path: 'learnedDigits', component: LearnedDigitsComponent},
-    {path: '**', pathMatch: 'full', redirectTo: 'polynominalregretion'}
+    {path: '', redirectTo: 'polynominalregretion'}
   ]
 }];
 

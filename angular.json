@@ -178,6 +178,7 @@
   },
   "defaultProject": "angular-examples",
   "cli": {
-    "analytics": "4ad877ce-d991-489a-97e7-918fca894614"
+    "analytics": "4ad877ce-d991-489a-97e7-918fca894614",
+    "defaultCollection": "@datorama/akita"
   }
 }

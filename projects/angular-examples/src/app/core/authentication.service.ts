@@ -1,44 +1,49 @@
 import {Injectable} from '@angular/core';
-import {AngularFireAuth} from '@angular/fire/auth';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import {Angulartics2} from 'angulartics2';
 import * as firebase from 'firebase';
-import {Observable} from 'rxjs';
-import {map, tap} from 'rxjs/operators';
-import {AuthUser} from './auth-user';
-import GoogleAuthProvider = firebase.auth.GoogleAuthProvider;
+import {tap} from 'rxjs/operators';
+import {AkitaAuthQuery, AkitaFireAuthService} from './akita-fire-auth';
 import UserCredential = firebase.auth.UserCredential;
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
 
-  user: Observable<AuthUser | null>;
-  authenticated: Observable<boolean>;
-  uid: string | number;
-
-  constructor(private afAuth: AngularFireAuth, private router: Router, angulartics: Angulartics2) {
-    this.user = this.afAuth.user.pipe(
-      tap(user => {
-        this.uid = user != null ? user.uid : null;
-      }),
-      tap(user => angulartics.setUsername.next(('' + this.uid))),
-      map(user => user == null ? null : new AuthUser(user.displayName, user.photoURL))
-    );
-    // @ts-ignore
-    this.authenticated = this.afAuth.authState.pipe(
-      map(user => user != null)
-    );
+  constructor(private afAuth: AkitaFireAuthService, private akitaAuthQuery: AkitaAuthQuery, private router: Router,
+              angulartics: Angulartics2,
+              private snackBar: MatSnackBar) {
+    afAuth.sync().subscribe();
+    this.akitaAuthQuery.select().pipe(
+      tap(user => angulartics.setUsername.next(('' + user.uid))),
+    ).subscribe();
   }
 
-  signIn(): Promise<UserCredential> {
-    return this.afAuth.auth.signInWithPopup(new GoogleAuthProvider());
+  async signIn(): Promise<UserCredential> {
+    try {
+      return await this.afAuth.signin('google');
+    } catch (error) {
+      console.log('Error sign in: ', error);
+      const matSnackBarRef = this.snackBar.open('Upps, there was an error while signing in. Try again later.',
+        'Retry now!', {
+          duration: 6000, horizontalPosition: 'right', verticalPosition: 'top'
+        });
+      matSnackBarRef.onAction().subscribe(() => this.signIn());
+    }
   }
+
 
   async signOut(): Promise<void> {
-    await this.router.navigate(['/']);
-    return this.afAuth.auth.signOut();
+    try {
+      await this.router.navigate(['/']);
+      await this.afAuth.signOut();
+    } catch (error) {
+      console.log('Error sign out: ', error);
+      this.snackBar.open('Error signing out', null, {
+        duration: 6000, horizontalPosition: 'right', verticalPosition: 'top'
+      });
+    }
   }
 }

@@ -29,7 +29,6 @@ export const routes: AppRoute[] = [
     path: 'shaderExamples',
     loadChildren: async () => import('./shader-examples/shader-examples.module').then(m => m.ShaderExamplesModule),
     data: {linkText: 'WebGL Shader examples with live code editor (three.js)'},
-    canLoad: [IsAuthenticatedGuard]
   },
   {
     path: 'someGpuCalculations',
@@ -75,7 +74,7 @@ export const routes: AppRoute[] = [
 
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {paramsInheritanceStrategy: 'always'})],
   exports: [RouterModule],
   providers: [
     {

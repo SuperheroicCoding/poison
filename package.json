@@ -39,8 +39,12 @@
     "@angular/platform-browser-dynamic": "9.0.0-rc.11",
     "@angular/router": "9.0.0-rc.11",
     "@angular/service-worker": "9.0.0-rc.11",
+    "@datorama/akita": "^4.18.1",
+    "@datorama/akita-ng-router-store": "^4.0.0",
+    "@datorama/akita-ngdevtools": "^3.0.2",
     "@tensorflow/tfjs": "1.5.1",
     "ace-builds": "^1.4.8",
+    "akita-ng-fire": "^2.0.0-alpha.26",
     "angulartics2": "^7.5.2",
     "brace": "^0.11.1",
     "browserslist": "^4.8.5",
@@ -102,5 +106,10 @@
     "ts-node": "8.6.2",
     "tslint": "6.0.0",
     "typescript": "3.7.5"
+  },
+  "akitaCli": {
+    "customFolderName": "true",
+    "isAngular": true,
+    "basePath": "./projects/angular-examples/src/app/"
   }
 }
