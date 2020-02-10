@@ -21,10 +21,10 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {Angulartics2Module} from 'angulartics2';
-import 'hammerjs';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {ScThanosModule} from '../../../../sc-thanos/src/lib/sc-thanos.module';
 import {CodeEditorComponent} from './code-editor/code-editor.component';
+import {ElemResizedDirective} from './elem-resized.directive';
 import {RaiseCardDirective} from './raise-card.directive';
 import {RenderShaderComponent} from './render-shader/render-shader.component';
 import {SafeHtmlPipe} from './safe-html.pipe';
@@ -34,6 +34,12 @@ import {SafeHtmlPipe} from './safe-html.pipe';
     CommonModule,
     AceEditorModule
   ],
+  declarations: [
+    RaiseCardDirective,
+    SafeHtmlPipe,
+    CodeEditorComponent,
+    RenderShaderComponent,
+    ElemResizedDirective],
   exports: [
     CommonModule,
     FormsModule,
@@ -62,13 +68,10 @@ import {SafeHtmlPipe} from './safe-html.pipe';
     CodeEditorComponent,
     RenderShaderComponent,
     Angulartics2Module,
-    ScThanosModule
+    ScThanosModule,
+    ElemResizedDirective
   ],
-  declarations: [
-    RaiseCardDirective,
-    SafeHtmlPipe,
-    CodeEditorComponent,
-    RenderShaderComponent]
+
 })
 export class SharedModule {
 }

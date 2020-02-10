@@ -7,11 +7,11 @@
   <span class="toolbar-spacer"></span>
   <app-service-worker-update [class.hide]="isHandset$ | async"></app-service-worker-update>
   <app-login></app-login>
-<div class="shader-background" #shaderContainer *ngIf="shaderCode">
+<div class="shader-background" (appElemResized)="onResize($event)" *ngIf="shaderCode">
   <app-render-shader
     [shaderCode]="shaderCode"
-    [canvasWidth]="shaderContainer.clientWidth"
-    [canvasHeight]="shaderContainer.clientHeight"
+    [canvasWidth]="shaderWidth"
+    [canvasHeight]="shaderHeight"
     [runAnimation]="runAnimation$ | async"
   >
   </app-render-shader>

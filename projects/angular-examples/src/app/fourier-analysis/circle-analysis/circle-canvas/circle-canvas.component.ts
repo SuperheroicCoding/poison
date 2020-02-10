@@ -12,9 +12,10 @@ import {
 import * as math from 'mathjs';
 import P5 from 'p5';
 import {InputWave} from '../../state/input-wave.model';
-import { Graphics } from 'p5';
+import {Graphics} from 'p5';
 
 const NEG_TWO_PI = -2 * Math.PI;
+const CIRCLE_DRAW_SAMPLES = 800;
 
 interface CircleCanvasChanges extends SimpleChanges {
   waveWidth: SimpleChange;
@@ -35,7 +36,7 @@ interface CenterData {
 })
 export class CircleCanvasComponent implements OnChanges, AfterViewInit, OnDestroy {
 
-  @ViewChild('canvasContainer', { static: true }) canvasContainerRef: ElementRef;
+  @ViewChild('canvasContainer', {static: true}) canvasContainerRef: ElementRef;
   private canvasContainer: HTMLElement;
 
   @Input() waveWidth: number;
@@ -257,11 +258,12 @@ export class CircleCanvasComponent implements OnChanges, AfterViewInit, OnDestro
       }
     }
 
-
     function drawCircleToBuffer(this: CircleCanvasComponent) {
       const radius = (sketch.height - (padding * 2)) / 2;
       fourierCircleImg = sketch.createGraphics(2 * (radius + padding), 2 * (radius + padding));
-      const drawSamples = this.wave.points.length;
+      const drawSamplesLength = this.wave.points.length;
+      const stepSize = Math.max(1, Math.floor(drawSamplesLength / CIRCLE_DRAW_SAMPLES));
+
       fourierCircleImg.background(66);
       fourierCircleImg.stroke(255, 255, 255);
       fourierCircleImg.strokeWeight(0.5);
@@ -271,18 +273,23 @@ export class CircleCanvasComponent implements OnChanges, AfterViewInit, OnDestro
       fourierCircleImg.ellipseMode('center');
       fourierCircleImg.ellipse(0, 0, radius * 2);
       fourierCircleImg.stroke(255, 255, 255, 60);
+
+
       fourierCircleImg.beginShape();
-      for (let n = 0; n < drawSamples; n++) {
-        const tIndex = Math.floor(fourierCircleImg.map(n, 0, drawSamples, 0, this.wave.points.length));
-        const t = fourierCircleImg.map(n, 0, drawSamples, 0, this.wave.lengthInMs / 1000);
+      for (let n = 0; n < drawSamplesLength; n += stepSize) {
+
+        const tIndex = Math.floor(fourierCircleImg.map(n, 0, drawSamplesLength, 0, this.wave.points.length));
+        const t = fourierCircleImg.map(n, 0, drawSamplesLength, 0, this.wave.lengthInMs / 1000);
         const normalizedSamplePoint = fourierCircleImg.map(this.wave.points[tIndex], -1, 1, 0, 1);
         const rotation = NEG_TWO_PI * this.frequencyToTest * t;
         const realStep = normalizedSamplePoint * Math.cos(rotation);
         const imagStep = normalizedSamplePoint * Math.sin(rotation);
 
-        fourierCircleImg.vertex(realStep * radius, -imagStep * radius);
+        const x = realStep * radius;
+        const y = -imagStep * radius;
+        fourierCircleImg.curveVertex(x, y);
       }
-      fourierCircleImg.endShape();
+      fourierCircleImg.endShape('close');
 
       fourierCircleImg.stroke(255, 255, 255);
       fourierCircleImg.ellipse(0, 0, 2, 2);
@@ -295,7 +302,7 @@ export class CircleCanvasComponent implements OnChanges, AfterViewInit, OnDestro
 
     function setFrequencyToTest(this: CircleCanvasComponent, frequency: number) {
       this.frequencyToTest = frequency;
-      drawCircleToBuffer.call(this);
+      drawCircleToBuffer.apply(this);
     }
   }
 

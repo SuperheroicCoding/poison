@@ -1,4 +1,16 @@
-import {AfterViewInit, Component, ElementRef, Inject, Input, NgZone, OnChanges, OnDestroy, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  NgZone,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import * as Stats from 'stats.js';
 import {Camera, Mesh, OrthographicCamera, PlaneBufferGeometry, Renderer, Scene, ShaderMaterial, Vector2, WebGLRenderer} from 'three';
 import {defaultVertexShader} from './default-vertex-shader';
@@ -6,7 +18,8 @@ import {defaultVertexShader} from './default-vertex-shader';
 @Component({
   selector: 'app-render-shader',
   templateUrl: './render-shader.component.html',
-  styleUrls: ['./render-shader.component.less']
+  styleUrls: ['./render-shader.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RenderShaderComponent implements AfterViewInit, OnChanges, OnDestroy {
 

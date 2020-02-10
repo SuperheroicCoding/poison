@@ -1,9 +1,11 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
+import {ResizedEvent} from '../../shared/resized-event';
 import {FourierAnalysisQuery} from '../state/fourier-analysis.query';
 import {FourierAnalysisService} from '../state/fourier-analysis.service';
 import {FourierAnalysisState} from '../state/fourier-analysis.store';
 import {InputWaveService} from '../state/input-wave.service';
+
 
 @Component({
   selector: 'app-fourier-analysis',
@@ -13,6 +15,10 @@ import {InputWaveService} from '../state/input-wave.service';
 export class FourierAnalysisComponent implements OnInit {
   fourierAnalysis$: Observable<FourierAnalysisState>;
   isLoading$: Observable<boolean>;
+  inputWaveCanvasWidth: number;
+  inputWaveCanvasHeight: number;
+  circleCanvasWidth: number;
+  circleCanvasHeight: number;
 
   constructor(
     private el: ElementRef,
@@ -22,26 +28,18 @@ export class FourierAnalysisComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.fourierAnalysis$ = this.fourierAnalysisQuery.select();
     this.isLoading$ = this.fourierAnalysisQuery.selectLoading();
   }
 
-  get inputWaveCanvasWidth() {
-    const availableWidth = (this.el.nativeElement as HTMLDivElement).clientWidth;
-    return availableWidth - 32;
-  }
+  onResize($event: ResizedEvent) {
+    const availableWidth = Math.max(300, $event.newWidth - 32);
 
-  get inputWaveCanvasHeight() {
-    return Math.round(this.inputWaveCanvasWidth * (9 / 64));
-  }
+    this.inputWaveCanvasWidth = availableWidth;
+    this.circleCanvasWidth = availableWidth;
 
-  get circleCanvasWidth() {
-    const availableWidth = (this.el.nativeElement as HTMLDivElement).clientWidth;
-    return availableWidth - 32;
-  }
-
-  get circleCanvasHeight() {
-    return Math.round(this.inputWaveCanvasWidth * (9 / 64));
+    this.circleCanvasHeight = Math.max(250, this.circleCanvasWidth * (9 / 94));
+    this.inputWaveCanvasHeight = Math.max(250, Math.round(this.inputWaveCanvasWidth * (9 / 64)));
   }
 }
