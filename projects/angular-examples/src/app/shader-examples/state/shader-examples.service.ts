@@ -25,7 +25,7 @@ export class ShaderExamplesService {
     this.updateShaderSubject = new Subject();
     this.updateShaderSubject
       .pipe(
-        debounceTime(500),
+        debounceTime(2000),
         distinctUntilChanged((x1, x2) =>
           x1.shader.id === x2.shader.id && x1.code === x2.code
         ),

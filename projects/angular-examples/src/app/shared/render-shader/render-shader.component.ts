@@ -2,12 +2,12 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
+  ElementRef, EventEmitter,
   Inject,
   Input,
   NgZone,
   OnChanges,
-  OnDestroy,
+  OnDestroy, Output,
   SimpleChanges,
   ViewChild
 } from '@angular/core';
@@ -29,7 +29,7 @@ export class RenderShaderComponent implements AfterViewInit, OnChanges, OnDestro
   @Input() showFps = false;
   @Input() canvasWidth: number;
   @Input() canvasHeight: number;
-
+  @Output() error: EventEmitter<any> = new EventEmitter<any>();
 
   private renderer: Renderer;
 
@@ -158,12 +158,16 @@ export class RenderShaderComponent implements AfterViewInit, OnChanges, OnDestro
   }
 
   animate(time: number) {
-    this._ngZone.runOutsideAngular(() => {
-      if (this.runAnimation) {
-        requestAnimationFrame(timestamp => this.animate(timestamp));
-      }
-      this.render(time);
-    });
+    try {
+      this._ngZone.runOutsideAngular(() => {
+        if (this.runAnimation) {
+          requestAnimationFrame(timestamp => this.animate(timestamp));
+        }
+        this.render(time);
+      });
+    } catch (e) {
+      this.error.next(e);
+    }
   }
 
 }
