@@ -100,7 +100,7 @@ export class DrawPredictionsComponent implements OnChanges {
   plotLosses(lossValues) {
     embed(
       this.lossCanvas.nativeElement, {
-        '$schema': 'https://vega.github.io/schema/vega-lite/v3.2.1.json',
+        '$schema': 'https://vega.github.io/schema/vega-lite/v4.4.0.json',
         'data': {'values': lossValues},
         'mark': {
           'type': 'line',
@@ -121,7 +121,7 @@ export class DrawPredictionsComponent implements OnChanges {
   plotAccuracies(accuracyValues) {
     embed(
       this.accuracyCanvas.nativeElement, {
-        '$schema': 'https://vega.github.io/schema/vega-lite/v3.2.1.json',
+        '$schema': 'https://vega.github.io/schema/vega-lite/v4.4.0.json',
         'data': {'values': accuracyValues},
         'width': 260,
         'mark': {'type': 'line', 'orient': 'vertical', 'legend': null},
@@ -146,7 +146,7 @@ export class DrawPredictionsComponent implements OnChanges {
     const data = image.dataSync();
     for (let i = 0; i < height * width; ++i) {
       const j = i * 4;
-      imageData.data[j + 0] = data[i] * 255;
+      imageData.data[j] = data[i] * 255;
       imageData.data[j + 1] = data[i] * 255;
       imageData.data[j + 2] = data[i] * 255;
       imageData.data[j + 3] = 255;
