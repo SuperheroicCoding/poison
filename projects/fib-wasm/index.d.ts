@@ -9,8 +9,8 @@ declare module ASModule {
   type f64 = number;
   type bool = any;
   export function __alloc(size: u32, id: u32): u32;
-  export function __retain(ref: u32): u32;
-  export function __release(ref: u32): void;
+  export function __retain(ptr: u32): u32;
+  export function __release(ptr: u32): void;
   export function __collect(): void;
   export var __rtti_base: u32;
   export function logRecCalls(v: i32): void;
