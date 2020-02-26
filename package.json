@@ -39,7 +39,7 @@
     "@angular/platform-browser-dynamic": "9.0.2",
     "@angular/router": "9.0.2",
     "@angular/service-worker": "9.0.2",
-    "@datorama/akita": "^4.19.3",
+    "@datorama/akita": "^4.19.4",
     "@datorama/akita-ng-router-store": "^4.0.0",
     "@datorama/akita-ngdevtools": "^3.0.2",
     "@tensorflow/tfjs": "1.5.2",
