@@ -1,7 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {untilDestroyed} from 'ngx-take-until-destroy';
-import {Subscription} from 'rxjs';
 import {AuthenticationService, AuthQuery, Profile} from '../core';
 import UserCredential = firebase.auth.UserCredential;
 
@@ -13,12 +11,10 @@ import UserCredential = firebase.auth.UserCredential;
 export class LoginComponent implements OnInit, OnDestroy {
   user: Profile;
 
-  private subscription: Subscription;
-
-  constructor(private authQuery: AuthQuery, private authService: AuthenticationService, private snackBar: MatSnackBar) {
+  constructor(private authQuery: AuthQuery, private authService: AuthenticationService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.authQuery.profile$.pipe(untilDestroyed(this)).subscribe(user => this.user = user);
   }
 
@@ -26,12 +22,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     return await this.authService.signIn();
   }
 
-  async logout() {
+  async logout(): Promise<void> {
     await this.authService.signOut();
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+  ngOnDestroy(): void {
   }
 
 }

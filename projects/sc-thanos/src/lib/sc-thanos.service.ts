@@ -1,6 +1,6 @@
 import {Inject, Injectable, NgZone} from '@angular/core';
 
-import html2canvas from 'html2canvas';
+import {default as html2canvas} from 'html2canvas';
 import {animationFrameScheduler, from, interval, Observable} from 'rxjs';
 import {map, switchMap, takeWhile, tap, timeInterval} from 'rxjs/operators';
 import {SC_THANOS_OPTIONS_TOKEN, ScThanosOptions} from './sc-thanos.options';
@@ -260,7 +260,7 @@ export class ScThanosService {
         allowTaint: true,
         windowHeight: window.innerHeight,
         windowWidth: window.innerWidth,
-        scrollY:  -window.scrollY,
+        scrollY: -window.scrollY,
       });
 
     return from(html2CanvasPromise).pipe(
