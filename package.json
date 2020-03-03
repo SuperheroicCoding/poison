@@ -60,7 +60,7 @@
     "p5": "^0.10.2",
     "rxjs": "6.5.4",
     "stats.js": "^0.17.0",
-    "three": "0.113.2",
+    "three": "0.114.0",
     "three-orbitcontrols-ts": "^0.1.2",
     "ts-keycode-enum": "^1.0.6",
     "tslib": "^1.11.0",
