@@ -30,7 +30,7 @@ import {SharedModule} from './shared/shared.module';
     MainToolbarComponent,
   ],
   imports: [
-    environment.production ? [] : AkitaNgDevtools.forRoot(),
+    environment.production ? [] : AkitaNgDevtools,
     AkitaNgRouterStoreModule,
     BrowserModule,
     BrowserAnimationsModule,
