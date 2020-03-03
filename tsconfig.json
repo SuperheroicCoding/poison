@@ -22,8 +22,16 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "@fib-wasm": ["projects/fib-wasm"],
-      "@fib-wasm/*": ["projects/fib-wasm/*"]
+      "@fib-wasm": [
+        "projects/fib-wasm"
+      ],
+      "@fib-wasm/*": [
+        "projects/fib-wasm/*"
+      ],
+      "test-lib": [
+        "dist/test-lib/test-lib",
+        "dist/test-lib"
+      ]
     }
   }
 }
