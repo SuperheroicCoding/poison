@@ -57,7 +57,7 @@
     "mathjs": "^6.6.1",
     "ng2-ace-editor": "0.3.9",
     "ngx-take-until-destroy": "^5.4.0",
-    "p5": "^0.10.2",
+    "p5": "^1.0.0",
     "rxjs": "6.5.4",
     "stats.js": "^0.17.0",
     "three": "0.114.0",
