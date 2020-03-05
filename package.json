@@ -42,7 +42,7 @@
     "@datorama/akita": "^4.20.0",
     "@datorama/akita-ng-router-store": "^4.0.0",
     "@datorama/akita-ngdevtools": "^4.0.0",
-    "@tensorflow/tfjs": "1.5.2",
+    "@tensorflow/tfjs": "1.6.0",
     "ace-builds": "^1.4.8",
     "akita-ng-fire": "^2.0.0-alpha.29",
     "angulartics2": "^8.3.0",
