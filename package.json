@@ -89,7 +89,7 @@
     "aws-sdk": "^2.631.0",
     "axios": "^0.19.2",
     "codelyzer": "^5.2.1",
-    "cross-env": "^7.0.0",
+    "cross-env": "^7.0.2",
     "firebase-admin": "^8.9.2",
     "html2canvas": "^1.0.0-rc.5",
     "jasmine-core": "~3.5.0",
