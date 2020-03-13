@@ -75,7 +75,7 @@
     "@angular-devkit/schematics": "^9.0.4",
     "@angular/cli": "9.0.4",
     "@angular/compiler-cli": "^9.0.4",
-    "@angular/language-service": "9.0.4",
+    "@angular/language-service": "9.0.6",
     "@types/gl-matrix": "^2.4.5",
     "@types/hammerjs": "^2.0.36",
     "@types/jasmine": "3.5.7",
