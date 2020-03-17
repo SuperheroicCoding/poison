@@ -65,9 +65,9 @@
     "ts-keycode-enum": "^1.0.6",
     "tslib": "^1.11.1",
     "vega": "^5.9.2",
-    "vega-embed": "6.3.2",
+    "vega-embed": "6.4.0",
     "vega-lite": "4.7.0",
-    "zone.js": "~0.10.2"
+    "zone.js": 0.10.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.900.4",
