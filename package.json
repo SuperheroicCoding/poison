@@ -52,7 +52,7 @@
     "document-register-element": "^1.14.3",
     "firebase": "^7.9.3",
     "gl-matrix": "3.2.1",
-    "gpu.js": "2.6.9",
+    "gpu.js": "2.8.4",
     "hammerjs": "^2.0.8",
     "mathjs": "^6.6.1",
     "ng2-ace-editor": "0.3.9",
