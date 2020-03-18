@@ -64,7 +64,7 @@
     "three-orbitcontrols-ts": "^0.1.2",
     "ts-keycode-enum": "^1.0.6",
     "tslib": "^1.11.1",
-    "vega": "^5.9.2",
+    "vega": "^5.10.0",
     "vega-embed": "6.5.1",
     "vega-lite": "4.7.0",
     "zone.js": "0.10.3"
