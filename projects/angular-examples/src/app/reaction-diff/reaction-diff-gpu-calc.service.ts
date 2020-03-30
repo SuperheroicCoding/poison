@@ -97,7 +97,7 @@ export class ReactionDiffGpuCalcService implements ReactionDiffCalculator {
         calcParams,
         this.nextAddChemicals
       ) as Texture;
-      this.grid.delete();
+      // this.grid.delete();
       this.grid = nextCalcResult;
       this.lastNextCalc = (this.lastNextCalc + 1) % 2;
       this.nextAddChemicals = [0., 0., 0., 0.];
