@@ -10,7 +10,7 @@ import {
   ViewChild
 } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {untilDestroyed} from 'ngx-take-until-destroy';
+import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import {Observable} from 'rxjs';
 import {distinctUntilChanged, filter, map, switchMap, take} from 'rxjs/operators';
 import {ScThanosDirective} from '../../../../sc-thanos/src/public-api';
@@ -42,6 +42,7 @@ export function createImageDataFromBacterias(
 }
 
 
+@UntilDestroy()
 @Component({
   selector: 'app-game-state',
   templateUrl: './bacteria-game.component.html',

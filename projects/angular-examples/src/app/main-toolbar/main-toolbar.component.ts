@@ -1,13 +1,14 @@
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, OnDestroy, Output} from '@angular/core';
 import {NavigationEnd, Router, RouterEvent} from '@angular/router';
-import {untilDestroyed} from 'ngx-take-until-destroy';
+import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import {Observable} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
 import {HeadlineAnimationService} from '../core/headline-animation.service';
 import {ResizedEvent} from '../shared/resized-event';
 import {shader} from '../title-shader';
 
+@UntilDestroy()
 @Component({
   selector: 'app-main-toolbar',
   templateUrl: './main-toolbar.component.html',

@@ -1,8 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {untilDestroyed} from 'ngx-take-until-destroy';
+import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import {AuthenticationService, AuthQuery, Profile} from '../core';
 import UserCredential = firebase.auth.UserCredential;
 
+@UntilDestroy()
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',

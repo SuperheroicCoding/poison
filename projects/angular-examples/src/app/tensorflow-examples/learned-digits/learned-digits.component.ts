@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Tensor, Tensor2D} from '@tensorflow/tfjs';
-import {untilDestroyed} from 'ngx-take-until-destroy';
+import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import {Subject} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 import {HeadlineAnimationService} from '../../core/headline-animation.service';
@@ -10,6 +10,7 @@ import {AskForNumberDialogData} from './ask-for-number-dialog/ask-for-number-dia
 import {LearnedDigitsModelService} from './learned-digits-model.service';
 import {MnistDataService} from './mnist-data.service';
 
+@UntilDestroy()
 @Component({
   selector: 'app-learned-digits',
   templateUrl: './learned-digits.component.html',
