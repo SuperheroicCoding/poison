@@ -22,7 +22,7 @@
     "deploy": "npm version patch && npm run build-libs && npm run buildS3 && node node-scripts/sync-S3",
     "deploy-without-build": "node node-scripts/sync-S3",
     "deploy-exclude-assets": "npm version patch && npm run build-deps && npm run buildS3 && node node-scripts/sync-S3 --excludeAssets",
-    "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points"
+    "postinstall": "ngcc"
   },
   "private": true,
   "dependencies": {
