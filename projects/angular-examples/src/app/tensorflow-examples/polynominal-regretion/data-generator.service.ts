@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import * as tf from '@tensorflow/tfjs';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class DataGeneratorService {
 
   constructor() {

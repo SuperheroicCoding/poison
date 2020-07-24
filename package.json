@@ -13,8 +13,8 @@
     "test": "ng test angular-examples",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "asbuild:untouched": "asc projects/fib-wasm/assembly/index.ts -d projects/fib-wasm/index.d.ts -b projects/fib-wasm/build/untouched.wasm -t projects/fib-wasm/build/untouched.wat --sourceMap --importMemory --validate --debug",
-    "asbuild:optimized": "asc projects/fib-wasm/assembly/index.ts -d projects/fib-wasm/index.d.ts -b projects/fib-wasm/build/optimized.wasm -t projects/fib-wasm/build/optimized.wat --sourceMap --importMemory --validate --optimize",
+    "asbuild:untouched": "asc projects/fib-wasm/assembly/index.ts -d projects/fib-wasm/index.d.ts -b projects/fib-wasm/build/untouched.wasm -t projects/fib-wasm/build/untouched.wat --sourceMap --importMemory --debug",
+    "asbuild:optimized": "asc projects/fib-wasm/assembly/index.ts -d projects/fib-wasm/index.d.ts -b projects/fib-wasm/build/optimized.wasm -t projects/fib-wasm/build/optimized.wat --sourceMap --importMemory --optimize",
     "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
     "ghPages": "npm run asbuild && ng build --prod --output-path docs --named-chunks --base-href https://superheroiccoding.github.io/AngularExamples/",
     "buildS3": "cross-env NODE_OPTIONS=--max_old_space_size=7168 ng build --prod --output-path distS3 --base-href https://angularexamples.superheroiccoding.de",
@@ -22,7 +22,7 @@
     "deploy": "npm version patch && npm run build-libs && npm run buildS3 && node node-scripts/sync-S3",
     "deploy-without-build": "node node-scripts/sync-S3",
     "deploy-exclude-assets": "npm version patch && npm run build-deps && npm run buildS3 && node node-scripts/sync-S3 --excludeAssets",
-    "postinstall": "ngcc"
+    "postinstall": "ngcc --tsconfig=projects/angular-examples/tsconfig.app.json"
   },
   "private": true,
   "dependencies": {
@@ -55,7 +55,7 @@
     "gl-matrix": "3.3.0",
     "gpu.js": "2.9.5",
     "mathjs": "^7.1.0",
-    "ng2-ace-editor": "0.3.9",
+    "ngx-ace-editor-wrapper": "^9.0.1",
     "p5": "^1.1.9",
     "rxjs": "6.5.5",
     "stats.js": "^0.17.0",

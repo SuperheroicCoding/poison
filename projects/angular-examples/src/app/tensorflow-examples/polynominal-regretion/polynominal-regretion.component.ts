@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {PolynominalRegretionService} from './polynominal-regretion.service';
 import {HeadlineAnimationService} from '../../core/headline-animation.service';
+import {PolynominalRegretionService} from './polynominal-regretion.service';
 
 @Component({
   selector: 'app-tensorflow-examples',

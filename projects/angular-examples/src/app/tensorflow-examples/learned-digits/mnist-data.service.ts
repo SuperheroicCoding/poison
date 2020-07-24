@@ -1,6 +1,6 @@
+import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {tensor2d, util} from '@tensorflow/tfjs';
-import {HttpClient} from '@angular/common/http';
 
 const IMAGE_SIZE = 784;
 const NUM_CLASSES = 10;
@@ -20,7 +20,7 @@ const MNIST_LABELS_PATH =
  * NOTE: This will get much easier. For now, we do data fetching and
  * manipulation manually.
  */
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class MnistDataService {
   private shuffledTrainIndex: number;
   private shuffledTestIndex: number;

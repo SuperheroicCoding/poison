@@ -1,4 +1,4 @@
-import {ModuleWithProviders} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {WebGlComponent} from './web-gl.component';
 

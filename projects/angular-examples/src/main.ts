@@ -10,5 +10,5 @@ if (environment.production) {
   enableAkitaProdMode();
 }
 
-persistState({exclude: ['performance-test', 'wasm-test', 'input-wave', 'game-state', 'bacteria-player']});
+// persistState({exclude: ['performance-test', 'wasm-test', 'input-wave', 'game-state', 'bacteria-player']});
 platformBrowserDynamic().bootstrapModule(AppModule);

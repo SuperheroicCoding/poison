@@ -1,11 +1,9 @@
 import {Injectable} from '@angular/core';
-import {from} from 'rxjs';
-import {delay, filter, switchMap, switchMapTo, take, tap} from 'rxjs/operators';
-import {mapWorker} from '../../rx/operator/map-worker';
+import loader from 'assemblyscript/lib/loader';
+import {delay, filter, switchMapTo, take, tap} from 'rxjs/operators';
 import {WasmTestQuery} from './wasm-test.query';
 import {WasmTestStore} from './wasm-test.store';
-import loader from 'assemblyscript/lib/loader';
-import {default as FibModule} from '@fib-wasm';
+import ASModule from '@fib-wasm';
 
 function fibJS(n: number): any | number {
   if (n < 2) {
@@ -54,7 +52,7 @@ export class WasmTestService {
       .finally(() => this.wasmTestStore.setLoading(false));
   }
 
-  private async instantiateWasm(): Promise<typeof FibModule> {
+  private async instantiateWasm(): Promise<typeof ASModule> {
     const fibImports = {
       index: {
         logRecCalls(recCalls) {
@@ -68,7 +66,7 @@ export class WasmTestService {
         memory: new WebAssembly.Memory({initial: 256}),
       }
     };
-    return loader.instantiateStreaming<typeof FibModule>(fetch('build/optimized.wasm'), fibImports);
+    return loader.instantiateStreaming(fetch('build/optimized.wasm'), fibImports) as unknown as Promise<typeof ASModule>;
   }
 
   startFibCalc(): void {

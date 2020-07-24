@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {Tensor, Tensor2D} from '@tensorflow/tfjs';
-import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import {Subject} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 import {HeadlineAnimationService} from '../../core/headline-animation.service';

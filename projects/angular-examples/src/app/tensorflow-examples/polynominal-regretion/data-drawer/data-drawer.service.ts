@@ -1,16 +1,15 @@
 import {Injectable} from '@angular/core';
-import * as tf from '@tensorflow/tfjs';
+import {Tensor} from '@tensorflow/tfjs';
 import renderChart from 'vega-embed';
 
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class DataDrawerService {
-
 
   constructor() {
   }
 
-  async plotData(element, data: { xs: tf.Tensor, ys: tf.Tensor }) {
+  async plotData(element, data: { xs: Tensor, ys: Tensor }) {
     const xvals = await data.xs.data();
     const yvals = await data.ys.data();
 
@@ -33,7 +32,7 @@ export class DataDrawerService {
     return renderChart(element, spec, {actions: false});
   }
 
-  async plotDataAndPredictions(container, data: { xs: tf.Tensor, ys: tf.Tensor }, preds: tf.Tensor) {
+  async plotDataAndPredictions(container, data: { xs: Tensor, ys: Tensor }, preds: Tensor) {
     const xvals = await data.xs.data();
     const yvals = await data.ys.data();
     const predVals = await preds.data();

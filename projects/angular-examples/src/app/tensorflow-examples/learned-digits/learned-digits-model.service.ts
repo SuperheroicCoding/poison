@@ -1,16 +1,5 @@
 import {Injectable} from '@angular/core';
-import {
-  layers,
-  nextFrame,
-  Sequential,
-  sequential,
-  SGDOptimizer,
-  Tensor,
-  tensor2d,
-  Tensor2D,
-  tidy,
-  train
-} from '@tensorflow/tfjs';
+import {layers, nextFrame, Sequential, sequential, SGDOptimizer, Tensor, Tensor2D, tidy, train} from '@tensorflow/tfjs';
 import {MnistDataService} from './mnist-data.service';
 
 
@@ -27,7 +16,7 @@ const TRAIN_BATCHES = 100;
 const TEST_BATCH_SIZE = 1000;
 const TEST_ITERATION_FREQUENCY = 10;
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class LearnedDigitsModelService {
   private model: Sequential;
   private optimizer: SGDOptimizer;

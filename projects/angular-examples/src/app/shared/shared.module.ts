@@ -21,9 +21,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {Angulartics2Module} from 'angulartics2';
-import {AceEditorModule} from 'ng2-ace-editor';
 import {ScThanosModule} from '../../../../sc-thanos/src/lib/sc-thanos.module';
-import {CodeEditorComponent} from './code-editor/code-editor.component';
 import {ElemResizedDirective} from './elem-resized.directive';
 import {RaiseCardDirective} from './raise-card.directive';
 import {RenderShaderComponent} from './render-shader/render-shader.component';
@@ -32,12 +30,10 @@ import {SafeHtmlPipe} from './safe-html.pipe';
 @NgModule({
   imports: [
     CommonModule,
-    AceEditorModule
   ],
   declarations: [
     RaiseCardDirective,
     SafeHtmlPipe,
-    CodeEditorComponent,
     RenderShaderComponent,
     ElemResizedDirective],
   exports: [
@@ -64,8 +60,6 @@ import {SafeHtmlPipe} from './safe-html.pipe';
     MatProgressSpinnerModule,
     RaiseCardDirective,
     SafeHtmlPipe,
-    AceEditorModule,
-    CodeEditorComponent,
     RenderShaderComponent,
     Angulartics2Module,
     ScThanosModule,
