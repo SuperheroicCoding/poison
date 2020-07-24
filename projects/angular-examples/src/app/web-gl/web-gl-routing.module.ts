@@ -6,5 +6,9 @@ const routes: Routes = [
   {path: '', component: WebGlComponent},
 ];
 
-export const webGlRoutes: ModuleWithProviders<RouterModule> = RouterModule.forChild(routes);
-
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class WebGlRoutes {
+}
