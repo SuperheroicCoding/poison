@@ -7,7 +7,6 @@ import {WinnerComponent} from './winner-info/winner.component';
 @NgModule({
   imports: [SharedModule, BacteriaGameRoutingModule],
   declarations: [BacteriaGameComponent, WinnerComponent],
-  entryComponents: [WinnerComponent]
 })
 export class BacteriaGameModule {
 }
