@@ -6,5 +6,5 @@ const routes: Routes = [
   {path: '', component: WebGlComponent},
 ];
 
-export const webGlRoutes: ModuleWithProviders = RouterModule.forChild(routes);
+export const webGlRoutes: ModuleWithProviders<RouterModule> = RouterModule.forChild(routes);
 
