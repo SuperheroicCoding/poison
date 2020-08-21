@@ -85,7 +85,7 @@
     "@types/stats.js": "^0.17.0",
     "@types/three": "0.103.2",
     "assemblyscript": "^0.14.3",
-    "aws-sdk": "^2.719.0",
+    "aws-sdk": "^2.738.0",
     "axios": "^0.19.2",
     "codelyzer": "^6.0.0",
     "cross-env": "^7.0.2",
