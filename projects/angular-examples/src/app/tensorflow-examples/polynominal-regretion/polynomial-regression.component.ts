@@ -1,19 +1,19 @@
 import {Component, OnInit} from '@angular/core';
 import {HeadlineAnimationService} from '../../core/headline-animation.service';
-import {PolynominalRegretionService} from './polynominal-regretion.service';
+import {PolynomialRegressionService} from './polynomial-regression.service';
 
 @Component({
-  selector: 'app-tensorflow-examples',
-  templateUrl: './polynominal-regretion.component.html',
-  styleUrls: ['./polynominal-regretion.component.less']
+  selector: 'app-polynomial-regressen',
+  templateUrl: './polynomial-regression.component.html',
+  styleUrls: ['./polynomial-regression.component.less']
 })
-export class PolynominalRegretionComponent implements OnInit {
+export class PolynomialRegressionComponent implements OnInit {
   randomCoefficients: { a: number; b: number; c: number; d: number };
   learnedCoefficients: { a: number; b: number; c: number; d: number };
   currentLoss: number;
   isLearning = false;
 
-  constructor(public polyService: PolynominalRegretionService, public headlineAnimation: HeadlineAnimationService) {
+  constructor(public polyService: PolynomialRegressionService, public headlineAnimation: HeadlineAnimationService) {
   }
 
   ngOnInit() {

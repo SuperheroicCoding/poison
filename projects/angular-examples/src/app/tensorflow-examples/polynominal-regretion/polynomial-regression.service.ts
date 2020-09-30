@@ -17,7 +17,7 @@ import {DataGeneratorService} from './data-generator.service';
  * values of y that fit the curve implied by our example.
  */
 @Injectable({providedIn: 'root'})
-export class PolynominalRegretionService {
+export class PolynomialRegressionService {
 
   private a: Variable<Rank.R0>;
   private b: Variable<Rank.R0>;

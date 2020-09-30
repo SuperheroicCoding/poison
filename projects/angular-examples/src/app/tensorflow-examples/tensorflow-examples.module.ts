@@ -6,7 +6,7 @@ import {DrawDigitComponent} from './learned-digits/draw-digit/draw-digit.compone
 import {DrawPredictionsComponent} from './learned-digits/draw-predictions/draw-predictions.component';
 import {LearnedDigitsComponent} from './learned-digits/learned-digits.component';
 import {DataDrawerComponent} from './polynominal-regretion/data-drawer/data-drawer.component';
-import {PolynominalRegretionComponent} from './polynominal-regretion/polynominal-regretion.component';
+import {PolynomialRegressionComponent} from './polynominal-regretion/polynomial-regression.component';
 import {TensorflowExamplesRoutingModule} from './tensorflow-examples-routing.module';
 import {TensorflowExamplesComponent} from './tensorflow-examples.component';
 
@@ -17,7 +17,7 @@ import {TensorflowExamplesComponent} from './tensorflow-examples.component';
     HttpClientModule
   ],
   declarations: [
-    PolynominalRegretionComponent,
+    PolynomialRegressionComponent,
     DataDrawerComponent,
     LearnedDigitsComponent,
     TensorflowExamplesComponent,

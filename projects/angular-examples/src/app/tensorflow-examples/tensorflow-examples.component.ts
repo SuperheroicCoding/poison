@@ -9,7 +9,7 @@ import {environment} from '../../environments/environment';
 export class TensorflowExamplesComponent implements OnInit {
 
   navLinks = [
-    {path: 'polynominalregretion', label: 'Polynominal regretion'},
+    {path: 'polynomialregression', label: 'Polynomial regression'},
     {path: 'learnedDigits', label: 'Learned digits (MNIST)', hidden: !environment.production}
   ];
 
