@@ -10,7 +10,7 @@ export class TensorflowExamplesComponent implements OnInit {
 
   navLinks = [
     {path: 'polynomialregression', label: 'Polynomial regression'},
-    {path: 'learnedDigits', label: 'Learned digits (MNIST)', hidden: !environment.production}
+    {path: 'learnedDigits', label: 'Learned digits (MNIST)'}
   ];
 
   constructor() { }
