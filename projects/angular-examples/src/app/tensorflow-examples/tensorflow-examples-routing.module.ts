@@ -8,7 +8,7 @@ const routes: Routes = [{
   path: '', component: TensorflowExamplesComponent, children: [
     {path: 'polynomialregression', component: PolynomialRegressionComponent},
     {path: 'learnedDigits', component: LearnedDigitsComponent},
-    {path: '', redirectTo: 'polynomialregression'}
+    {path: '', redirectTo: 'polynomialregression', pathMatch: 'full'}
   ]
 }];
 
