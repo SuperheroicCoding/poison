@@ -8,7 +8,8 @@ import {PerceptronTabComponent} from './perceptron-tab/perceptron-tab.component'
 const routes: Routes = [{
   path: '', component: NeuralNetworkComponent, children: [
     {path: 'perceptron', component: PerceptronTabComponent},
-    {path: 'multiPerceptron', component: MultiPerceptronComponent}
+    {path: 'multiPerceptron', component: MultiPerceptronComponent},
+    {path: '', pathMatch: 'full', redirectTo: 'perceptron'}
   ]
 }];
 
