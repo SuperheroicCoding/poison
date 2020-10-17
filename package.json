@@ -86,7 +86,7 @@
     "assemblyscript": "^0.14.12",
     "aws-sdk": "^2.772.0",
     "axios": "^0.20.0",
-    "codelyzer": "^6.0.0",
+    "codelyzer": "^6.0.1",
     "cross-env": "^7.0.2",
     "firebase-admin": "^9.2.0",
     "html2canvas": "^1.0.0-rc.7",
