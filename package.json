@@ -85,7 +85,7 @@
     "@types/three": "0.103.2",
     "assemblyscript": "^0.14.12",
     "aws-sdk": "^2.772.0",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "codelyzer": "^6.0.0",
     "cross-env": "^7.0.2",
     "firebase-admin": "^9.2.0",
