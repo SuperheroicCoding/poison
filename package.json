@@ -45,7 +45,7 @@
     "@ngneat/until-destroy": "^8.0.2",
     "@tensorflow/tfjs": "2.4.0",
     "ace-builds": "^1.4.12",
-    "akita-ng-fire": "^3.1.4",
+    "akita-ng-fire": "^3.1.8",
     "angulartics2": "^10.0.0",
     "brace": "^0.11.1",
     "browserslist": "^4.14.5",
