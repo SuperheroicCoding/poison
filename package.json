@@ -82,7 +82,7 @@
     "@types/node": "^14.11.2",
     "@types/p5": "^0.9.1",
     "@types/stats.js": "^0.17.0",
-    "@types/three": "0.103.2",
+    "@types/three": "0.128.0",
     "assemblyscript": "^0.14.12",
     "aws-sdk": "^2.772.0",
     "axios": "^0.20.0",
