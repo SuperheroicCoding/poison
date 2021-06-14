@@ -62,7 +62,7 @@
     "three": "0.121.1",
     "three-orbitcontrols-ts": "^0.1.2",
     "ts-keycode-enum": "^1.0.6",
-    "tslib": "^2.0.1",
+    "tslib": "^2.3.0",
     "vega": "^5.16.1",
     "vega-embed": "6.12.2",
     "vega-lite": "4.16.8",
